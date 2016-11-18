@@ -26,6 +26,8 @@
 	<string>Main</string>
 	<key>MGLMapboxAccessToken</key>
 	<string>pk.eyJ1IjoianVhbnNwYWNlIiwiYSI6ImNpdmVwNmk0eDAwdGkyenRtdmN6NDZoczQifQ.F8ZAM_XPEYG00CgB16dJTQ</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Shows your location on the map and helps improve OpenStreetMap.</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

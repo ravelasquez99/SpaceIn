@@ -8,15 +8,23 @@
 
 import Foundation
 import UIKit
+import CoreLocation
+import Mapbox
 
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, MGLMapViewDelegate {
+    
+    @IBOutlet var mapView: MGLMapView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.mapView.delegate = self
+        self.mapView.showsUserLocation = true
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         fatalError("You are using too much memory")
     }
+    
 }

@@ -37,6 +37,9 @@
                             <constraint firstItem="KRy-jc-NCQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="x2A-b7-B4H"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mapView" destination="KRy-jc-NCQ" id="zyZ-3a-Zkc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
