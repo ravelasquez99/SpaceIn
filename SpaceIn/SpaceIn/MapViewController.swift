@@ -12,10 +12,11 @@ import CoreLocation
 import Mapbox
 
 
-class MapViewController: UIViewController, MGLMapViewDelegate {
+class MapViewController: UIViewController {
     
-    @IBOutlet var mapView: MGLMapView!
     @IBOutlet private var mapOverlayView: MapOverlayView!
+    
+    @IBOutlet var mapView: MapView!
     
     private var didConstrainMapOverlayView = false
     
@@ -44,14 +45,26 @@ class MapViewController: UIViewController, MGLMapViewDelegate {
     }
     
     private func centerMap() {
-        //37.827791, -122.255903
         let coordinate = CLLocationCoordinate2DMake(37.827791, -122.255903)
         self.mapView.setCenter(coordinate, animated: true)
+        
+        let annotation = CharacterView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))//this doesn't need to be a view
+        
+        self.mapView.addAnnotation(annotation)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         fatalError("You are using too much memory")
+    }
+    
+}
+
+extension MapViewController: MGLMapViewDelegate {
+    func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
+        let view = MGLAnnotationView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        view.backgroundColor = UIColor.gray
+        return view
     }
     
 }

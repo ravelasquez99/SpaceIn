@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D85DAE731DE10DB10093FF1D /* MapOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DAE721DE10DB10093FF1D /* MapOverlayView.swift */; };
+		D85DAE751DE121C60093FF1D /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DAE741DE121C60093FF1D /* MapView.swift */; };
+		D85DAE771DE123470093FF1D /* CharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DAE761DE123470093FF1D /* CharacterView.swift */; };
 		D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894EECA1DDC26170039D92A /* AppDelegate.swift */; };
 		D894EED01DDC26180039D92A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D894EECE1DDC26180039D92A /* Main.storyboard */; };
 		D894EED21DDC26180039D92A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D894EED11DDC26180039D92A /* Assets.xcassets */; };
@@ -33,6 +35,8 @@
 
 /* Begin PBXFileReference section */
 		D85DAE721DE10DB10093FF1D /* MapOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapOverlayView.swift; sourceTree = "<group>"; };
+		D85DAE741DE121C60093FF1D /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		D85DAE761DE123470093FF1D /* CharacterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterView.swift; sourceTree = "<group>"; };
 		D894EEC71DDC26170039D92A /* SpaceIn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceIn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D894EECA1DDC26170039D92A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D894EECF1DDC26180039D92A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -107,6 +111,8 @@
 				D894EED31DDC26180039D92A /* LaunchScreen.storyboard */,
 				D894EECE1DDC26180039D92A /* Main.storyboard */,
 				D85DAE721DE10DB10093FF1D /* MapOverlayView.swift */,
+				D85DAE741DE121C60093FF1D /* MapView.swift */,
+				D85DAE761DE123470093FF1D /* CharacterView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -211,6 +217,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D85DAE731DE10DB10093FF1D /* MapOverlayView.swift in Sources */,
+				D85DAE751DE121C60093FF1D /* MapView.swift in Sources */,
+				D85DAE771DE123470093FF1D /* CharacterView.swift in Sources */,
 				D894EEE21DDEA4BA0039D92A /* MapViewController.swift in Sources */,
 				D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */,
 			);
