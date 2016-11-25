@@ -9,19 +9,35 @@
 import Foundation
 import UIKit
 import CoreLocation
+import MapKit
 
 
 class MapViewController: UIViewController {
     
+    @IBOutlet var mapView: MKMapView!
+    
+    let distance: CLLocationDistance = 650
+    let pitch: CGFloat = 65
+    let heading = 0.0
+    var camera: MKMapCamera?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapView.mapType = .hybridFlyover
+        mapView.showsBuildings = true
+        mapView.showsPointsOfInterest = true
         
+        let coordinate = CLLocationCoordinate2D(latitude: 40.7484405,
+                                                longitude: -73.9856644)
+        camera = MKMapCamera(lookingAtCenter: coordinate,
+                             fromDistance: distance,
+                             pitch: pitch,
+                             heading: heading)
+        mapView.camera = camera!
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        fatalError("You are using too much memory")
+    @IBAction func animate(_ sender: UIButton) {
     }
+ 
     
 }
