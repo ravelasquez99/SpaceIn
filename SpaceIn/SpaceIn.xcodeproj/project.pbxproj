@@ -11,24 +11,8 @@
 		D894EED01DDC26180039D92A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D894EECE1DDC26180039D92A /* Main.storyboard */; };
 		D894EED21DDC26180039D92A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D894EED11DDC26180039D92A /* Assets.xcassets */; };
 		D894EED51DDC26180039D92A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D894EED31DDC26180039D92A /* LaunchScreen.storyboard */; };
-		D894EEDD1DDC26A90039D92A /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D894EEDC1DDC26A80039D92A /* Mapbox.framework */; };
-		D894EEDE1DDC26A90039D92A /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D894EEDC1DDC26A80039D92A /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D894EEE21DDEA4BA0039D92A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894EEE11DDEA4BA0039D92A /* MapViewController.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		D894EEDF1DDC26A90039D92A /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				D894EEDE1DDC26A90039D92A /* Mapbox.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D894EEC71DDC26170039D92A /* SpaceIn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceIn.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,7 +21,6 @@
 		D894EED11DDC26180039D92A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D894EED41DDC26180039D92A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D894EED61DDC26180039D92A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D894EEDC1DDC26A80039D92A /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
 		D894EEE11DDEA4BA0039D92A /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -46,7 +29,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D894EEDD1DDC26A90039D92A /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +38,6 @@
 		D894EEBE1DDC26170039D92A = {
 			isa = PBXGroup;
 			children = (
-				D894EEDC1DDC26A80039D92A /* Mapbox.framework */,
 				D894EEC91DDC26170039D92A /* SpaceIn */,
 				D894EEC81DDC26170039D92A /* Products */,
 			);
@@ -117,8 +98,6 @@
 				D894EEC31DDC26170039D92A /* Sources */,
 				D894EEC41DDC26170039D92A /* Frameworks */,
 				D894EEC51DDC26170039D92A /* Resources */,
-				D894EEDF1DDC26A90039D92A /* Embed Frameworks */,
-				D894EEE01DDC26BD0039D92A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -176,22 +155,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		D894EEE01DDC26BD0039D92A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework/strip-frameworks.sh\"";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D894EEC31DDC26170039D92A /* Sources */ = {

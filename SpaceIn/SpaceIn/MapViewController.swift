@@ -9,17 +9,14 @@
 import Foundation
 import UIKit
 import CoreLocation
-import Mapbox
 
 
-class MapViewController: UIViewController, MGLMapViewDelegate {
+class MapViewController: UIViewController {
     
-    @IBOutlet var mapView: MGLMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.mapView.delegate = self
-        self.mapView.showsUserLocation = true
+        
     }
     
     override func didReceiveMemoryWarning() {
