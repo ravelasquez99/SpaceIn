@@ -24,60 +24,66 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.mapType = .satelliteFlyover
-        mapView.showsBuildings = false
+        mapView.showsBuildings = true
         mapView.showsPointsOfInterest = false
+        mapView.showsTraffic = false
+        mapView.delegate = self
         
-        //mapView.delegate = self
+        let coordinateTwo = CLLocationCoordinate2D(latitude: 40.7784405,
+                                                   longitude: -73.9856644)
         
-        let coordinate = CLLocationCoordinate2D(latitude: 40.7484405,
-                                                longitude: -73.9856644)
-        camera = MKMapCamera(lookingAtCenter: coordinate,
+        //let coordinate = CLLocationCoordinate2D(latitude: 40.7484405,
+                                             //   longitude: -73.9856644)
+        camera = MKMapCamera(lookingAtCenter: coordinateTwo,
                              fromDistance: distance,
                              pitch: pitch,
                              heading: heading)
         mapView.camera = camera!
         
-        let coordinateTwo = CLLocationCoordinate2D(latitude: 40.7784405,
-                                                longitude: -73.9856644)
+
         let ano = MKPointAnnotation()
         ano.coordinate = coordinateTwo
         self.mapView.addAnnotation(ano)
+        
+        self.mapView.isZoomEnabled = true
+        self.mapView.isRotateEnabled = false
+        self.mapView.isScrollEnabled = false
     }
     
     @IBAction func animate(_ sender: UIButton) {
     }
 }
 
-//extension MapViewController: MKMapViewDelegate {
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//        guard !(annotation is MKUserLocation) else {
-//            return nil
-//        }
-//        
-//        // Better to make this class property
-//        let annotationIdentifier = "AnnotationIdentifier"
-//        
-//        var annotationView: MKAnnotationView?
-//        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
-//            annotationView = dequeuedAnnotationView
-//            annotationView?.annotation = annotation
-//        }
-//        else {
-//            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-//            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-//        }
-//        
-//        if let annotationView = annotationView {
-//            // Configure your annotation view here
-//            annotationView.canShowCallout = true
-//            annotationView.image = UIImage(named: "Kobe")
-//        }
-//        
-//        annotationView?.frame = CGRect(x: 0, y: 0, width: 75, height: 75)
-//        annotationView?.contentMode = .scaleAspectFit
-//        
-//        return annotationView
-//    }
-//    
-//}
+extension MapViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard !(annotation is MKUserLocation) else {
+            return nil
+        }
+        
+        // Better to make this class property
+        let annotationIdentifier = "AnnotationIdentifier"
+        
+        var annotationView: MKAnnotationView?
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
+            annotationView = dequeuedAnnotationView
+            annotationView?.annotation = annotation
+        }
+        else {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        
+        if let annotationView = annotationView {
+            // Configure your annotation view here
+            annotationView.canShowCallout = true
+            annotationView.image = UIImage(named: "Kobe")
+        }
+        
+        annotationView?.frame = CGRect(x: 0, y: 0, width: 75, height: 75)
+        annotationView?.contentMode = .scaleAspectFit
+        
+        return annotationView
+    }
+    
+}
 
