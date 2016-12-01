@@ -10,9 +10,13 @@ import Foundation
 import MapKit
 
 
+
+//Ricky you can check the heading and pitch against our standard
+
 // moving anos http://stackoverflow.com/questions/8564013/animate-removal-of-annotations/8564097#8564097
 
 //http://stackoverflow.com/questions/29776549/animate-mapkit-annotation-coordinate-change-in-swift
+
 class MapView: MKMapView {
     
     static let distance: CLLocationDistance = 650
@@ -59,8 +63,8 @@ class MapView: MKMapView {
     
     private func setUserInteraction() {
         self.isZoomEnabled = true
-        self.isRotateEnabled = false
-        self.isScrollEnabled = false
+        self.isRotateEnabled = true
+        self.isScrollEnabled = true
     }
 }
 
@@ -94,6 +98,15 @@ extension MapView: MKMapViewDelegate {
         annotationView?.contentMode = .scaleAspectFit
         
         return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        if mapView.mapType == .hybridFlyover {
+            print("hybrid")
+        } else if mapView.mapType == .satellite {
+            print("satellite")
+        }
+        print("changed")
     }
     
 }
