@@ -13,9 +13,14 @@
 		D894EED51DDC26180039D92A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D894EED31DDC26180039D92A /* LaunchScreen.storyboard */; };
 		D894EEE21DDEA4BA0039D92A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894EEE11DDEA4BA0039D92A /* MapViewController.swift */; };
 		D8D6AE491DEA9CEE0083C204 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D6AE481DEA9CEE0083C204 /* MapView.swift */; };
+		D8F954781DF1173A0058A1CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8F954771DF1173A0058A1CB /* GoogleService-Info.plist */; };
+		F04FE1F66A58311B4E88C286 /* Pods_SpaceIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 036A50A7C319BF6AAF4DEA2C /* Pods_SpaceIn.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		036A50A7C319BF6AAF4DEA2C /* Pods_SpaceIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpaceIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A06FBF98DDBC98EB5FFB788 /* Pods-SpaceIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.debug.xcconfig"; sourceTree = "<group>"; };
+		A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.release.xcconfig"; sourceTree = "<group>"; };
 		D894EEC71DDC26170039D92A /* SpaceIn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceIn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D894EECA1DDC26170039D92A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D894EECF1DDC26180039D92A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -24,6 +29,7 @@
 		D894EED61DDC26180039D92A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D894EEE11DDEA4BA0039D92A /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		D8D6AE481DEA9CEE0083C204 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		D8F954771DF1173A0058A1CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +37,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F04FE1F66A58311B4E88C286 /* Pods_SpaceIn.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		752633AF3549B1F6B50E9FDD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				036A50A7C319BF6AAF4DEA2C /* Pods_SpaceIn.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8E2361847C5A0C3FCEEF131C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0A06FBF98DDBC98EB5FFB788 /* Pods-SpaceIn.debug.xcconfig */,
+				A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		D894EEBE1DDC26170039D92A = {
 			isa = PBXGroup;
 			children = (
 				D894EEC91DDC26170039D92A /* SpaceIn */,
 				D894EEC81DDC26170039D92A /* Products */,
+				8E2361847C5A0C3FCEEF131C /* Pods */,
+				752633AF3549B1F6B50E9FDD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,10 +82,11 @@
 		D894EEC91DDC26170039D92A /* SpaceIn */ = {
 			isa = PBXGroup;
 			children = (
-				D894EEE51DDEA4D10039D92A /* Controller */,
-				D894EEE41DDEA4CC0039D92A /* View */,
-				D894EEE31DDEA4C60039D92A /* Model */,
 				D894EECA1DDC26170039D92A /* AppDelegate.swift */,
+				D894EEE31DDEA4C60039D92A /* Model */,
+				D894EEE41DDEA4CC0039D92A /* View */,
+				D894EEE51DDEA4D10039D92A /* Controller */,
+				D8F954761DF117010058A1CB /* External */,
 				D894EED11DDC26180039D92A /* Assets.xcassets */,
 				D894EED31DDC26180039D92A /* LaunchScreen.storyboard */,
 				D894EED61DDC26180039D92A /* Info.plist */,
@@ -91,6 +118,14 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
+		D8F954761DF117010058A1CB /* External */ = {
+			isa = PBXGroup;
+			children = (
+				D8F954771DF1173A0058A1CB /* GoogleService-Info.plist */,
+			);
+			name = External;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -98,9 +133,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D894EED91DDC26180039D92A /* Build configuration list for PBXNativeTarget "SpaceIn" */;
 			buildPhases = (
+				FF802F141F83C192FF69BA9A /* [CP] Check Pods Manifest.lock */,
 				D894EEC31DDC26170039D92A /* Sources */,
 				D894EEC41DDC26170039D92A /* Frameworks */,
 				D894EEC51DDC26170039D92A /* Resources */,
+				56B1EA8FC28011AB6D7767A4 /* [CP] Embed Pods Frameworks */,
+				50AF1FB6C24DEEBD7732D577 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -152,12 +190,61 @@
 			buildActionMask = 2147483647;
 			files = (
 				D894EED51DDC26180039D92A /* LaunchScreen.storyboard in Resources */,
+				D8F954781DF1173A0058A1CB /* GoogleService-Info.plist in Resources */,
 				D894EED21DDC26180039D92A /* Assets.xcassets in Resources */,
 				D894EED01DDC26180039D92A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		50AF1FB6C24DEEBD7732D577 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		56B1EA8FC28011AB6D7767A4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF802F141F83C192FF69BA9A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D894EEC31DDC26170039D92A /* Sources */ = {
@@ -288,6 +375,7 @@
 		};
 		D894EEDA1DDC26180039D92A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A06FBF98DDBC98EB5FFB788 /* Pods-SpaceIn.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -298,6 +386,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = SpaceIn/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rickyvelasquez.SpaceIn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -308,6 +397,7 @@
 		};
 		D894EEDB1DDC26180039D92A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -318,6 +408,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = SpaceIn/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rickyvelasquez.SpaceIn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
