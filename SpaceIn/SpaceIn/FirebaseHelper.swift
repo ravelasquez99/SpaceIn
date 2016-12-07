@@ -14,13 +14,21 @@ enum FirebaseReturnType {
     case UserAlreadyCreated
     case Success
     case NoUID
+    case UserNotFound
     
     //Sign in
     case InvalidPassword
     case EmailDoesntExist
+    case InvalidEmail
     
     //Default
     case Unknown
+    
+    case InvalidToken
+    
+    //Network
+    case NetworkError
+    case TooManyRequests
 }
 
 class FirebaseHelper {
@@ -73,13 +81,41 @@ class FirebaseHelper {
     private class func feedback(forError error: Error) -> FirebaseReturnType {
         var returnType = FirebaseReturnType.Unknown
         
-        switch error.localizedDescription {
-        case "blah":
-            returnType = .EmailDoesntExist
-        default:
-            break
+        if let errCode = FIRAuthErrorCode(rawValue: error._code) {
+            switch errCode {
+            case .errorCodeInvalidEmail:
+                returnType = .InvalidEmail
+                print("WARNING: invalid email entered")
+                break
+            case .errorCodeNetworkError:
+                returnType = .NetworkError
+                print("WARNING: There was a nework error while executing firbase call")
+                break
+            case .errorCodeUserNotFound:
+                returnType = .UserNotFound
+                print("WARNING: This user was not found in the Database")
+                break
+            case .errorCodeUserTokenExpired:
+                returnType = .UserNotFound
+                print("WARNING: This user's local token has expired and they need to sign in again")
+                break
+            case .errorCodeTooManyRequests:
+                returnType = .TooManyRequests
+                print("WARNING: We have made too many requests")
+                break
+            case .errorCodeInvalidAPIKey:
+                fatalError("we must fix the API key")
+                break
+            case .errorCodeInternalError:
+                print("GOOGLE INTERNAL ERROR SEND REPORT TO GOOGLE")
+                print(error)
+                break
+            default:
+                print("Create User Error: \(error)")
+            }
+
         }
+        
         return returnType
     }
-    //...
 }
