@@ -28,27 +28,28 @@ class FirebaseHelper {
     static let fireBaseBaseURL = "https://spacein-299ee.firebaseio.com/"
     static let usersBranchURL = FirebaseHelper.fireBaseBaseURL + "users"
     
-    class func createUser(email: String, password: String, completion: @escaping ( _ name: String, _ email: String, _ fbReturnType: FirebaseReturnType) -> Void) {
+    class func createUser(name: String, email: String, password: String, completion: @escaping ( _ name: String, _ email: String, _ uid: String,  _ fbReturnType: FirebaseReturnType) -> Void) {
         
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user: FIRUser?, error) in
             if error != nil {
-                completion("", "", FirebaseHelper.feedback(forError: error!))
+                completion("", "", "", FirebaseHelper.feedback(forError: error!))
                 return
             }
             
             guard let uid = user?.uid else {
-                completion("", "", FirebaseReturnType.NoUID)
+                completion("", "", "", FirebaseReturnType.NoUID)
                 return
             }
             
             let ref = FIRDatabase.database().reference(fromURL: FirebaseHelper.fireBaseBaseURL)
             let usersReference = ref.child("users").child(uid)
-            let values = ["name": "Ricky", "email": email]
+            let values = ["name": name, "email": email]
             usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
                 if err != nil {
-                    completion("", "", FirebaseHelper.feedback(forError: err!))
+                    completion("", "", "", FirebaseHelper.feedback(forError: err!))
                     return
                 } else {
+                    completion(name, email, user!.uid, .Success)
                 }
                 print("Saved user successfully into Firebase db")
             })
@@ -57,14 +58,14 @@ class FirebaseHelper {
         
     }
     
-    class func loginUser(email: String, password: String, completion: @escaping ( _ name: String, _ email: String) -> Void) {
+    class func loginUser(email: String, password: String, completion: @escaping (_ user: FIRUser?, _ returnType: FirebaseReturnType) -> Void) {
         
         FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
-                print(error!.localizedDescription)
+                completion(nil, FirebaseHelper.feedback(forError: error!))
                 return
             } else {
-                print("we logged in")
+                completion(user!, FirebaseReturnType.Success)
             }
         })
     }

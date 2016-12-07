@@ -12,15 +12,10 @@ import UIKit
 class LoginVC : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        FirebaseAuthenticator.createUser(email: "test1@gmail.com", password: "password", completion: {user, email, message in
+        FirebaseHelper.createUser(name: "name", email: "email", password: "password", completion: { name, email, uid, fbReturnType in
             
-        })
+            })
         
-//        FirebaseAuthenticator.loginUser(email: "ravelasquez99@gmail.com", password: "password", completion: { user, email in
-//            
-//            
-//        })
     }
         
         
