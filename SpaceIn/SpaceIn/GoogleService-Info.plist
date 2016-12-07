@@ -10,6 +10,8 @@
 	<string>167488397094-6fpe03fl8dlc04v14eavba4i1ne0kaek.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.167488397094-6fpe03fl8dlc04v14eavba4i1ne0kaek</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCJ6ySd8z9796rPY2cK3J2sAASTE4SvKTQ</string>
 	<key>GCM_SENDER_ID</key>
 	<string>167488397094</string>
 	<key>PLIST_VERSION</key>
@@ -18,6 +20,8 @@
 	<string>com.rickyvelasquez.SpaceIn</string>
 	<key>PROJECT_ID</key>
 	<string>spacein-299ee</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
 	<key>STORAGE_BUCKET</key>
 	<string>spacein-299ee.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>

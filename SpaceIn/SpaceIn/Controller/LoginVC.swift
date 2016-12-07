@@ -13,6 +13,16 @@ class LoginVC : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        FirebaseAuthenticator.createUser(email: "test1@gmail.com", password: "password", completion: {user, email, message in
+            
+        })
         
+//        FirebaseAuthenticator.loginUser(email: "ravelasquez99@gmail.com", password: "password", completion: { user, email in
+//            
+//            
+//        })
     }
+        
+        
+        
 }
