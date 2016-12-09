@@ -11,6 +11,9 @@
 		D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894EECA1DDC26170039D92A /* AppDelegate.swift */; };
 		D894EED21DDC26180039D92A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D894EED11DDC26180039D92A /* Assets.xcassets */; };
 		D894EED51DDC26180039D92A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D894EED31DDC26180039D92A /* LaunchScreen.storyboard */; };
+		D8CA4C181DFA55B3004665F0 /* LoginRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA4C171DFA55B3004665F0 /* LoginRegisterView.swift */; };
+		D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */; };
+		D8CA4C1C1DFA5879004665F0 /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */; };
 		D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D7465E1DF1228700A1EE70 /* MapView.swift */; };
 		D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D746601DF122C100A1EE70 /* MapVC.swift */; };
 		D8D746631DF122D700A1EE70 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D746621DF122D700A1EE70 /* Main.storyboard */; };
@@ -31,6 +34,9 @@
 		D894EED11DDC26180039D92A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D894EED41DDC26180039D92A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D894EED61DDC26180039D92A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8CA4C171DFA55B3004665F0 /* LoginRegisterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRegisterView.swift; sourceTree = "<group>"; };
+		D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyleGuideManager.swift; sourceTree = "<group>"; };
+		D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		D8D7465E1DF1228700A1EE70 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapView.swift; path = View/MapView.swift; sourceTree = "<group>"; };
 		D8D746601DF122C100A1EE70 /* MapVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapVC.swift; path = Controller/MapVC.swift; sourceTree = "<group>"; };
 		D8D746621DF122D700A1EE70 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = View/Main.storyboard; sourceTree = "<group>"; };
@@ -107,6 +113,8 @@
 			children = (
 				D8D746641DF1236A00A1EE70 /* FirebaseHelper.swift */,
 				D838E9561DF7B7AF00F08F17 /* SpaceInUser.swift */,
+				D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */,
+				D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -116,6 +124,7 @@
 			children = (
 				D8D746621DF122D700A1EE70 /* Main.storyboard */,
 				D8D7465E1DF1228700A1EE70 /* MapView.swift */,
+				D8CA4C171DFA55B3004665F0 /* LoginRegisterView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -267,11 +276,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8CA4C181DFA55B3004665F0 /* LoginRegisterView.swift in Sources */,
 				D838E9571DF7B7AF00F08F17 /* SpaceInUser.swift in Sources */,
 				D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */,
 				D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */,
+				D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */,
 				D8D746651DF1236A00A1EE70 /* FirebaseHelper.swift in Sources */,
 				D8D746671DF128BA00A1EE70 /* LoginVC.swift in Sources */,
+				D8CA4C1C1DFA5879004665F0 /* AssetManager.swift in Sources */,
 				D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
