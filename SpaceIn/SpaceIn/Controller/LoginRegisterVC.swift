@@ -102,7 +102,9 @@ extension LoginRegisterVC { //UI calls
         self.loginRegisterTableView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: self.sidePadding()).isActive = true
         self.loginRegisterTableView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -self.sidePadding()).isActive = true
         self.loginRegisterTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
-        self.loginRegisterTableView.backgroundColor = UIColor.green
+        
+        let testTextfield = ToplessTextField(frame: CGRect(x: 20, y: 20, width: 100, height: 60))
+        self.view.addSubview(testTextfield)
     }
     
     
