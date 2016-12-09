@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--LoginVC-->
+        <!--Login RegisterVC-->
         <scene sceneID="BTk-GU-F5D">
             <objects>
-                <viewController id="6wQ-K2-30P" customClass="LoginVC" customModule="SpaceIn" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6wQ-K2-30P" customClass="LoginRegisterVC" customModule="SpaceIn" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="x0R-rN-gJj"/>
                         <viewControllerLayoutGuide type="bottom" id="WGJ-1D-629"/>
