@@ -12,27 +12,28 @@ import UIKit
 class LoginRegisterVC : UIViewController {
     
     static let imageWidthHeight = CGFloat(100)
+    static let textFieldHeights = CGFloat(40)
+    static var buttonHeights = CGFloat(60)
     var backgroundImageView = UIImageView(frame: CGRect.zero)
     var logoImageView = UIImageView(frame: CGRect.zero)
-    let loginRegisterTableView = UITableView(frame: CGRect.zero)
+    let userNameTextField = ToplessTextField(frame: CGRect.zero)
+    var isInRegisterMode = false
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         if userIsSignedIn() == true {
             self.loginUser()
         } else {
             self.view.addSubview(self.backgroundImageView)
-            self.view.addSubview(logoImageView)
-            self.view.addSubview(self.loginRegisterTableView)
-            self.backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-            self.loginRegisterTableView.translatesAutoresizingMaskIntoConstraints = false
-            self.logoImageView.translatesAutoresizingMaskIntoConstraints = false
-
-            self.backgroundImageView.contentMode = .scaleToFill
+            self.view.addSubview(self.logoImageView)
+            self.view.addSubview(self.userNameTextField)
             
-            self.loginRegisterTableView.delegate = self
-            self.loginRegisterTableView.dataSource = self
-            self.loginRegisterTableView.isScrollEnabled = false
+            self.userNameTextField.translatesAutoresizingMaskIntoConstraints = false
+            self.backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+            self.logoImageView.translatesAutoresizingMaskIntoConstraints = false
+            
+            self.backgroundImageView.contentMode = .scaleToFill
         }
     }
     
@@ -45,16 +46,6 @@ class LoginRegisterVC : UIViewController {
         }
     }
     
-    
-    private func shouldLoadRegisterView() -> Bool {
-        return true
-    }
-    
-    
-    func layoutSignInView() {
-        
-    }
-    
     fileprivate func userIsSignedIn() -> Bool {
         return false
     }
@@ -62,49 +53,111 @@ class LoginRegisterVC : UIViewController {
     fileprivate func loginUser() {
         
     }
+    
+    fileprivate func shouldLoadRegisterView() -> Bool {
+        return self.isInRegisterMode
+    }
 }
 
-extension LoginRegisterVC: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell(frame: CGRect.zero)
-    }
+extension LoginRegisterVC: UITextFieldDelegate {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
-    }
 }
 
 extension LoginRegisterVC { //UI calls
     
     func layoutRegisterView() {
+        
+        self.logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: self.registerImageTopPadding()).isActive = true
+
+    }
+    
+    func layoutSignInView() {
         self.view.removeConstraints(self.view.constraints)
         self.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.backgroundColor = UIColor.white
-        
+        let widthForViews = self.view.frame.width * 0.71
+
         self.backgroundImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         self.backgroundImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
         self.backgroundImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: 0).isActive = true
         self.backgroundImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: 0).isActive = true
         self.backgroundImageView.image = AssetManager.imageForAssetName(name: .loginBackground)
-
+        
+        self.userNameTextField.bottomAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 0).isActive = true
+        self.userNameTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
+        self.userNameTextField.widthAnchor.constraint(equalToConstant: widthForViews).isActive = true
+        self.userNameTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
+        self.userNameTextField.placeholder = "Email"
         
         self.logoImageView.image = AssetManager.imageForAssetName(name: AssetName.logoColored)
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: self.registerImageTopPadding()).isActive = true
         self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
         self.logoImageView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
+        self.logoImageView.bottomAnchor.constraint(equalTo: self.userNameTextField.topAnchor, constant: -20).isActive = true
         
-        self.loginRegisterTableView.topAnchor.constraint(equalTo: self.logoImageView.bottomAnchor, constant: self.view.frame.height * 0.05).isActive = true
-        self.loginRegisterTableView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: self.sidePadding()).isActive = true
-        self.loginRegisterTableView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -self.sidePadding()).isActive = true
-        self.loginRegisterTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
         
-        let testTextfield = ToplessTextField(frame: CGRect(x: 20, y: 20, width: 100, height: 60))
-        self.view.addSubview(testTextfield)
+        var heightRemaining = self.view.frame.height / 2 - 10
+        
+        
+        let passwordTextField = ToplessTextField(frame: CGRect.zero)
+        self.view.addSubview(passwordTextField)
+        passwordTextField.placeholder = "Password"
+        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+        passwordTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        passwordTextField.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor).isActive = true
+        let heightAnchor = passwordTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights)
+        heightAnchor.isActive = true
+        let topAnchor = passwordTextField.topAnchor.constraint(equalTo: self.userNameTextField.bottomAnchor, constant: 10)
+        topAnchor.isActive = true
+        
+        heightRemaining = heightRemaining - LoginRegisterVC.textFieldHeights - 10
+        
+        let loginButton = UIButton(frame: CGRect.zero)
+        self.view.addSubview(loginButton)
+        
+        loginButton.setTitle("Login", for: .normal)
+        loginButton.backgroundColor = UIColor.green
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: heightRemaining * 0.13).isActive = true
+        loginButton.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: heightRemaining * 0.22).isActive = true
+        loginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        
+        //heightRemaining * 0.2
+        
+        
+        let orLabel = UILabel(frame: CGRect.zero)
+        self.view.addSubview(orLabel)
+        orLabel.textAlignment = .center
+        orLabel.text = "Or"
+
+        orLabel.translatesAutoresizingMaskIntoConstraints = false
+        orLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        orLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: heightRemaining * 0.08).isActive = true
+        orLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        orLabel.heightAnchor.constraint(equalToConstant: heightRemaining * 0.05).isActive = true
+        orLabel.backgroundColor = .orange
+        
+        let socialLoginButton = UIButton(type: .custom)
+        self.view.addSubview(socialLoginButton)
+        socialLoginButton.setTitle("Login With Social", for: .normal)
+        socialLoginButton.translatesAutoresizingMaskIntoConstraints = false
+        socialLoginButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: heightRemaining * 0.08).isActive = true
+        socialLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        socialLoginButton.heightAnchor.constraint(equalToConstant: heightRemaining * 0.22).isActive = true
+        socialLoginButton.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor).isActive = true
+        socialLoginButton.backgroundColor = UIColor.green
+        
+        let forgotPasswordRegisterView = UIView(frame: CGRect.zero)
+        self.view.addSubview(forgotPasswordRegisterView)
+        forgotPasswordRegisterView.backgroundColor = UIColor.orange
+        forgotPasswordRegisterView.translatesAutoresizingMaskIntoConstraints = false
+        forgotPasswordRegisterView.topAnchor.constraint(equalTo: socialLoginButton.bottomAnchor, constant: heightRemaining * 0.1).isActive = true
+        forgotPasswordRegisterView.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor).isActive = true
+        forgotPasswordRegisterView.heightAnchor.constraint(equalToConstant: heightRemaining * 0.12).isActive = true
+        forgotPasswordRegisterView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+
+        
     }
     
     
@@ -115,6 +168,7 @@ extension LoginRegisterVC { //UI calls
     fileprivate func sidePadding() -> CGFloat {
         return self.view.frame.width * 0.06
     }
+    
 }
 
 //how to call fb

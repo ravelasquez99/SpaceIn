@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D81CD97B1DFA79350042E2AD /* LoginRegisterCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81CD97A1DFA79350042E2AD /* LoginRegisterCells.swift */; };
 		D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */; };
 		D838E9571DF7B7AF00F08F17 /* SpaceInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D838E9561DF7B7AF00F08F17 /* SpaceInUser.swift */; };
 		D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894EECA1DDC26170039D92A /* AppDelegate.swift */; };
@@ -28,7 +27,6 @@
 		036A50A7C319BF6AAF4DEA2C /* Pods_SpaceIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpaceIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A06FBF98DDBC98EB5FFB788 /* Pods-SpaceIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.debug.xcconfig"; sourceTree = "<group>"; };
 		A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.release.xcconfig"; sourceTree = "<group>"; };
-		D81CD97A1DFA79350042E2AD /* LoginRegisterCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRegisterCells.swift; sourceTree = "<group>"; };
 		D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToplessTextfield.swift; sourceTree = "<group>"; };
 		D838E9551DF7AE6100F08F17 /* SpaceIn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpaceIn.entitlements; sourceTree = "<group>"; };
 		D838E9561DF7B7AF00F08F17 /* SpaceInUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceInUser.swift; sourceTree = "<group>"; };
@@ -126,7 +124,6 @@
 			children = (
 				D8D746621DF122D700A1EE70 /* Main.storyboard */,
 				D8D7465E1DF1228700A1EE70 /* MapView.swift */,
-				D81CD97A1DFA79350042E2AD /* LoginRegisterCells.swift */,
 				D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */,
 			);
 			name = View;
@@ -288,7 +285,6 @@
 				D8D746671DF128BA00A1EE70 /* LoginRegisterVC.swift in Sources */,
 				D8CA4C1C1DFA5879004665F0 /* AssetManager.swift in Sources */,
 				D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */,
-				D81CD97B1DFA79350042E2AD /* LoginRegisterCells.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
