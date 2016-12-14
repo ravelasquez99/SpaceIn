@@ -18,6 +18,7 @@ class StyleGuideManager {
     static let loginTextFieldSelectedColor = UIColor.black
     static let loginPlaceholderTextColor = UIColor.green
     static let loginTextFieldTextColor = UIColor.orange
+    static let loginButtonBorderColor = UIColor.orange
     
     
     

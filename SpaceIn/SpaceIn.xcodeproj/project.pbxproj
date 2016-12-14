@@ -20,6 +20,7 @@
 		D8D746651DF1236A00A1EE70 /* FirebaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D746641DF1236A00A1EE70 /* FirebaseHelper.swift */; };
 		D8D746671DF128BA00A1EE70 /* LoginRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D746661DF128B900A1EE70 /* LoginRegisterVC.swift */; };
 		D8F954781DF1173A0058A1CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8F954771DF1173A0058A1CB /* GoogleService-Info.plist */; };
+		D8FD46441E01021100873565 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD46431E01021100873565 /* RoundedButton.swift */; };
 		F04FE1F66A58311B4E88C286 /* Pods_SpaceIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 036A50A7C319BF6AAF4DEA2C /* Pods_SpaceIn.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		D8D746641DF1236A00A1EE70 /* FirebaseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseHelper.swift; sourceTree = "<group>"; };
 		D8D746661DF128B900A1EE70 /* LoginRegisterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegisterVC.swift; path = Controller/LoginRegisterVC.swift; sourceTree = "<group>"; };
 		D8F954771DF1173A0058A1CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D8FD46431E01021100873565 /* RoundedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				D8D746621DF122D700A1EE70 /* Main.storyboard */,
 				D8D7465E1DF1228700A1EE70 /* MapView.swift */,
 				D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */,
+				D8FD46431E01021100873565 /* RoundedButton.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -277,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D838E9571DF7B7AF00F08F17 /* SpaceInUser.swift in Sources */,
+				D8FD46441E01021100873565 /* RoundedButton.swift in Sources */,
 				D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */,
 				D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */,
 				D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */,

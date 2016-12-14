@@ -127,7 +127,7 @@ extension LoginRegisterVC { //UI calls
         
         heightRemaining = heightRemaining - LoginRegisterVC.textFieldHeights - 10
         
-        let loginButton = UIButton(frame: CGRect.zero)
+        let loginButton = RoundedButton(filledIn: false, color: StyleGuideManager.loginButtonBorderColor)
         self.view.addSubview(loginButton)
         
         loginButton.setTitle("Login", for: .normal)
@@ -154,7 +154,7 @@ extension LoginRegisterVC { //UI calls
         orLabel.heightAnchor.constraint(equalToConstant: heightRemaining * 0.05).isActive = true
         orLabel.backgroundColor = .orange
         
-        let socialLoginButton = UIButton(type: .custom)
+        let socialLoginButton = RoundedButton(filledIn: false, color: StyleGuideManager.loginButtonBorderColor)
         self.view.addSubview(socialLoginButton)
         socialLoginButton.setTitle("Login With Social", for: .normal)
         socialLoginButton.translatesAutoresizingMaskIntoConstraints = false
