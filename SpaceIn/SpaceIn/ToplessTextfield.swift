@@ -13,13 +13,30 @@
 import UIKit
 
 
-class ToplessTextField: UITextField {
+class ToplessTextField: UITextField, UITextFieldDelegate {
     
-    var didAddBottom = false
-    var borderColor : UIColor = .orange
+    private var didAddBottom = false
+    
+    var borderColor : UIColor = .orange {
+        didSet {
+            if self.border != nil {
+                self.border!.borderColor = borderColor.cgColor
+            }
+        }
+    }
+    
+    var selectedBorderColor: UIColor? {
+        didSet {
+            
+        }
+    }
+    var placeholderTextColor: UIColor?
+    private var border: CALayer?
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.delegate = self
         self.borderStyle = .none
     }
     
@@ -36,18 +53,16 @@ class ToplessTextField: UITextField {
     }
     
     func addBottom() {
-        
         if !self.didAddBottom {
-            let border = CALayer()
+            self.border = CALayer()
             let width = CGFloat(2.0)
-            border.borderColor = borderColor.cgColor
-            border.frame = CGRect(x: 0, y: self.frame.size.height - 2, width:  self.frame.size.width, height: 2)
-            border.borderWidth = width
-            self.layer.addSublayer(border)
+            self.border!.borderColor = borderColor.cgColor
+            self.border!.frame = CGRect(x: 0, y: self.frame.size.height - 2, width:  self.frame.size.width, height: 2)
+            self.border!.borderWidth = width
+            self.layer.addSublayer(border!)
             self.layer.masksToBounds = true
             self.didAddBottom = true
         }
-
     }
     
 }

@@ -150,13 +150,46 @@ extension LoginRegisterVC { //UI calls
         
         let forgotPasswordRegisterView = UIView(frame: CGRect.zero)
         self.view.addSubview(forgotPasswordRegisterView)
-        forgotPasswordRegisterView.backgroundColor = UIColor.orange
+        forgotPasswordRegisterView.backgroundColor = UIColor.clear
         forgotPasswordRegisterView.translatesAutoresizingMaskIntoConstraints = false
         forgotPasswordRegisterView.topAnchor.constraint(equalTo: socialLoginButton.bottomAnchor, constant: heightRemaining * 0.1).isActive = true
         forgotPasswordRegisterView.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor).isActive = true
         forgotPasswordRegisterView.heightAnchor.constraint(equalToConstant: heightRemaining * 0.12).isActive = true
         forgotPasswordRegisterView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-
+//        
+        
+        let divider = UILabel()
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        divider.text = "|"
+        divider.textAlignment = .center
+        
+        forgotPasswordRegisterView.addSubview(divider)
+        divider.centerXAnchor.constraint(equalTo: forgotPasswordRegisterView.centerXAnchor).isActive = true
+        divider.heightAnchor.constraint(equalTo: forgotPasswordRegisterView.heightAnchor).isActive = true
+        divider.centerYAnchor.constraint(equalTo: forgotPasswordRegisterView.centerYAnchor).isActive = true
+        divider.widthAnchor.constraint(equalToConstant: 5).isActive = true
+        
+        
+        let forgotPasswordButton = UIButton(type: .custom)
+        forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
+        forgotPasswordButton.setTitle("Forgot Password", for: .normal)
+        
+        forgotPasswordRegisterView.addSubview(forgotPasswordButton)
+        forgotPasswordButton.leftAnchor.constraint(equalTo: forgotPasswordRegisterView.leftAnchor, constant: 0).isActive = true
+        forgotPasswordButton.centerYAnchor.constraint(equalTo: forgotPasswordRegisterView.centerYAnchor).isActive = true
+        forgotPasswordButton.rightAnchor.constraint(equalTo: divider.leftAnchor, constant: 5)
+        forgotPasswordButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        
+        let switchToRegisterButton = UIButton(type: .custom)
+        switchToRegisterButton.translatesAutoresizingMaskIntoConstraints = false
+        switchToRegisterButton.setTitle("Register", for: .normal)
+        
+        forgotPasswordRegisterView.addSubview(switchToRegisterButton)
+        switchToRegisterButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        switchToRegisterButton.leftAnchor.constraint(equalTo:divider.rightAnchor, constant: 2).isActive = true
+        switchToRegisterButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        switchToRegisterButton.centerYAnchor.constraint(equalTo: forgotPasswordRegisterView.centerYAnchor).isActive = true
         
     }
     
