@@ -30,7 +30,7 @@ class ToplessTextField: UITextField, UITextFieldDelegate {
             
         }
     }
-    var placeholderTextColor: UIColor?
+    
     private var border: CALayer?
     
     
@@ -63,6 +63,16 @@ class ToplessTextField: UITextField, UITextFieldDelegate {
             self.layer.masksToBounds = true
             self.didAddBottom = true
         }
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if self.selectedBorderColor != nil {
+            self.border?.borderColor = self.selectedBorderColor!.cgColor
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.border?.borderColor = self.borderColor.cgColor
     }
     
 }

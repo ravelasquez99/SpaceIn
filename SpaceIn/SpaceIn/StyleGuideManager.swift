@@ -11,5 +11,15 @@ import UIKit
 
 
 class StyleGuideManager {
+    private init(){}
+    let sharedInstance = StyleGuideManager()
+    
+    static let loginTextFieldDefaultColor = UIColor.white
+    static let loginTextFieldSelectedColor = UIColor.black
+    static let loginPlaceholderTextColor = UIColor.green
+    static let loginTextFieldTextColor = UIColor.orange
+    
+    
+    
     
 }

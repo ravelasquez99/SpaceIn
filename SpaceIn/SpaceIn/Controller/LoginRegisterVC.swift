@@ -39,6 +39,12 @@ class LoginRegisterVC : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.removeConstraints(self.view.constraints)
+        self.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.backgroundColor = UIColor.white
+        
+        self.layoutLogoImageView()
+        
         if self.shouldLoadRegisterView() {
             self.layoutRegisterView()
         } else {
@@ -65,6 +71,15 @@ extension LoginRegisterVC: UITextFieldDelegate {
 
 extension LoginRegisterVC { //UI calls
     
+    
+    fileprivate func layoutLogoImageView() {
+        
+        self.backgroundImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
+        self.backgroundImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        self.backgroundImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: 0).isActive = true
+        self.backgroundImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: 0).isActive = true
+        self.backgroundImageView.image = AssetManager.imageForAssetName(name: .loginBackground)
+    }
     func layoutRegisterView() {
         
         self.logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: self.registerImageTopPadding()).isActive = true
@@ -72,22 +87,16 @@ extension LoginRegisterVC { //UI calls
     }
     
     func layoutSignInView() {
-        self.view.removeConstraints(self.view.constraints)
-        self.view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.backgroundColor = UIColor.white
         let widthForViews = self.view.frame.width * 0.71
-
-        self.backgroundImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
-        self.backgroundImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        self.backgroundImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: 0).isActive = true
-        self.backgroundImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: 0).isActive = true
-        self.backgroundImageView.image = AssetManager.imageForAssetName(name: .loginBackground)
         
         self.userNameTextField.bottomAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 0).isActive = true
         self.userNameTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         self.userNameTextField.widthAnchor.constraint(equalToConstant: widthForViews).isActive = true
         self.userNameTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
-        self.userNameTextField.placeholder = "Email"
+        self.userNameTextField.borderColor = StyleGuideManager.loginTextFieldDefaultColor
+        self.userNameTextField.selectedBorderColor = StyleGuideManager.loginTextFieldSelectedColor
+        self.userNameTextField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName: StyleGuideManager.loginPlaceholderTextColor])
+        self.userNameTextField.textColor = StyleGuideManager.loginTextFieldTextColor
         
         self.logoImageView.image = AssetManager.imageForAssetName(name: AssetName.logoColored)
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -101,7 +110,13 @@ extension LoginRegisterVC { //UI calls
         
         let passwordTextField = ToplessTextField(frame: CGRect.zero)
         self.view.addSubview(passwordTextField)
-        passwordTextField.placeholder = "Password"
+        passwordTextField.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName: StyleGuideManager.loginPlaceholderTextColor])
+        passwordTextField.borderColor = StyleGuideManager.loginTextFieldDefaultColor
+        passwordTextField.selectedBorderColor = StyleGuideManager.loginTextFieldSelectedColor
+        passwordTextField.textColor = StyleGuideManager.loginTextFieldTextColor
+
+
+        
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         passwordTextField.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor).isActive = true
@@ -116,12 +131,13 @@ extension LoginRegisterVC { //UI calls
         self.view.addSubview(loginButton)
         
         loginButton.setTitle("Login", for: .normal)
-        loginButton.backgroundColor = UIColor.green
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: heightRemaining * 0.13).isActive = true
         loginButton.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor).isActive = true
         loginButton.heightAnchor.constraint(equalToConstant: heightRemaining * 0.22).isActive = true
         loginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        loginButton.layer.borderWidth = 2.0
+        loginButton.layer.borderColor = UIColor.green.cgColor
         
         //heightRemaining * 0.2
         
@@ -146,7 +162,6 @@ extension LoginRegisterVC { //UI calls
         socialLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         socialLoginButton.heightAnchor.constraint(equalToConstant: heightRemaining * 0.22).isActive = true
         socialLoginButton.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor).isActive = true
-        socialLoginButton.backgroundColor = UIColor.green
         
         let forgotPasswordRegisterView = UIView(frame: CGRect.zero)
         self.view.addSubview(forgotPasswordRegisterView)
