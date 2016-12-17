@@ -25,9 +25,17 @@ public class StyleGuideManager {
     static let loginButtonBorderColor = UIColor(red: 105 / 255 , green: 240 / 255, blue: 174 / 255, alpha: 1.0)
     static let loginPageTextColor = UIColor.white
     
+    func loginFontLarge() -> UIFont {
+        return UIFont(name: "Helvetica Light", size: 30)!
+
+    }
     
     func loginPageFont() -> UIFont {
-        return UIFont(name: "Helvetica Light", size: 25)!
+        return UIFont(name: "Helvetica Light", size: 15)!
+    }
+    
+    func loginPageSmallFont() -> UIFont {
+        return UIFont(name: "Helvetica Light", size: 13)!
     }
 }
 

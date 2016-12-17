@@ -55,9 +55,9 @@ class ToplessTextField: UITextField, UITextFieldDelegate {
     func addBottom() {
         if !self.didAddBottom {
             self.border = CALayer()
-            let width = CGFloat(2.0)
+            let width = CGFloat(2)
             self.border!.borderColor = borderColor.cgColor
-            self.border!.frame = CGRect(x: 0, y: self.frame.size.height - 2, width:  self.frame.size.width, height: 2)
+            self.border!.frame = CGRect(x: 0, y: self.frame.size.height - width, width:  self.frame.size.width, height: width)
             self.border!.borderWidth = width
             self.layer.addSublayer(border!)
             self.layer.masksToBounds = true

@@ -31,7 +31,7 @@ class RoundedButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         if self.frame != CGRect.zero {
-            self.layer.cornerRadius = 33
+            self.layer.cornerRadius = self.frame.height * 0.5
             self.clipsToBounds = true
             self.backgroundColor = self.filledIn == true ? self.color : UIColor.clear
             self.layer.borderWidth = self.filledIn == true ? 0 : 2
