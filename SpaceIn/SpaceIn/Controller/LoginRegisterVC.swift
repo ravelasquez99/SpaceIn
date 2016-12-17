@@ -128,7 +128,7 @@ extension LoginRegisterVC { //UI calls
         
         heightRemaining = heightRemaining - LoginRegisterVC.textFieldHeights - 10
         
-        let loginButton = RoundedButton(filledIn: false, color: StyleGuideManager.loginButtonBorderColor)
+        let loginButton = RoundedButton(filledIn: true, color: StyleGuideManager.loginButtonBorderColor)
         self.view.addSubview(loginButton)
         loginButton.setTitle("Login", for: .normal)
         loginButton.titleLabel?.font = self.loginFont
@@ -146,13 +146,13 @@ extension LoginRegisterVC { //UI calls
         orLabel.textAlignment = .center
         orLabel.text = "Or"
         orLabel.font = self.loginFont
+        orLabel.textColor = StyleGuideManager.loginPageTextColor
 
         orLabel.translatesAutoresizingMaskIntoConstraints = false
         orLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         orLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: heightRemaining * 0.08).isActive = true
         orLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
         orLabel.heightAnchor.constraint(equalToConstant: heightRemaining * 0.05).isActive = true
-        orLabel.backgroundColor = .orange
         
         let socialLoginButton = RoundedButton(filledIn: false, color: StyleGuideManager.loginButtonBorderColor)
         self.view.addSubview(socialLoginButton)
@@ -182,6 +182,7 @@ extension LoginRegisterVC { //UI calls
         divider.textAlignment = .center
         forgotPasswordRegisterView.addSubview(divider)
         divider.font = self.loginFont
+        divider.textColor = StyleGuideManager.loginPageTextColor
         
         divider.centerXAnchor.constraint(equalTo: forgotPasswordRegisterView.centerXAnchor).isActive = true
         divider.heightAnchor.constraint(equalTo: forgotPasswordRegisterView.heightAnchor).isActive = true
