@@ -13,11 +13,11 @@ class RoundedButton: UIButton {
     private var color: UIColor?
     private var filledIn: Bool?
     
-    
     convenience init(filledIn: Bool, color: UIColor? ) {
         self.init(frame: CGRect.zero)
         self.filledIn = filledIn
         self.color = color
+        self.setTitleColor(UIColor.gray, for: .highlighted)
     }
     
     override init(frame: CGRect) {

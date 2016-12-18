@@ -18,12 +18,22 @@ public class StyleGuideManager {
         return instance
     }()
     
+    //Login
     static let loginTextFieldDefaultColor = UIColor.white
     static let loginTextFieldSelectedColor = UIColor.lightGray
     static let loginPlaceholderTextColor = UIColor.white
     static let loginTextFieldTextColor = UIColor.darkGray
     static let loginButtonBorderColor = UIColor(red: 105 / 255 , green: 240 / 255, blue: 174 / 255, alpha: 1.0)
     static let loginPageTextColor = UIColor.white
+    
+    //Register
+    static let registerTextFieldDefaultColor = UIColor.black
+    static let registerTextFieldSelectedColor = UIColor.lightGray
+    static let registerPlaceholderTextColor = UIColor.lightGray
+    static let registerTextFieldTextColor = UIColor.black
+
+
+
     
     func loginFontLarge() -> UIFont {
         return UIFont(name: "Helvetica Light", size: 30)!

@@ -25,11 +25,7 @@ class ToplessTextField: UITextField, UITextFieldDelegate {
         }
     }
     
-    var selectedBorderColor: UIColor? {
-        didSet {
-            
-        }
-    }
+    var selectedBorderColor: UIColor?
     
     private var border: CALayer?
     
