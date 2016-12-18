@@ -51,33 +51,57 @@ extension LoginRegisterVC { //UI calls
     
     func layoutRegisterView() {
         self.view.removeConstraints(self.view.constraints)
+    
         self.removeLoginSpecificViews()
+        self.addRegisterSpecificSubviews()
+
         self.layoutBackgroundImageView()
         self.backgroundImageView.image = nil
         self.backgroundImageView.backgroundColor = UIColor.clear
-        self.view.backgroundColor = .white
         
+        self.view.backgroundColor = .white
+        self.setupRegisterTextFields()
+        self.constrainRegisterView()
+    }
+    
+    fileprivate func removeRegisterSpecificViews() {
+        self.confirmPasswordTextField.removeFromSuperview()
+        self.fullNameTextField.removeFromSuperview()
+    }
+    
+    
+    private func setupRegisterTextFields() {
+        self.setColorsForTextField(textField: self.emailTextField, withPlaceHolerText: "Email")
+        self.setColorsForTextField(textField: self.fullNameTextField, withPlaceHolerText: "Full name")
+        self.setColorsForTextField(textField: self.passwordTextField, withPlaceHolerText: "Password")
+        self.setColorsForTextField(textField: self.confirmPasswordTextField, withPlaceHolerText: "Confirm Password")
+    }
+    
+    private func addRegisterSpecificSubviews() {
         let viewsToAdd = [self.fullNameTextField, self.confirmPasswordTextField]
         for view in viewsToAdd {
             view.translatesAutoresizingMaskIntoConstraints = false
             self.view.addSubview(view)
         }
+    }
+    
+    fileprivate func constrainRegisterView() {
         let widthForViews = self.view.frame.width * 0.71
+        let paddingBetweenTextFields = CGFloat(32)
         
-        self.setColorsForTextField(textField: self.emailTextField, withPlaceHolerText: "Email")
-        self.setColorsForTextField(textField: self.fullNameTextField, withPlaceHolerText: "Full name")
-        self.setColorsForTextField(textField: self.passwordTextField, withPlaceHolerText: "Password")
-        self.setColorsForTextField(textField: self.confirmPasswordTextField, withPlaceHolerText: "Confirm Password")
+        let fullwidthCenteredViews = [self.passwordTextField, self.fullNameTextField, self.emailTextField, self.passwordTextField, self.confirmPasswordTextField, self.signupLoginButton, self.socialLoginButton]
         
-        self.passwordTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.passwordTextField.widthAnchor.constraint(equalToConstant: widthForViews).isActive = true
-        self.passwordTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
+        for centeredView in fullwidthCenteredViews {
+            centeredView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            centeredView.widthAnchor.constraint(equalToConstant: widthForViews).isActive = true
+            centeredView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
+        }
+       
+        //setup vertical spacing
         self.passwordTextField.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -5).isActive = true
-        
-//        self.emailTextField.bottomAnchor.constraint(equalTo: self.passwordTextField.topAnchor, constant: -15).isActive = true
-//        self.emailTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
-//        self.emailTextField.widthAnchor.constraint(equalTo: self.passwordTextField.widthAnchor).isActive = true
-//        self.emailTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
+        self.fullNameTextField.bottomAnchor.constraint(equalTo: self.passwordTextField.topAnchor, constant: -paddingBetweenTextFields).isActive = true
+        self.emailTextField.bottomAnchor.constraint(equalTo: self.fullNameTextField.topAnchor, constant: -paddingBetweenTextFields).isActive = true
+        self.confirmPasswordTextField.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: paddingBetweenTextFields)
     }
     
     func layoutSignInView() {
@@ -182,12 +206,7 @@ extension LoginRegisterVC { //UI calls
         self.switchLoginRegisterButton.leftAnchor.constraint(equalTo:self.divider.rightAnchor, constant: 15).isActive = true
         self.switchLoginRegisterButton.bottomAnchor.constraint(equalTo: self.bottomButtonsView.bottomAnchor).isActive = true
     }
-    
-    fileprivate func removeRegisterSpecificViews() {
-        self.confirmPasswordTextField.removeFromSuperview()
-        self.fullNameTextField.removeFromSuperview()
-    }
-    
+
     fileprivate func removeLoginSpecificViews() {
         self.forgotPasswordButton.removeFromSuperview()
     }

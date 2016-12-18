@@ -27,7 +27,7 @@ public class StyleGuideManager {
     static let loginPageTextColor = UIColor.white
     
     //Register
-    static let registerTextFieldDefaultColor = UIColor.black
+    static let registerTextFieldDefaultColor = UIColor.lightGray
     static let registerTextFieldSelectedColor = UIColor.lightGray
     static let registerPlaceholderTextColor = UIColor.lightGray
     static let registerTextFieldTextColor = UIColor.black
