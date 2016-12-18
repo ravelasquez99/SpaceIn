@@ -81,6 +81,10 @@ class LoginRegisterVC : UIViewController {
         print("login pressed")
     }
     
+    func socialLoginPressed() {
+        print("social login pressed")
+    }
+    
     func switchState() {
         let stateToSwitchTo = self.state == .register ? LoginRegisterState.login : LoginRegisterState.register
         self.switchToState(state: stateToSwitchTo)

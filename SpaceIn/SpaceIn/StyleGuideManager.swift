@@ -31,6 +31,8 @@ public class StyleGuideManager {
     static let registerTextFieldSelectedColor = UIColor.lightGray
     static let registerPlaceholderTextColor = UIColor.lightGray
     static let registerTextFieldTextColor = UIColor.black
+    static let registerPageTextColor = UIColor.darkGray
+
 
 
 

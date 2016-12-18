@@ -9,18 +9,30 @@
 import UIKit
 
 extension LoginRegisterVC { //UI calls
-    
+    //MARK: - Initial UI Setup(Login + Register)
     func addConstantViews() {
         self.addConstantSubviews()
-        self.setConstantViewsAsConstrainable()
+        self.setViewsAsConstrainable()
         self.setFonts()
+        self.logoImageView.image = AssetManager.imageForAssetName(name: AssetName.logoColored)
+        self.orLabel.textAlignment = .center
+        self.orLabel.text = "or"
+        
+        self.signupLoginButton.setTitleColor(UIColor.white, for: .normal)
+        self.socialLoginButton.setTitleColor(UIColor.white, for: .normal)
+        
+        self.signupLoginButton.setTitleColor(UIColor.gray, for: .highlighted)
+        self.socialLoginButton.setTitleColor(UIColor.gray, for: .highlighted)
+        
+        self.forgotPasswordButton.setTitle("Forgot Password", for: .normal)
+        self.forgotPasswordButton.setTitleColor(UIColor.gray, for: .highlighted)
     }
     
     fileprivate func addConstantSubviews() {
         self.view.addSubview(self.backgroundImageView)
         self.view.addSubview(self.logoImageView)
         self.view.addSubview(self.emailTextField)
-        self.view.addSubview(passwordTextField)
+        self.view.addSubview(self.passwordTextField)
         self.view.addSubview(self.signupLoginButton)
         self.view.addSubview(self.orLabel)
         self.view.addSubview(self.socialLoginButton)
@@ -28,7 +40,7 @@ extension LoginRegisterVC { //UI calls
         self.bottomButtonsView.addSubview(self.switchLoginRegisterButton)
     }
     
-    fileprivate func setConstantViewsAsConstrainable() {
+    fileprivate func setViewsAsConstrainable() {
         self.emailTextField.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         self.logoImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -38,11 +50,20 @@ extension LoginRegisterVC { //UI calls
         self.socialLoginButton.translatesAutoresizingMaskIntoConstraints = false
         self.switchLoginRegisterButton.translatesAutoresizingMaskIntoConstraints = false
         self.bottomButtonsView.translatesAutoresizingMaskIntoConstraints = false
+        self.fullNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.confirmPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.divider.translatesAutoresizingMaskIntoConstraints = false
+        self.forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
+    //MARK: - Shared UI Calls (Login + Register)
     fileprivate func setFonts() {
-        self.emailTextField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName: StyleGuideManager.loginPlaceholderTextColor, NSFontAttributeName: self.loginFont])
         self.signupLoginButton.titleLabel?.font = self.loginFont
+        self.socialLoginButton.titleLabel?.font = self.loginFont
+        self.orLabel.font = self.loginFont
+        self.divider.font = StyleGuideManager.sharedInstance.loginFontLarge()
+        self.forgotPasswordButton.titleLabel?.font = StyleGuideManager.sharedInstance.loginPageSmallFont()
+        self.switchLoginRegisterButton.titleLabel?.font = StyleGuideManager.sharedInstance.loginPageSmallFont()
     }
     
     
@@ -54,7 +75,54 @@ extension LoginRegisterVC { //UI calls
         self.backgroundImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: 0).isActive = true
     }
     
+    fileprivate func updateSubviewsForStateChange() {
+        self.backgroundImageView.image = self.state == .register ?  nil : AssetManager.imageForAssetName(name: .loginBackground)
+        
+        self.backgroundImageView.backgroundColor = UIColor.clear
+        self.updateButtonsForStateChange()
+        self.updateTextFieldsForStateChange()
+        
+        self.orLabel.textColor = self.state == .register ? StyleGuideManager.registerPageTextColor : StyleGuideManager.loginPageTextColor
+    }
+    
+    private func updateButtonsForStateChange() {
+        self.socialLoginButton.setFilledInState(filledIn: self.state == .register)
+        self.signupLoginButton.setFilledInState(filledIn: self.state == .register)
+        
+        let signUpTitle = self.state == .register ? "Sign Up" : "Login"
+        self.signupLoginButton.setTitle(signUpTitle, for: .normal)
+        
+        let socialTitle = self.state == .register ? "Sign Up With Google" : "Sign In With Google"
+        self.socialLoginButton.setTitle(socialTitle, for: .normal)
+
+        let switchTitle = self.state == .register ? "Login" : "Register"
+        self.switchLoginRegisterButton.setTitle(switchTitle, for: .normal)
+        
+        let switchColor = self.state == .register ? StyleGuideManager.registerPageTextColor : StyleGuideManager.loginPageTextColor
+        self.switchLoginRegisterButton.setTitleColor(switchColor, for: .normal)
+    }
+    
+    private func updateTextFieldsForStateChange() {
+        self.setColorsForTextField(textField: self.emailTextField, withPlaceHolerText: "Email")
+        self.setColorsForTextField(textField: self.fullNameTextField, withPlaceHolerText: "Full name")
+        self.setColorsForTextField(textField: self.passwordTextField, withPlaceHolerText: "Password")
+        self.setColorsForTextField(textField: self.confirmPasswordTextField, withPlaceHolerText: "Confirm Password")
+    }
+    
+    
+    fileprivate func setColorsForTextField(textField: ToplessTextField, withPlaceHolerText placeholderText: String) {
+        textField.borderColor = self.state == .register ? StyleGuideManager.registerTextFieldDefaultColor : StyleGuideManager.loginTextFieldDefaultColor
+        textField.selectedBorderColor = self.state == .register ? StyleGuideManager.registerTextFieldSelectedColor : StyleGuideManager.loginTextFieldSelectedColor
+        let placeholderTextColor = self.state == .register ? StyleGuideManager.registerPlaceholderTextColor : StyleGuideManager.loginPlaceholderTextColor
+        textField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: placeholderTextColor, NSFontAttributeName: self.loginFont])
+        textField.textColor = self.state == .register ?  StyleGuideManager.registerTextFieldTextColor : StyleGuideManager.loginTextFieldTextColor
+    }
+    
+    
+    //MARK: - Register Calls
     func layoutRegisterView() {
+       
+
         self.view.removeConstraints(self.view.constraints)
         self.removeLoginSpecificViews()
         self.addRegisterSpecificSubviews()
@@ -63,49 +131,22 @@ extension LoginRegisterVC { //UI calls
         self.constrainRegisterView()
     }
     
-    fileprivate func updateSubviewsForStateChange() {
-        self.backgroundImageView.image = nil
-        self.backgroundImageView.backgroundColor = UIColor.clear
-        self.setupRegisterTextFields()
-        self.updateButtonsForStateChange()
-        self.orLabel.textColor = UIColor.lightGray
-        self.switchLoginRegisterButton.setTitle("Login", for: .normal)
-        self.switchLoginRegisterButton.setTitleColor(UIColor.darkGray, for: .normal)
-    }
-    
-    
-    
-    fileprivate func removeRegisterSpecificViews() {
-        self.confirmPasswordTextField.removeFromSuperview()
-        self.fullNameTextField.removeFromSuperview()
-        self.orLabel.textColor = StyleGuideManager.registerTextFieldDefaultColor
-    }
-    
-    
-    private func setupRegisterTextFields() {
-        self.setColorsForTextField(textField: self.emailTextField, withPlaceHolerText: "Email")
-        self.setColorsForTextField(textField: self.fullNameTextField, withPlaceHolerText: "Full name")
-        self.setColorsForTextField(textField: self.passwordTextField, withPlaceHolerText: "Password")
-        self.setColorsForTextField(textField: self.confirmPasswordTextField, withPlaceHolerText: "Confirm Password")
-    }
-    
-    private func updateButtonsForStateChange() {
-        self.socialLoginButton.toggleFilledInState()
-        self.signupLoginButton.toggleFilledInState()
-        
-        let socialTitle = self.state == .register ? "Sign Up With Google" : "Sign In With Google"
-        self.socialLoginButton.setTitle(socialTitle, for: .normal)
-        
-        let signUpTitle = self.state == .register ? "Sign Up" : "Sign In"
-        self.signupLoginButton.setTitle(signUpTitle, for: .normal)
+    fileprivate func removeLoginSpecificViews() {
+        self.forgotPasswordButton.removeFromSuperview()
+        self.divider.removeFromSuperview()
+        self.bottomButtonsView.removeConstraints(self.bottomButtonsView.constraints)
     }
     
     private func addRegisterSpecificSubviews() {
         let viewsToAdd = [self.fullNameTextField, self.confirmPasswordTextField]
         for view in viewsToAdd {
-            view.translatesAutoresizingMaskIntoConstraints = false
             self.view.addSubview(view)
         }
+    }
+    
+    fileprivate func removeRegisterSpecificViews() {
+        self.confirmPasswordTextField.removeFromSuperview()
+        self.fullNameTextField.removeFromSuperview()
     }
     
     fileprivate func constrainRegisterView() {
@@ -162,29 +203,30 @@ extension LoginRegisterVC { //UI calls
         self.switchLoginRegisterButton.contentHorizontalAlignment = .center
     }
     
+    //MARK: - Sign In Specific Layouts
+    
     func layoutSignInView() {
         self.view.removeConstraints(self.view.constraints)
-        self.removeRegisterSpecificViews()
+        self.bottomButtonsView.removeConstraints(self.bottomButtonsView.constraints)
         self.layoutBackgroundImageView()
-        self.backgroundImageView.image = AssetManager.imageForAssetName(name: .loginBackground)
-
-        self.setColorsForTextField(textField: self.passwordTextField, withPlaceHolerText: "Password")
-        self.setColorsForTextField(textField: self.emailTextField, withPlaceHolerText: "Email")
+        self.removeRegisterSpecificViews()
+        self.updateSubviewsForStateChange()
+        self.constraintSignInView()
+    }
+    
+    fileprivate func constraintSignInView() {
         
         let widthForViews = self.view.frame.width * 0.71
-
+        
         self.passwordTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.passwordTextField.widthAnchor.constraint(equalTo: self.emailTextField.widthAnchor).isActive = true
         self.passwordTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
         self.passwordTextField.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -5).isActive = true
         
-        
         self.emailTextField.bottomAnchor.constraint(equalTo: self.passwordTextField.topAnchor, constant: -15).isActive = true
         self.emailTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         self.emailTextField.widthAnchor.constraint(equalToConstant: widthForViews).isActive = true
         self.emailTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
-        
-        self.logoImageView.image = AssetManager.imageForAssetName(name: AssetName.logoColored)
         
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
@@ -194,57 +236,36 @@ extension LoginRegisterVC { //UI calls
         var heightRemaining = self.view.frame.height / 2 - LoginRegisterVC.textFieldHeights / 2 - 5
         heightRemaining = heightRemaining - LoginRegisterVC.textFieldHeights - 20
         
-        self.signupLoginButton.setTitle("Login", for: .normal)
-        
         self.signupLoginButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 28).isActive = true
         self.signupLoginButton.widthAnchor.constraint(equalTo: self.emailTextField.widthAnchor).isActive = true
         self.signupLoginButton.heightAnchor.constraint(equalToConstant: LoginRegisterVC.buttonHeights).isActive = true
         self.signupLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.signupLoginButton.layer.borderWidth = 2.0
-        self.signupLoginButton.layer.borderColor = UIColor.green.cgColor
-        
-        self.orLabel.textAlignment = .center
-        self.orLabel.text = "or"
-        self.orLabel.font = self.loginFont
-        self.orLabel.textColor = StyleGuideManager.loginPageTextColor
         
         self.orLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.orLabel.topAnchor.constraint(equalTo: signupLoginButton.bottomAnchor, constant: 13).isActive = true
         self.orLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
         self.orLabel.heightAnchor.constraint(equalToConstant: heightRemaining * 0.1).isActive = true
         
-        self.socialLoginButton.setTitle("Login With Google", for: .normal)
-        self.socialLoginButton.titleLabel?.font = self.loginFont
-        
         self.socialLoginButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 13).isActive = true
         self.socialLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.socialLoginButton.heightAnchor.constraint(equalTo: self.signupLoginButton.heightAnchor).isActive = true
         self.socialLoginButton.widthAnchor.constraint(equalTo: self.emailTextField.widthAnchor).isActive = true
         
-        
         self.bottomButtonsView.topAnchor.constraint(equalTo: self.socialLoginButton.bottomAnchor, constant: 20).isActive = true
         self.bottomButtonsView.widthAnchor.constraint(equalTo: self.emailTextField.widthAnchor).isActive = true
         self.bottomButtonsView.heightAnchor.constraint(equalToConstant: heightRemaining * 0.12).isActive = true
         self.bottomButtonsView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        
-        //
-        
-        self.divider.translatesAutoresizingMaskIntoConstraints = false
+
         self.divider.text = "|"
         self.divider.textAlignment = .center
         self.bottomButtonsView.addSubview(self.divider)
-        self.divider.font = StyleGuideManager.sharedInstance.loginFontLarge()
         self.divider.textColor = StyleGuideManager.loginPageTextColor
         
         self.divider.centerXAnchor.constraint(equalTo: self.bottomButtonsView.centerXAnchor).isActive = true
         self.divider.heightAnchor.constraint(equalTo: self.bottomButtonsView.heightAnchor).isActive = true
         self.divider.centerYAnchor.constraint(equalTo: self.bottomButtonsView.centerYAnchor).isActive = true
         self.divider.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        
-        
-        self.forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
-        self.forgotPasswordButton.setTitle("Forgot Password", for: .normal)
-        self.forgotPasswordButton.titleLabel?.font = StyleGuideManager.sharedInstance.loginPageSmallFont()
+
         self.bottomButtonsView.addSubview(forgotPasswordButton)
         
         self.forgotPasswordButton.leftAnchor.constraint(equalTo: self.bottomButtonsView.leftAnchor, constant: 5).isActive = true
@@ -252,21 +273,13 @@ extension LoginRegisterVC { //UI calls
         self.forgotPasswordButton.rightAnchor.constraint(equalTo: self.divider.leftAnchor, constant: -15).isActive = true
         self.forgotPasswordButton.bottomAnchor.constraint(equalTo: self.bottomButtonsView.bottomAnchor).isActive = true
         self.forgotPasswordButton.contentHorizontalAlignment = .right
-        
-        self.switchLoginRegisterButton.setTitle("Register", for: .normal)
-        self.switchLoginRegisterButton.titleLabel?.font = StyleGuideManager.sharedInstance.loginPageSmallFont()
+
         self.switchLoginRegisterButton.contentHorizontalAlignment = .left
-        
+
         self.switchLoginRegisterButton.rightAnchor.constraint(equalTo: self.bottomButtonsView.rightAnchor, constant: -5).isActive = true
         self.switchLoginRegisterButton.topAnchor.constraint(equalTo: self.bottomButtonsView.topAnchor).isActive = true
         self.switchLoginRegisterButton.leftAnchor.constraint(equalTo:self.divider.rightAnchor, constant: 15).isActive = true
         self.switchLoginRegisterButton.bottomAnchor.constraint(equalTo: self.bottomButtonsView.bottomAnchor).isActive = true
-    }
-
-    fileprivate func removeLoginSpecificViews() {
-        self.forgotPasswordButton.removeFromSuperview()
-        self.divider.removeFromSuperview()
-        self.bottomButtonsView.removeConstraints(self.bottomButtonsView.constraints)
     }
     
     fileprivate func registerImageTopPadding () -> CGFloat {
@@ -275,14 +288,6 @@ extension LoginRegisterVC { //UI calls
     
     fileprivate func sidePadding() -> CGFloat {
         return self.view.frame.width * 0.06
-    }
-    
-    fileprivate func setColorsForTextField(textField: ToplessTextField, withPlaceHolerText placeholderText: String) {
-        textField.borderColor = self.state == .register ? StyleGuideManager.registerTextFieldDefaultColor : StyleGuideManager.loginTextFieldDefaultColor
-        textField.selectedBorderColor = self.state == .register ? StyleGuideManager.registerTextFieldSelectedColor : StyleGuideManager.loginTextFieldSelectedColor
-        let placeholderTextColor = self.state == .register ? StyleGuideManager.registerPlaceholderTextColor : StyleGuideManager.loginPlaceholderTextColor
-        textField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: placeholderTextColor, NSFontAttributeName: self.loginFont])
-        textField.textColor = self.state == .register ?  StyleGuideManager.registerTextFieldTextColor : StyleGuideManager.loginTextFieldTextColor
     }
     
 }

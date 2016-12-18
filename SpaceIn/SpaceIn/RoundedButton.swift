@@ -43,12 +43,8 @@ class RoundedButton: UIButton {
         self.layer.borderColor = self.filledIn == true ? UIColor.clear.cgColor : self.color?.cgColor
     }
     
-    func toggleFilledInState() {
-        if self.filledIn != nil {
-            self.filledIn = !self.filledIn!
-            self.setupColors()
-        }
-
-        
+    func setFilledInState(filledIn: Bool) {
+        self.filledIn = filledIn
+        self.setupColors()
     }
 }
