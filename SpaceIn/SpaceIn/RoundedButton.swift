@@ -33,9 +33,22 @@ class RoundedButton: UIButton {
         if self.frame != CGRect.zero {
             self.layer.cornerRadius = self.frame.height * 0.5
             self.clipsToBounds = true
-            self.backgroundColor = self.filledIn == true ? self.color : UIColor.clear
-            self.layer.borderWidth = self.filledIn == true ? 0 : 2
-            self.layer.borderColor = self.filledIn == true ? UIColor.clear.cgColor : self.color?.cgColor
+            self.setupColors()
         }
+    }
+    
+    private func setupColors() {
+        self.backgroundColor = self.filledIn == true ? self.color : UIColor.clear
+        self.layer.borderWidth = self.filledIn == true ? 0 : 2
+        self.layer.borderColor = self.filledIn == true ? UIColor.clear.cgColor : self.color?.cgColor
+    }
+    
+    func toggleFilledInState() {
+        if self.filledIn != nil {
+            self.filledIn = !self.filledIn!
+            self.setupColors()
+        }
+
+        
     }
 }

@@ -49,8 +49,7 @@ class LoginRegisterVC : UIViewController {
         } else {
             self.addConstantViews()
         }
-        
-        self.switchLoginRegisterButton.addTarget(self, action: #selector(self.switchState), for: .touchUpInside)
+        self.addButtonTargets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,6 +97,12 @@ class LoginRegisterVC : UIViewController {
             self.layoutSignInView()
             break
         }
+    }
+    
+    private func addButtonTargets() {
+        self.socialLoginButton.addTarget(self, action: #selector(self.loginPressed), for: .touchUpInside)
+        self.signupLoginButton.addTarget(self, action: #selector(self.loginPressed), for: .touchUpInside)
+        self.switchLoginRegisterButton.addTarget(self, action: #selector(self.switchState), for: .touchUpInside)
     }
 }
 
