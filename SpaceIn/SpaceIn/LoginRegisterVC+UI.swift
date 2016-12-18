@@ -71,10 +71,10 @@ extension LoginRegisterVC { //UI calls
     
     func layoutBackgroundImageView() {
         self.backgroundImageView.contentMode = .scaleToFill
-        self.backgroundImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
-        self.backgroundImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        self.backgroundImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: 0).isActive = true
-        self.backgroundImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: 0).isActive = true
+        self.backgroundImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: -20).isActive = true
+        self.backgroundImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: -20).isActive = true
+        self.backgroundImageView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 20).isActive = true
+        self.backgroundImageView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 20).isActive = true
     }
     
     fileprivate func updateSubviewsForStateChange() {
