@@ -28,6 +28,9 @@ extension LoginRegisterVC { //UI calls
         self.forgotPasswordButton.setTitleColor(UIColor.gray, for: .highlighted)
         
         self.switchLoginRegisterButton.setTitleColor(UIColor.gray, for: .highlighted)
+        
+        self.passwordTextField.isSecureTextEntry = true
+        self.confirmPasswordTextField.isSecureTextEntry = true
     }
     
     fileprivate func addConstantSubviews() {
@@ -123,7 +126,6 @@ extension LoginRegisterVC { //UI calls
     
     //MARK: - Register Calls
     func layoutRegisterView() {
-       
 
         self.view.removeConstraints(self.view.constraints)
         self.removeLoginSpecificViews()
@@ -233,7 +235,7 @@ extension LoginRegisterVC { //UI calls
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
         self.logoImageView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
-        self.logoImageView.bottomAnchor.constraint(equalTo: self.emailTextField.topAnchor, constant: -40).isActive = true
+        self.logoImageView.bottomAnchor.constraint(equalTo: self.emailTextField.topAnchor, constant: -60).isActive = true
         
         var heightRemaining = self.view.frame.height / 2 - LoginRegisterVC.textFieldHeights / 2 - 5
         heightRemaining = heightRemaining - LoginRegisterVC.textFieldHeights - 20
@@ -275,12 +277,13 @@ extension LoginRegisterVC { //UI calls
         self.forgotPasswordButton.rightAnchor.constraint(equalTo: self.divider.leftAnchor, constant: -15).isActive = true
         self.forgotPasswordButton.bottomAnchor.constraint(equalTo: self.bottomButtonsView.bottomAnchor).isActive = true
         self.forgotPasswordButton.contentHorizontalAlignment = .right
+        self.forgotPasswordButton.sizeToFit()
 
         self.switchLoginRegisterButton.contentHorizontalAlignment = .left
 
         self.switchLoginRegisterButton.rightAnchor.constraint(equalTo: self.bottomButtonsView.rightAnchor, constant: -5).isActive = true
         self.switchLoginRegisterButton.topAnchor.constraint(equalTo: self.bottomButtonsView.topAnchor).isActive = true
-        self.switchLoginRegisterButton.leftAnchor.constraint(equalTo:self.divider.rightAnchor, constant: 15).isActive = true
+        self.switchLoginRegisterButton.leftAnchor.constraint(equalTo:self.divider.rightAnchor, constant: 20).isActive = true
         self.switchLoginRegisterButton.bottomAnchor.constraint(equalTo: self.bottomButtonsView.bottomAnchor).isActive = true
     }
     

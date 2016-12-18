@@ -20,12 +20,14 @@ public class StyleGuideManager {
     
     //Login
     static let loginTextFieldDefaultColor = UIColor.white
-    static let loginTextFieldSelectedColor = UIColor.lightGray
     static let loginPlaceholderTextColor = UIColor.white
-    static let loginTextFieldTextColor = UIColor.darkGray
+
+    static let loginTextFieldSelectedColor = UIColor(withNumbersFor: 36, green: 255, blue: 132)
+    static let loginTextFieldTextColor = UIColor(withNumbersFor: 36, green: 217, blue: 255)
+    
     static let loginButtonBorderColor = UIColor(red: 105 / 255 , green: 240 / 255, blue: 174 / 255, alpha: 1.0)
     static let loginPageTextColor = UIColor.white
-    
+
     //Register
     static let registerTextFieldDefaultColor = UIColor.lightGray
     static let registerTextFieldSelectedColor = UIColor.lightGray
