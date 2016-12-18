@@ -51,22 +51,26 @@ extension LoginRegisterVC { //UI calls
     
     func layoutRegisterView() {
         self.view.removeConstraints(self.view.constraints)
-    
         self.removeLoginSpecificViews()
         self.addRegisterSpecificSubviews()
-
         self.layoutBackgroundImageView()
+        self.updateSubviewsForStateChange()
+        self.constrainRegisterView()
+    }
+    
+    fileprivate func updateSubviewsForStateChange() {
         self.backgroundImageView.image = nil
         self.backgroundImageView.backgroundColor = UIColor.clear
-        
-        self.view.backgroundColor = .white
         self.setupRegisterTextFields()
-        self.constrainRegisterView()
+        self.orLabel.textColor = UIColor.lightGray
+        self.switchLoginRegisterButton.titleLabel?.textColor = UIColor.gray
+
     }
     
     fileprivate func removeRegisterSpecificViews() {
         self.confirmPasswordTextField.removeFromSuperview()
         self.fullNameTextField.removeFromSuperview()
+        self.orLabel.textColor = StyleGuideManager.registerTextFieldDefaultColor
     }
     
     
@@ -89,9 +93,9 @@ extension LoginRegisterVC { //UI calls
         let widthForViews = self.view.frame.width * 0.71
         let paddingBetweenTextFields = CGFloat(32)
         
-        let fullwidthCenteredViews = [self.passwordTextField, self.fullNameTextField, self.emailTextField, self.passwordTextField, self.confirmPasswordTextField, self.signupLoginButton, self.socialLoginButton]
+        let textFields = [self.passwordTextField, self.fullNameTextField, self.emailTextField, self.passwordTextField, self.confirmPasswordTextField]
         
-        for centeredView in fullwidthCenteredViews {
+        for centeredView in textFields {
             centeredView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
             centeredView.widthAnchor.constraint(equalToConstant: widthForViews).isActive = true
             centeredView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
@@ -101,7 +105,42 @@ extension LoginRegisterVC { //UI calls
         self.passwordTextField.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -5).isActive = true
         self.fullNameTextField.bottomAnchor.constraint(equalTo: self.passwordTextField.topAnchor, constant: -paddingBetweenTextFields).isActive = true
         self.emailTextField.bottomAnchor.constraint(equalTo: self.fullNameTextField.topAnchor, constant: -paddingBetweenTextFields).isActive = true
-        self.confirmPasswordTextField.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: paddingBetweenTextFields)
+        self.confirmPasswordTextField.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: paddingBetweenTextFields).isActive = true
+        
+        self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
+        self.logoImageView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
+        self.logoImageView.bottomAnchor.constraint(equalTo: self.emailTextField.topAnchor, constant: -30).isActive = true
+        
+        self.signupLoginButton.topAnchor.constraint(equalTo: self.confirmPasswordTextField.bottomAnchor, constant: 40).isActive = true
+        self.signupLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.signupLoginButton.heightAnchor.constraint(equalToConstant: LoginRegisterVC.buttonHeights).isActive = true
+        self.signupLoginButton.widthAnchor.constraint(equalTo: self.emailTextField.widthAnchor).isActive = true
+        
+        let topPadding = CGFloat(22)
+        
+        self.orLabel.topAnchor.constraint(equalTo: signupLoginButton.bottomAnchor, constant: topPadding).isActive = true
+        self.orLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.orLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        self.orLabel.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        
+        self.socialLoginButton.topAnchor.constraint(equalTo: self.orLabel.bottomAnchor, constant: topPadding).isActive = true
+        self.socialLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.socialLoginButton.widthAnchor.constraint(equalTo: self.signupLoginButton.widthAnchor).isActive = true
+        self.socialLoginButton.heightAnchor.constraint(equalTo: self.signupLoginButton.heightAnchor).isActive = true
+        
+        self.bottomButtonsView.topAnchor.constraint(equalTo: self.socialLoginButton.bottomAnchor, constant: 10).isActive = true
+        self.bottomButtonsView.widthAnchor.constraint(equalTo: self.emailTextField.widthAnchor).isActive = true
+        self.bottomButtonsView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        self.bottomButtonsView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        
+        self.bottomButtonsView.addSubview(self.switchLoginRegisterButton)
+        
+        self.switchLoginRegisterButton.centerXAnchor.constraint(equalTo: self.bottomButtonsView.centerXAnchor).isActive = true
+        self.switchLoginRegisterButton.widthAnchor.constraint(equalTo: self.bottomButtonsView.widthAnchor).isActive = true
+        self.switchLoginRegisterButton.heightAnchor.constraint(equalTo: self.bottomButtonsView.heightAnchor).isActive = true
+        self.switchLoginRegisterButton.centerYAnchor.constraint(equalTo: self.bottomButtonsView.centerYAnchor).isActive = true
+        self.switchLoginRegisterButton.contentHorizontalAlignment = .center
     }
     
     func layoutSignInView() {
@@ -209,6 +248,8 @@ extension LoginRegisterVC { //UI calls
 
     fileprivate func removeLoginSpecificViews() {
         self.forgotPasswordButton.removeFromSuperview()
+        self.divider.removeFromSuperview()
+        self.bottomButtonsView.removeConstraints(self.bottomButtonsView.constraints)
     }
     
     fileprivate func registerImageTopPadding () -> CGFloat {
