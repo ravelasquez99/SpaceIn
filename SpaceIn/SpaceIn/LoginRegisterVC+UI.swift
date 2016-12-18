@@ -26,6 +26,8 @@ extension LoginRegisterVC { //UI calls
         
         self.forgotPasswordButton.setTitle("Forgot Password", for: .normal)
         self.forgotPasswordButton.setTitleColor(UIColor.gray, for: .highlighted)
+        
+        self.switchLoginRegisterButton.setTitleColor(UIColor.gray, for: .highlighted)
     }
     
     fileprivate func addConstantSubviews() {
