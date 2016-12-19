@@ -118,6 +118,7 @@ extension LoginRegisterVC { //UI calls
     fileprivate func setColorsForTextField(textField: ToplessTextField, withPlaceHolerText placeholderText: String) {
         textField.borderColor = self.state == .register ? StyleGuideManager.registerTextFieldDefaultColor : StyleGuideManager.loginTextFieldDefaultColor
         textField.selectedBorderColor = self.state == .register ? StyleGuideManager.registerTextFieldSelectedColor : StyleGuideManager.loginTextFieldSelectedColor
+        
         let placeholderTextColor = self.state == .register ? StyleGuideManager.registerPlaceholderTextColor : StyleGuideManager.loginPlaceholderTextColor
         textField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: placeholderTextColor, NSFontAttributeName: self.loginFont])
         textField.textColor = self.state == .register ?  StyleGuideManager.registerTextFieldTextColor : StyleGuideManager.loginTextFieldTextColor
@@ -133,6 +134,7 @@ extension LoginRegisterVC { //UI calls
         self.layoutBackgroundImageView()
         self.updateSubviewsForStateChange()
         self.constrainRegisterView()
+        UIApplication.shared.statusBarStyle = .default
     }
     
     fileprivate func removeLoginSpecificViews() {
@@ -186,7 +188,7 @@ extension LoginRegisterVC { //UI calls
         self.orLabel.topAnchor.constraint(equalTo: signupLoginButton.bottomAnchor, constant: topPadding).isActive = true
         self.orLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.orLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        self.orLabel.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        self.orLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
         
         self.socialLoginButton.topAnchor.constraint(equalTo: self.orLabel.bottomAnchor, constant: topPadding).isActive = true
         self.socialLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -216,6 +218,7 @@ extension LoginRegisterVC { //UI calls
         self.removeRegisterSpecificViews()
         self.updateSubviewsForStateChange()
         self.constraintSignInView()
+        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     fileprivate func constraintSignInView() {

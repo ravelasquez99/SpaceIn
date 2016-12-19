@@ -65,6 +65,11 @@ class LoginRegisterVC : UIViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        UIApplication.shared.statusBarStyle = .default
+    }
+    
     fileprivate func userIsSignedIn() -> Bool {
         return false
     }

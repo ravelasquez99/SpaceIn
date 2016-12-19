@@ -29,10 +29,11 @@ public class StyleGuideManager {
     static let loginPageTextColor = UIColor.white
 
     //Register
-    static let registerTextFieldDefaultColor = UIColor.lightGray
-    static let registerTextFieldSelectedColor = UIColor.lightGray
     static let registerPlaceholderTextColor = UIColor.lightGray
-    static let registerTextFieldTextColor = UIColor.black
+    static let registerTextFieldDefaultColor = UIColor(withNumbersFor: 16, green: 249, blue: 232)
+
+    static let registerTextFieldSelectedColor = StyleGuideManager.loginTextFieldSelectedColor
+    static let registerTextFieldTextColor = UIColor(withNumbersFor: 36, green: 217, blue: 255)
     static let registerPageTextColor = UIColor.darkGray
 
 
