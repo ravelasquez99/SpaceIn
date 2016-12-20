@@ -83,12 +83,90 @@ class LoginRegisterVC : UIViewController {
         return self.state == .register
     }
     
-    func loginPressed() {
-        print("login pressed")
+    func loginRegisterPressed() {
+        if self.state == .register {
+            self.register()
+        } else {
+            self.login()
+        }
     }
     
     func socialLoginPressed() {
         print("social login pressed")
+    }
+    
+    private func login() {
+        let loginStateIsValid = self.loginStateIsValid()
+        if loginStateIsValid.0 == false {
+            self.presentErrorMessageWithAlert(alert: loginStateIsValid.1!)
+        }
+        
+        
+        
+    }
+    
+    private func register() {
+        let registerStateIsValid = self.registerStateIsValid()
+        if registerStateIsValid.0 == false {
+            self.presentErrorMessageWithAlert(alert: registerStateIsValid.1!)
+        }
+        
+        
+    }
+    
+    private func formIsValid() -> (Bool, AlertMessage?) {
+        return self.state == .register ? self.registerStateIsValid() : self.loginStateIsValid()
+    }
+    
+    private func registerStateIsValid() -> (Bool, AlertMessage?) {
+        if !self.isValidEmailAddress(email: self.emailTextField.text!) {
+            
+            return (false, AlertMessage.invalidEmail())
+            
+        } else if self.validatePasswordText(text: self.passwordTextField.text!){
+            
+            return (false, AlertMessage.invalidPassword())
+            
+        } else if self.passwordTextField.text != self.confirmPasswordTextField.text {
+            
+            return (false, AlertMessage.passwordsDontMatch())
+            
+        } else if self.validateFullName(name: self.fullNameTextField.text!) {
+            
+            return (false, AlertMessage.invalidName())
+            
+        } else {
+            
+            return (true, nil)
+        }
+    }
+    
+    private func loginStateIsValid() -> (Bool, AlertMessage?) {
+        return self.isValidEmailAddress(email: self.emailTextField.text!) ? (true, nil) : (false, AlertMessage.invalidEmail())
+    }
+    
+    private func presentErrorMessageWithAlert(alert: AlertMessage) {
+        
+    }
+    
+    private func isValidEmailAddress(email: String) -> Bool {
+        if email.isValidString() {
+            if !email.contains("@") {
+                return false
+            }
+            if email.characters.count < 6 {
+                return false
+            }
+        }
+        return true
+    }
+    
+    private func validateFullName(name: String) -> Bool {
+        return name.characters.count > 2
+    }
+    
+    private func validatePasswordText(text: String)-> Bool {
+        
     }
     
     func switchState() {
@@ -111,7 +189,7 @@ class LoginRegisterVC : UIViewController {
     
     private func addButtonTargets() {
         self.socialLoginButton.addTarget(self, action: #selector(self.socialLoginPressed), for: .touchUpInside)
-        self.signupLoginButton.addTarget(self, action: #selector(self.loginPressed), for: .touchUpInside)
+        self.signupLoginButton.addTarget(self, action: #selector(self.loginRegisterPressed), for: .touchUpInside)
         self.switchLoginRegisterButton.addTarget(self, action: #selector(self.switchState), for: .touchUpInside)
     }
 }
