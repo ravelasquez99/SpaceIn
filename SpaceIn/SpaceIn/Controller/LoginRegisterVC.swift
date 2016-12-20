@@ -100,9 +100,6 @@ class LoginRegisterVC : UIViewController {
         if loginStateIsValid.0 == false {
             self.presentErrorMessageWithAlert(alert: loginStateIsValid.1!)
         }
-        
-        
-        
     }
     
     private func register() {
@@ -154,9 +151,14 @@ class LoginRegisterVC : UIViewController {
             if !email.contains("@") {
                 return false
             }
-            if email.characters.count < 6 {
+            
+            if email.characters.count >	 6 {
                 return false
             }
+        } else {
+            
+            return false
+            
         }
         return true
     }
@@ -166,7 +168,7 @@ class LoginRegisterVC : UIViewController {
     }
     
     private func validatePasswordText(text: String)-> Bool {
-        
+        return text.characters.count > 5 && text.characters.count < 15
     }
     
     func switchState() {
