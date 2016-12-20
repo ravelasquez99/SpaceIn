@@ -110,7 +110,7 @@ class LoginRegisterVC : UIViewController {
     }
     
     private func addButtonTargets() {
-        self.socialLoginButton.addTarget(self, action: #selector(self.loginPressed), for: .touchUpInside)
+        self.socialLoginButton.addTarget(self, action: #selector(self.socialLoginPressed), for: .touchUpInside)
         self.signupLoginButton.addTarget(self, action: #selector(self.loginPressed), for: .touchUpInside)
         self.switchLoginRegisterButton.addTarget(self, action: #selector(self.switchState), for: .touchUpInside)
     }
