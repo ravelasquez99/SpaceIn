@@ -50,6 +50,7 @@ class LoginRegisterVC : UIViewController {
             self.addConstantViews()
         }
         self.addButtonTargets()
+        self.setTextFieldDelegates()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,8 +116,46 @@ class LoginRegisterVC : UIViewController {
     }
 }
 
-extension LoginRegisterVC: UITextFieldDelegate {
+extension LoginRegisterVC: ToplessTextFieldDelegate {
+    func setTextFieldDelegates() {
+        let textFields = [self.emailTextField, self.fullNameTextField, self.passwordTextField, self.confirmPasswordTextField]
+        for tf in textFields {
+            tf.toplessTextfieldDelegate = self
+        }
+    }
     
+    func didDismissKeyboard(textField: ToplessTextField) {
+        if textField == self.emailTextField {
+            if self.state == .login {
+                self.passwordTextField.becomeFirstResponder()
+            } else if self.state == .register {
+                self.fullNameTextField.becomeFirstResponder()
+            }
+        }
+        
+        if textField == self.passwordTextField && self.state == .register {
+            self.confirmPasswordTextField.becomeFirstResponder()
+        }
+        
+        if textField == self.fullNameTextField && self.state == .register {
+            self.passwordTextField.becomeFirstResponder()
+        }
+    }
+    
+    func toplessTextFieldDidEndEdting() {
+        print("ended")
+    }
+    
+    func toplessTextFieldDidBeginEditing() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
+        self.view.addGestureRecognizer(tapGesture)
+        print("began")
+    }
+    
+    func handleTap(gesture: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+        self.view.removeGestureRecognizer(gesture)
+    }
 }
 
 

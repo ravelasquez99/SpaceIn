@@ -12,10 +12,16 @@
 
 import UIKit
 
+protocol ToplessTextFieldDelegate {
+    func didDismissKeyboard(textField: ToplessTextField)
+    func toplessTextFieldDidBeginEditing()
+    func toplessTextFieldDidEndEdting()
+}
 
 class ToplessTextField: UITextField, UITextFieldDelegate {
     
     private var didAddBottom = false
+    var toplessTextfieldDelegate: ToplessTextFieldDelegate?
     
     var borderColor : UIColor = .orange {
         didSet {
@@ -65,14 +71,17 @@ class ToplessTextField: UITextField, UITextFieldDelegate {
         if self.selectedBorderColor != nil {
             self.border?.borderColor = self.selectedBorderColor!.cgColor
         }
+        self.toplessTextfieldDelegate?.toplessTextFieldDidBeginEditing()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        self.toplessTextfieldDelegate?.didDismissKeyboard(textField: self)
         return true
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.border?.borderColor = self.borderColor.cgColor
+        self.toplessTextfieldDelegate?.toplessTextFieldDidEndEdting()
     }
     
 }
