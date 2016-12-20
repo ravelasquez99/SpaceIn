@@ -28,9 +28,8 @@ extension LoginRegisterVC { //UI calls
         self.forgotPasswordButton.setTitleColor(UIColor.gray, for: .highlighted)
         
         self.switchLoginRegisterButton.setTitleColor(UIColor.gray, for: .highlighted)
-        
-        self.passwordTextField.isSecureTextEntry = true
-        self.confirmPasswordTextField.isSecureTextEntry = true
+        self.setTextFieldKeyboardSettings()
+
     }
     
     fileprivate func addConstantSubviews() {
@@ -71,6 +70,25 @@ extension LoginRegisterVC { //UI calls
         self.switchLoginRegisterButton.titleLabel?.font = StyleGuideManager.sharedInstance.loginPageSmallFont()
     }
     
+    fileprivate func setTextFieldKeyboardSettings() {
+        self.emailTextField.keyboardType = .emailAddress
+        self.emailTextField.returnKeyType = .next
+        self.emailTextField.autocorrectionType = .no
+        
+        self.fullNameTextField.autocorrectionType = .no
+        self.fullNameTextField.keyboardType = .default
+        self.fullNameTextField.returnKeyType = .next
+        
+        self.passwordTextField.autocorrectionType = .no
+        self.confirmPasswordTextField.autocorrectionType = .no
+        self.passwordTextField.isSecureTextEntry = true
+        self.confirmPasswordTextField.isSecureTextEntry = true
+        self.confirmPasswordTextField.returnKeyType = .done
+        
+        self.passwordTextField.keyboardType = .default
+        self.confirmPasswordTextField.keyboardType = .default
+    }
+    
     
     func layoutBackgroundImageView() {
         self.backgroundImageView.contentMode = .scaleToFill
@@ -94,17 +112,19 @@ extension LoginRegisterVC { //UI calls
         self.socialLoginButton.setFilledInState(filledIn: self.state == .register)
         self.signupLoginButton.setFilledInState(filledIn: self.state == .register)
         
-        let signUpTitle = self.state == .register ? "Sign Up" : "Login"
+        let signUpTitle = self.state == .register ? "Sign Up" : "Sign in"
         self.signupLoginButton.setTitle(signUpTitle, for: .normal)
         
         let socialTitle = self.state == .register ? "Sign Up With Google" : "Sign In With Google"
         self.socialLoginButton.setTitle(socialTitle, for: .normal)
 
-        let switchTitle = self.state == .register ? "Login" : "Register"
+        let switchTitle = self.state == .register ? "Sign in" : "Sign Up"
         self.switchLoginRegisterButton.setTitle(switchTitle, for: .normal)
         
         let switchColor = self.state == .register ? StyleGuideManager.registerPageTextColor : StyleGuideManager.loginPageTextColor
         self.switchLoginRegisterButton.setTitleColor(switchColor, for: .normal)
+        
+        self.passwordTextField.returnKeyType = self.state == .login ? .done : .next
     }
     
     private func updateTextFieldsForStateChange() {

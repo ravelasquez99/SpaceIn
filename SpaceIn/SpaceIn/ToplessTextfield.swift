@@ -67,6 +67,10 @@ class ToplessTextField: UITextField, UITextFieldDelegate {
         }
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.border?.borderColor = self.borderColor.cgColor
     }

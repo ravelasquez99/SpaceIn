@@ -35,10 +35,6 @@ public class StyleGuideManager {
     static let registerTextFieldSelectedColor = StyleGuideManager.loginTextFieldSelectedColor
     static let registerTextFieldTextColor = UIColor(withNumbersFor: 36, green: 217, blue: 255)
     static let registerPageTextColor = UIColor.darkGray
-
-
-
-
     
     func loginFontLarge() -> UIFont {
         return UIFont(name: "Helvetica Light", size: 30)!
