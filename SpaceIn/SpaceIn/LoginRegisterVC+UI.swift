@@ -18,6 +18,8 @@ extension LoginRegisterVC { //UI calls
         self.orLabel.textAlignment = .center
         self.orLabel.text = "or"
         
+        self.emailTextField.autocapitalizationType = .none
+        
         self.signupLoginButton.setTitleColor(UIColor.white, for: .normal)
         self.socialLoginButton.setTitleColor(UIColor.white, for: .normal)
         
@@ -308,6 +310,31 @@ extension LoginRegisterVC { //UI calls
         self.switchLoginRegisterButton.topAnchor.constraint(equalTo: self.bottomButtonsView.topAnchor).isActive = true
         self.switchLoginRegisterButton.leftAnchor.constraint(equalTo:self.divider.rightAnchor, constant: 20).isActive = true
         self.switchLoginRegisterButton.bottomAnchor.constraint(equalTo: self.bottomButtonsView.bottomAnchor).isActive = true
+    }
+    
+    func addSpinner() {
+        self.view.addSubview(self.spinner)
+        self.constrainSpinner()
+        self.spinner.startAnimating()
+        self.spinner.hidesWhenStopped = true
+    }
+    
+    func stopSpinner() {
+        self.spinner.stopAnimating()
+    }
+    
+    fileprivate func constrainSpinner() {
+        if self.spinnerConstraints.count == 0 {
+            self.spinner.translatesAutoresizingMaskIntoConstraints = false
+            let centerX = self.spinner.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+            let centerY = self.spinner.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+            let width = self.spinner.widthAnchor.constraint(equalToConstant: 60)
+            let height = self.spinner.heightAnchor.constraint(equalToConstant: 60)
+            self.spinnerConstraints = [centerX, centerY, width, height]
+            for constraint in self.spinnerConstraints {
+                constraint.isActive = true
+            }
+        }
     }
     
     fileprivate func registerImageTopPadding () -> CGFloat {

@@ -30,6 +30,8 @@ class LoginRegisterVC : UIViewController {
     let socialLoginButton = RoundedButton(filledIn: false, color: StyleGuideManager.loginButtonBorderColor)
     let bottomButtonsView = UIView(frame: CGRect.zero)
     let switchLoginRegisterButton = UIButton(type: .custom)
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    var spinnerConstraints = [NSLayoutConstraint]()
     
     //Register only views
     let fullNameTextField = ToplessTextField(frame: CGRect.zero)
@@ -44,17 +46,18 @@ class LoginRegisterVC : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if userIsSignedIn() == true {
-            self.loginUser()
-        } else {
-            self.addConstantViews()
+        if self.userIsSignedIn() == true {
+            self.signInAndSegue()
         }
+        
         self.addButtonTargets()
         self.setTextFieldDelegates()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        self.addConstantViews()
         self.view.removeConstraints(self.view.constraints)
         self.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.backgroundColor = UIColor.white
@@ -72,11 +75,14 @@ class LoginRegisterVC : UIViewController {
     }
     
     fileprivate func userIsSignedIn() -> Bool {
-        return false
+        return FirebaseHelper.userIsLoggedIn()
     }
     
-    fileprivate func loginUser() {
-        
+    fileprivate func signInAndSegue() {
+        OperationQueue.main.addOperation {
+            [weak self] in
+            self?.performSegue(withIdentifier: "login", sender: self)
+        }
     }
     
     fileprivate func shouldLoadRegisterView() -> Bool {
@@ -85,9 +91,9 @@ class LoginRegisterVC : UIViewController {
     
     func loginRegisterPressed() {
         if self.state == .register {
-            self.register()
+            self.registerIfWeCan()
         } else {
-            self.login()
+            self.signInAndSegue()
         }
     }
     
@@ -95,19 +101,56 @@ class LoginRegisterVC : UIViewController {
         print("social login pressed")
     }
     
-    private func login() {
+    private func loginIfWeCan() {
         let loginStateIsValid = self.loginStateIsValid()
         if loginStateIsValid.0 == false {
             self.presentErrorMessageWithAlert(alert: loginStateIsValid.1!)
+        } else {
+            self.login()
+        }
+    }
+    
+    
+    private func login() {
+        guard let email = emailTextField.text else {
+            self.presentErrorMessageWithAlert(alert: AlertMessage.invalidEmail())
+            return
+        }
+        
+        guard let password = passwordTextField.text else {
+            self.presentErrorMessageWithAlert(alert: AlertMessage.invalidPassword())
+            return
+        }
+        
+        FirebaseHelper.loginUser(email: email, password: password, completion: { fbUser, returntype in
+            self.signInAndSegue()
+        })
+        
+    }
+    private func registerIfWeCan() {
+        let registerStateIsValid = self.registerStateIsValid()
+        if registerStateIsValid.0 == false {
+            self.presentErrorMessageWithAlert(alert: registerStateIsValid.1!)
+        } else {
+            self.register()
         }
     }
     
     private func register() {
-        let registerStateIsValid = self.registerStateIsValid()
-        if registerStateIsValid.0 == false {
-            self.presentErrorMessageWithAlert(alert: registerStateIsValid.1!)
-        }
+        let email = self.emailTextField.text
+        let password = self.passwordTextField.text
+        let fullName = self.fullNameTextField.text
         
+        self.addSpinner()
+        
+        FirebaseHelper.createUser(name: fullName!, email: email!, password: password!, completion: { name, createdUserEmail, createdUserUID, fbReturnType in
+            self.stopSpinner()
+            if fbReturnType != .Success {
+                self.handleFireBaseReturnTypre(returnType: fbReturnType)
+            } else {
+                self.loginIfWeCan()
+            }
+        })
         
     }
     
@@ -120,7 +163,11 @@ class LoginRegisterVC : UIViewController {
             
             return (false, AlertMessage.invalidEmail())
             
-        } else if self.validatePasswordText(text: self.passwordTextField.text!){
+        } else if !self.validateFullName(name: self.fullNameTextField.text!){
+            
+            return (false, AlertMessage.invalidPassword())
+            
+        } else if !self.validatePasswordText(text: self.passwordTextField.text!){
             
             return (false, AlertMessage.invalidPassword())
             
@@ -128,7 +175,7 @@ class LoginRegisterVC : UIViewController {
             
             return (false, AlertMessage.passwordsDontMatch())
             
-        } else if self.validateFullName(name: self.fullNameTextField.text!) {
+        } else if !self.validateFullName(name: self.fullNameTextField.text!) {
             
             return (false, AlertMessage.invalidName())
             
@@ -143,7 +190,29 @@ class LoginRegisterVC : UIViewController {
     }
     
     private func presentErrorMessageWithAlert(alert: AlertMessage) {
+        let alertController = UIAlertController(title: alert.alertTitle, message: alert.alertSubtitle, preferredStyle: .alert)
         
+        if alert.actionButton1Title.isValidString() {
+            alertController.addAction(UIAlertAction(title: alert.actionButton1Title, style: .default, handler: nil))
+        }
+        
+        if alert.actionButton2title != nil {
+            if alert.actionButton2title!.isValidString() {
+                alertController.addAction(UIAlertAction(title: alert.actionButton2title!, style: .default, handler: nil))
+            }
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func handleFireBaseReturnTypre(returnType: FirebaseReturnType) {
+        let alertMessage = AlertMessage.alertMessageForFireBaseReturnType(returnType: returnType)
+        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle, preferredStyle: .alert)
+        if alertMessage.actionButton1Title.isValidString() {
+            alertController.addAction(UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil))
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
     }
     
     private func isValidEmailAddress(email: String) -> Bool {
@@ -152,20 +221,22 @@ class LoginRegisterVC : UIViewController {
                 return false
             }
             
-            if email.characters.count >	 6 {
+            if email.characters.count < 6 {
                 return false
             }
-        } else {
             
-            return false
-            
+            if !email.contains(".") {
+                return false
+            }
         }
+        
         return true
     }
     
     private func validateFullName(name: String) -> Bool {
         return name.characters.count > 2
     }
+
     
     private func validatePasswordText(text: String)-> Bool {
         return text.characters.count > 5 && text.characters.count < 15

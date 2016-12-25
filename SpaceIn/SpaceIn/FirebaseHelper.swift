@@ -118,4 +118,16 @@ class FirebaseHelper {
         
         return returnType
     }
+    
+    class func userIsLoggedIn() -> Bool {
+        return FIRAuth.auth()?.currentUser != nil
+    }
+    
+    class func signOut() {
+        do {
+            try FIRAuth.auth()?.signOut()
+        } catch {
+            print("we could not sign out")
+        }
+    }
 }

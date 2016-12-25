@@ -19,16 +19,50 @@ enum AlertMessages: String {
     case mismatchPasswordSubtitle = "Please make sure your passwords match"
     
     case invalidNameTitle = "Please make sure to type a name longer than 2 characters"
+    
+    case unknownErrorTitle = "An Unknown Error Occured"
+    case unknownErrorSubtitle = "Please try again later"
+    
+    case userAlreadyExistsTitle = "Error"
+    case userAlreadyExistsSubtitle = "An acoount with this information already exists"
+    
+    case userNotFoundTitle = "User Not Found"
+    case userNotFoundSubtitle = "Please enter different information"
+    
+    case networkIssueTitle = "Network Error"
+    case networkIssueSubtitle = "Oops, something went wrong with the network. Please try again later"
 }
+
+//enum FirebaseReturnType {
+//    //Create user
+//    case UserAlreadyCreated
+//    case Success
+//    case NoUID
+//    case UserNotFound
+//    
+//    //Sign in
+//    case InvalidPassword
+//    case EmailDoesntExist
+//    case InvalidEmail
+//    
+//    //Default
+//    case Unknown
+//    
+//    case InvalidToken
+//    
+//    //Network
+//    case NetworkError
+//    case TooManyRequests
+//}
 
 
 class AlertMessage {
     var alertTitle: String?
     var alertSubtitle: String?
-    var actionButton1Title: String?
+    var actionButton1Title: String
     var actionButton2title: String?
     
-    public init (title: String, subtitle: String?, actionButtontitle: String, secondButtonTitle: String) {
+    public init (title: String, subtitle: String?, actionButtontitle: String, secondButtonTitle: String?) {
         self.alertTitle = title
         self.alertSubtitle = subtitle
         self.actionButton1Title = actionButtontitle
@@ -49,6 +83,45 @@ class AlertMessage {
     
     class func invalidName() -> AlertMessage {
         return AlertMessage(title: AlertMessages.invalidNameTitle.rawValue, subtitle: "", actionButtontitle: "Ok", secondButtonTitle: "")
+    }
+    
+    class func alertMessageForFireBaseReturnType(returnType: FirebaseReturnType) -> AlertMessage {
+        var titleMessage = AlertMessages.unknownErrorTitle.rawValue
+        var subtitleMessage = AlertMessages.unknownErrorSubtitle.rawValue
+        let alertButtonMessageOne = "OK"
+        
+        switch returnType {
+        case .InvalidEmail:
+            titleMessage = AlertMessages.invalidEmailTitle.rawValue
+            subtitleMessage = AlertMessages.invalidEmailSubTitle.rawValue
+            break
+        case .InvalidPassword:
+            titleMessage = AlertMessages.invalidPasswordTitle.rawValue
+            subtitleMessage = AlertMessages.invalidEmailSubTitle.rawValue
+            break
+        case .UserAlreadyCreated:
+            titleMessage = AlertMessages.userAlreadyExistsTitle.rawValue
+            subtitleMessage = AlertMessages.userAlreadyExistsSubtitle.rawValue
+            break
+        case .EmailDoesntExist:
+            titleMessage = AlertMessages.invalidEmailTitle.rawValue
+            subtitleMessage = AlertMessages.invalidEmailSubTitle.rawValue
+            break
+        case .NoUID:
+            break
+        case .UserNotFound:
+            titleMessage = AlertMessages.userNotFoundTitle.rawValue
+            subtitleMessage = AlertMessages.userNotFoundSubtitle.rawValue
+            break
+        case .NetworkError:
+            titleMessage = AlertMessages.networkIssueTitle.rawValue
+            subtitleMessage = AlertMessages.networkIssueSubtitle.rawValue
+            break
+        default:
+            break
+        }
+        
+        return AlertMessage(title: titleMessage, subtitle: subtitleMessage, actionButtontitle: alertButtonMessageOne, secondButtonTitle: nil)
     }
 }
 
