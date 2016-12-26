@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import GoogleSignIn
 
 enum FirebaseReturnType {
     //Create user

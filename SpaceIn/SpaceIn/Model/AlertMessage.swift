@@ -33,29 +33,6 @@ enum AlertMessages: String {
     case networkIssueSubtitle = "Oops, something went wrong with the network. Please try again later"
 }
 
-//enum FirebaseReturnType {
-//    //Create user
-//    case UserAlreadyCreated
-//    case Success
-//    case NoUID
-//    case UserNotFound
-//    
-//    //Sign in
-//    case InvalidPassword
-//    case EmailDoesntExist
-//    case InvalidEmail
-//    
-//    //Default
-//    case Unknown
-//    
-//    case InvalidToken
-//    
-//    //Network
-//    case NetworkError
-//    case TooManyRequests
-//}
-
-
 class AlertMessage {
     var alertTitle: String?
     var alertSubtitle: String?

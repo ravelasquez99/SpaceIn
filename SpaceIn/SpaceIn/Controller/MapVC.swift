@@ -22,6 +22,11 @@ class MapViewController: UIViewController {
 
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        FirebaseHelper.signOut()
+    }
+    
     @IBAction func animate(_ sender: UIButton) {
     }
 }

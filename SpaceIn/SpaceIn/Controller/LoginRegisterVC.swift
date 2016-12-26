@@ -47,7 +47,7 @@ class LoginRegisterVC : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.userIsSignedIn() == true {
-            self.signInAndSegue()
+            self.segueToHomePage()
         }
         
         self.addButtonTargets()
@@ -78,9 +78,10 @@ class LoginRegisterVC : UIViewController {
         return FirebaseHelper.userIsLoggedIn()
     }
     
-    fileprivate func signInAndSegue() {
+    fileprivate func segueToHomePage() {
         OperationQueue.main.addOperation {
             [weak self] in
+            self?.stopSpinner()
             self?.performSegue(withIdentifier: "login", sender: self)
         }
     }
@@ -93,7 +94,7 @@ class LoginRegisterVC : UIViewController {
         if self.state == .register {
             self.registerIfWeCan()
         } else {
-            self.signInAndSegue()
+            self.loginIfWeCan()
         }
     }
     
@@ -122,8 +123,14 @@ class LoginRegisterVC : UIViewController {
             return
         }
         
+        self.addSpinner()
         FirebaseHelper.loginUser(email: email, password: password, completion: { fbUser, returntype in
-            self.signInAndSegue()
+            self.stopSpinner()
+            if returntype != .Success {
+                self.handleFireBaseReturnTypre(returnType: returntype)
+            } else {
+                self.segueToHomePage()
+            }
         })
         
     }
@@ -206,6 +213,7 @@ class LoginRegisterVC : UIViewController {
     }
     
     private func handleFireBaseReturnTypre(returnType: FirebaseReturnType) {
+        self.stopSpinner()
         let alertMessage = AlertMessage.alertMessageForFireBaseReturnType(returnType: returnType)
         let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle, preferredStyle: .alert)
         if alertMessage.actionButton1Title.isValidString() {
@@ -228,6 +236,8 @@ class LoginRegisterVC : UIViewController {
             if !email.contains(".") {
                 return false
             }
+        } else {
+            return false
         }
         
         return true
