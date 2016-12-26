@@ -334,6 +334,10 @@ extension LoginRegisterVC { //UI calls
             for constraint in self.spinnerConstraints {
                 constraint.isActive = true
             }
+        } else {
+            self.view.removeConstraints(self.spinnerConstraints)
+            self.spinnerConstraints.removeAll()
+            self.constrainSpinner()
         }
     }
     
