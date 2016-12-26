@@ -131,4 +131,19 @@ class FirebaseHelper {
             print("we could not sign out")
         }
     }
+    
+    class func setUIDelegateTo(delegate: GIDSignInUIDelegate) {
+        GIDSignIn.sharedInstance().uiDelegate = delegate
+    }
+    
+    class func loginWithCredential(credential: FIRAuthCredential) {
+        FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
+            if error != nil {
+                print("there was an error")
+            } else {
+                print("we are signed in with google")
+            }
+        })
+    }
 }
+

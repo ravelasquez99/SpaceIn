@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import GoogleSignIn
 
 enum LoginRegisterState {
     case login
@@ -67,6 +68,7 @@ class LoginRegisterVC : UIViewController {
         } else {
             self.layoutSignInView()
         }
+        FirebaseHelper.setUIDelegateTo(delegate: self)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -99,7 +101,7 @@ class LoginRegisterVC : UIViewController {
     }
     
     func socialLoginPressed() {
-        print("social login pressed")
+        GIDSignIn.sharedInstance().signIn()
     }
     
     private func loginIfWeCan() {
@@ -277,48 +279,9 @@ class LoginRegisterVC : UIViewController {
     }
 }
 
-extension LoginRegisterVC: ToplessTextFieldDelegate {
-    func setTextFieldDelegates() {
-        let textFields = [self.emailTextField, self.fullNameTextField, self.passwordTextField, self.confirmPasswordTextField]
-        for tf in textFields {
-            tf.toplessTextfieldDelegate = self
-        }
-    }
+extension LoginRegisterVC : GIDSignInUIDelegate {
     
-    func didDismissKeyboard(textField: ToplessTextField) {
-        if textField == self.emailTextField {
-            if self.state == .login {
-                self.passwordTextField.becomeFirstResponder()
-            } else if self.state == .register {
-                self.fullNameTextField.becomeFirstResponder()
-            }
-        }
-        
-        if textField == self.passwordTextField && self.state == .register {
-            self.confirmPasswordTextField.becomeFirstResponder()
-        }
-        
-        if textField == self.fullNameTextField && self.state == .register {
-            self.passwordTextField.becomeFirstResponder()
-        }
-    }
-    
-    func toplessTextFieldDidEndEdting() {
-        print("ended")
-    }
-    
-    func toplessTextFieldDidBeginEditing() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
-        self.view.addGestureRecognizer(tapGesture)
-        print("began")
-    }
-    
-    func handleTap(gesture: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-        self.view.removeGestureRecognizer(gesture)
-    }
 }
-
 
 //how to call fb
 //        FirebaseHelper.createUser(name: "name", email: "email", password: "password", completion: { name, email, uid, fbReturnType in
