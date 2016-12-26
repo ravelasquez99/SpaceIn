@@ -138,14 +138,14 @@ class FirebaseHelper {
         GIDSignIn.sharedInstance().uiDelegate = delegate
     }
     
-    class func loginWithCredential(credential: FIRAuthCredential) {
-        FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
+    class func loginWithCredential(credential: FIRAuthCredential, andUser user: GIDGoogleUser) {
+        FIRAuth.auth()?.signIn(with: credential, completion: { (returnedUser, error) in
             if error != nil {
                 print("there was an error") //breadcrumb
-            } else if user != nil {
-                FirebaseHelper.addUserToDatabase(user: user!, name: user!.displayName!, email: user!.email!, completion: { one, two, three, returnType in
+            } else if returnedUser != nil {
+                FirebaseHelper.addUserToDatabase(user: returnedUser!, name: user.profile.name, email: user.profile.email, completion: { one, two, three, returnType in
+                    print("we should have updated the database with a user")
                     //breadcrumb (database should have user values)
-                    
                 })
                 print("we are signed in with google and firebase, now we need to update firebase")
 

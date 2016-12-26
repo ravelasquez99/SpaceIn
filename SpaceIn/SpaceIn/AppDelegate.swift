@@ -73,9 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         guard let authentication = user.authentication else { return } //breadcrumb
         let credential = FIRGoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                           accessToken: authentication.accessToken)
-        FirebaseHelper.loginWithCredential(credential: credential)
-        
-        
+        FirebaseHelper.loginWithCredential(credential: credential, andUser: user)
     }
     
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user:GIDGoogleUser!,
