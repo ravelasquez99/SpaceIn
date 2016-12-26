@@ -53,6 +53,7 @@ class LoginRegisterVC : UIViewController {
         
         self.addButtonTargets()
         self.setTextFieldDelegates()
+        FirebaseHelper.setUIDelegateTo(delegate: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,7 +61,6 @@ class LoginRegisterVC : UIViewController {
 
         self.addConstantViews()
         self.view.removeConstraints(self.view.constraints)
-        self.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.backgroundColor = UIColor.white
         
         if self.shouldLoadRegisterView() {
@@ -68,7 +68,6 @@ class LoginRegisterVC : UIViewController {
         } else {
             self.layoutSignInView()
         }
-        FirebaseHelper.setUIDelegateTo(delegate: self)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
