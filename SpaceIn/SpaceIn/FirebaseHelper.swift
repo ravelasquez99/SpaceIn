@@ -43,28 +43,30 @@ class FirebaseHelper {
             if error != nil {
                 completion("", "", "", FirebaseHelper.feedback(forError: error!))
                 return
-            }
-            
-            guard let uid = user?.uid else {
+            } else if user?.uid != nil {
+                FirebaseHelper.addUserToDatabase(user: user!, name: name, email: email, completion: completion)
+            } else {
                 completion("", "", "", FirebaseReturnType.NoUID)
-                return
             }
-            
-            let ref = FIRDatabase.database().reference(fromURL: FirebaseHelper.fireBaseBaseURL)
-            let usersReference = ref.child("users").child(uid)
-            let values = ["name": name, "email": email]
-            usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                if err != nil {
-                    completion("", "", "", FirebaseHelper.feedback(forError: err!))
-                    return
-                } else {
-                    completion(name, email, user!.uid, .Success)
-                }
-                print("Saved user successfully into Firebase db")
-            })
         })
 
         
+    }
+    
+    class func addUserToDatabase(user: FIRUser, name: String, email: String, completion: @escaping ( _ name: String, _ email: String, _ uid: String,  _ fbReturnType: FirebaseReturnType) -> Void) {
+        
+        let ref = FIRDatabase.database().reference(fromURL: FirebaseHelper.fireBaseBaseURL)
+        let usersReference = ref.child("users").child(user.uid)
+        let values = ["name": name, "email": email]
+        usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
+            if err != nil {
+                completion("", "", "", FirebaseHelper.feedback(forError: err!))
+                return
+            } else {
+                completion(name, email, user.uid, .Success)
+            }
+            print("Saved user successfully into Firebase db")
+        })
     }
     
     class func loginUser(email: String, password: String, completion: @escaping (_ user: FIRUser?, _ returnType: FirebaseReturnType) -> Void) {
@@ -139,9 +141,16 @@ class FirebaseHelper {
     class func loginWithCredential(credential: FIRAuthCredential) {
         FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
             if error != nil {
-                print("there was an error")
+                print("there was an error") //breadcrumb
+            } else if user != nil {
+                FirebaseHelper.addUserToDatabase(user: user!, name: user!.displayName!, email: user!.email!, completion: { one, two, three, returnType in
+                    //breadcrumb (database should have user values)
+                    
+                })
+                print("we are signed in with google and firebase, now we need to update firebase")
+
             } else {
-                print("we are signed in with google")
+                //breadcrumb
             }
         })
     }
