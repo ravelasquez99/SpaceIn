@@ -58,7 +58,8 @@ class LoginRegisterVC : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.segueToHomePage), name: .DidSetCurrentUser, object: nil)
         self.addConstantViews()
         self.view.removeConstraints(self.view.constraints)
         self.view.backgroundColor = UIColor.white
@@ -73,13 +74,14 @@ class LoginRegisterVC : UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
+        NotificationCenter.default.removeObserver(self)
     }
     
     fileprivate func userIsSignedIn() -> Bool {
         return FirebaseHelper.userIsLoggedIn()
     }
     
-    fileprivate func segueToHomePage() {
+    func segueToHomePage() {
         OperationQueue.main.addOperation {
             [weak self] in
             self?.stopSpinner()

@@ -63,6 +63,7 @@ class FirebaseHelper {
                 completion("", "", "", FirebaseHelper.feedback(forError: err!))
                 return
             } else {
+                SpaceInUser.currentUser = SpaceInUser(name: name, email: email, uid: user.uid)
                 completion(name, email, user.uid, .Success)
             }
             print("Saved user successfully into Firebase db")
@@ -145,10 +146,7 @@ class FirebaseHelper {
             } else if returnedUser != nil {
                 FirebaseHelper.addUserToDatabase(user: returnedUser!, name: user.profile.name, email: user.profile.email, completion: { one, two, three, returnType in
                     print("we should have updated the database with a user")
-                    //breadcrumb (database should have user values)
                 })
-                print("we are signed in with google and firebase, now we need to update firebase")
-
             } else {
                 //breadcrumb
             }

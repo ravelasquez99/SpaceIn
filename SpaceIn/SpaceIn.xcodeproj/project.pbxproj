@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */; };
-		D838E9571DF7B7AF00F08F17 /* SpaceInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D838E9561DF7B7AF00F08F17 /* SpaceInUser.swift */; };
+		D8280FC61E11A3B300D47D83 /* SpaceInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */; };
 		D849EB291E06011800A49B5C /* LoginRegisterVC+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB281E06011800A49B5C /* LoginRegisterVC+UI.swift */; };
 		D849EB2B1E08E5B400A49B5C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB2A1E08E5B300A49B5C /* Constants.swift */; };
 		D849EB2D1E08E8A200A49B5C /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB2C1E08E8A200A49B5C /* AlertMessage.swift */; };
@@ -32,8 +32,8 @@
 		0A06FBF98DDBC98EB5FFB788 /* Pods-SpaceIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.debug.xcconfig"; sourceTree = "<group>"; };
 		A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.release.xcconfig"; sourceTree = "<group>"; };
 		D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToplessTextfield.swift; sourceTree = "<group>"; };
+		D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpaceInUser.swift; path = Model/SpaceInUser.swift; sourceTree = "<group>"; };
 		D838E9551DF7AE6100F08F17 /* SpaceIn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpaceIn.entitlements; sourceTree = "<group>"; };
-		D838E9561DF7B7AF00F08F17 /* SpaceInUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceInUser.swift; sourceTree = "<group>"; };
 		D849EB281E06011800A49B5C /* LoginRegisterVC+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginRegisterVC+UI.swift"; sourceTree = "<group>"; };
 		D849EB2A1E08E5B300A49B5C /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D849EB2C1E08E8A200A49B5C /* AlertMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertMessage.swift; path = Model/AlertMessage.swift; sourceTree = "<group>"; };
@@ -120,11 +120,11 @@
 			isa = PBXGroup;
 			children = (
 				D8D746641DF1236A00A1EE70 /* FirebaseHelper.swift */,
-				D838E9561DF7B7AF00F08F17 /* SpaceInUser.swift */,
 				D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */,
 				D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */,
 				D849EB2A1E08E5B300A49B5C /* Constants.swift */,
 				D849EB2C1E08E8A200A49B5C /* AlertMessage.swift */,
+				D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -288,7 +288,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D838E9571DF7B7AF00F08F17 /* SpaceInUser.swift in Sources */,
 				D8FD46441E01021100873565 /* RoundedButton.swift in Sources */,
 				D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */,
 				D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */,
@@ -296,6 +295,7 @@
 				D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */,
 				D8D746651DF1236A00A1EE70 /* FirebaseHelper.swift in Sources */,
 				D8D746671DF128BA00A1EE70 /* LoginRegisterVC.swift in Sources */,
+				D8280FC61E11A3B300D47D83 /* SpaceInUser.swift in Sources */,
 				D849EB291E06011800A49B5C /* LoginRegisterVC+UI.swift in Sources */,
 				D8CA4C1C1DFA5879004665F0 /* AssetManager.swift in Sources */,
 				D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */,

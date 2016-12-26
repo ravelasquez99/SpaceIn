@@ -8,6 +8,7 @@
 
 import Foundation
 
-class Constants {
+extension Notification.Name {
     
+    static let DidSetCurrentUser = Notification.Name("did-set-current-user")
 }
