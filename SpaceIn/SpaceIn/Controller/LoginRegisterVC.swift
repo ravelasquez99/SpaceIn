@@ -218,6 +218,7 @@ class LoginRegisterVC : UIViewController {
     private func loginStateIsValid() -> (Bool, AlertMessage?) {
         return self.isValidEmailAddress(email: self.emailTextField.text!) ? (true, nil) : (false, AlertMessage.invalidEmail())
     }
+    
     private func isValidEmailAddress(email: String) -> Bool {
         if email.isValidString() {
             if !email.contains("@") {

@@ -9,14 +9,19 @@
 import Foundation
 
 enum AlertMessages: String {
+    case defaultTitle = "Sorry"
+    case defaultButtontitle = "Retry"
+    
     case invalidEmailTitle = "Invalid Email"
-    case invalidEmailSubTitle = "Please provide a valid email"
+    case invalidEmailSubTitle = "That email is invalid"
+    
+
     
     case invalidPasswordTitle = "Invalid Password"
     case invalidPasswordSubtitle = "This password is not valid"
     
     case mismatchPasswordTitle = "Password's Don't Match"
-    case mismatchPasswordSubtitle = "Please make sure your passwords match"
+    case mismatchPasswordSubtitle = "The passwords you have set are not the same"
     
     case invalidNameTitle = "Please make sure to type a name longer than 2 characters"
     
@@ -24,15 +29,14 @@ enum AlertMessages: String {
     case unknownErrorSubtitle = "Please try again later"
     
     case userAlreadyExistsTitle = "Error"
-    case userAlreadyExistsSubtitle = "An acoount with this information already exists"
+    case userAlreadyExistsSubtitle = "That email address is already in use"
     
     case userNotFoundTitle = "User Not Found"
-    case userNotFoundSubtitle = "Please enter different information"
+    case userNotFoundSubtitle = "This account does not exist"
     
     case networkIssueTitle = "Network Error"
-    case networkIssueSubtitle = "Oops, something went wrong with the network. Please try again later"
+    case networkIssueSubtitle = "Unable to connect to the internet"
     
-    case failedSocialLoginTitle = "Sorry"
     case failedSocialLoginSubtitle = "Something went wrong with Google login. Please try again later"
 
     case failedAuthTitle = "Authentication Error"
@@ -54,15 +58,15 @@ class AlertMessage {
     }
     
     class func invalidEmail() -> AlertMessage {
-        return AlertMessage(title: AlertMessages.invalidEmailTitle.rawValue, subtitle: AlertMessages.invalidEmailSubTitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: "")
+        return AlertMessage(title: AlertMessages.defaultTitle.rawValue, subtitle: AlertMessages.invalidEmailSubTitle.rawValue, actionButtontitle: AlertMessages.defaultButtontitle.rawValue, secondButtonTitle: "")
     }
     
     class func invalidPassword() -> AlertMessage {
-        return AlertMessage(title: AlertMessages.invalidPasswordTitle.rawValue, subtitle: AlertMessages.invalidPasswordSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: "")
+        return AlertMessage(title: AlertMessages.defaultTitle.rawValue, subtitle: AlertMessages.invalidPasswordSubtitle.rawValue, actionButtontitle: AlertMessages.defaultButtontitle.rawValue, secondButtonTitle: "")
     }
     
     class func passwordsDontMatch() -> AlertMessage {
-        return AlertMessage(title: AlertMessages.mismatchPasswordTitle.rawValue, subtitle: AlertMessages.mismatchPasswordSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: "")
+        return AlertMessage(title: AlertMessages.defaultTitle.rawValue, subtitle: AlertMessages.mismatchPasswordSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: "")
     }
     
     class func invalidName() -> AlertMessage {
@@ -72,7 +76,7 @@ class AlertMessage {
     class func alertMessageForFireBaseReturnType(returnType: FirebaseReturnType) -> AlertMessage {
         var titleMessage = AlertMessages.unknownErrorTitle.rawValue
         var subtitleMessage = AlertMessages.unknownErrorSubtitle.rawValue
-        let alertButtonMessageOne = "OK"
+        let alertButtonMessageOne = AlertMessages.defaultButtontitle.rawValue
         
         switch returnType {
         case .InvalidEmail:
@@ -84,7 +88,7 @@ class AlertMessage {
             subtitleMessage = AlertMessages.invalidEmailSubTitle.rawValue
             break
         case .UserAlreadyCreated:
-            titleMessage = AlertMessages.userAlreadyExistsTitle.rawValue
+            titleMessage = AlertMessages.defaultTitle.rawValue
             subtitleMessage = AlertMessages.userAlreadyExistsSubtitle.rawValue
             break
         case .EmailDoesntExist:
@@ -94,11 +98,11 @@ class AlertMessage {
         case .NoUID:
             break
         case .UserNotFound:
-            titleMessage = AlertMessages.userNotFoundTitle.rawValue
+            titleMessage = AlertMessages.defaultTitle.rawValue
             subtitleMessage = AlertMessages.userNotFoundSubtitle.rawValue
             break
         case .NetworkError:
-            titleMessage = AlertMessages.networkIssueTitle.rawValue
+            titleMessage = AlertMessages.defaultTitle.rawValue
             subtitleMessage = AlertMessages.networkIssueSubtitle.rawValue
             break
         default:
@@ -109,7 +113,7 @@ class AlertMessage {
     }
     
     class func failedSocialLogin() -> AlertMessage {
-        return AlertMessage(title: AlertMessages.failedSocialLoginTitle.rawValue, subtitle: AlertMessages.failedSocialLoginSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: nil)
+        return AlertMessage(title: AlertMessages.defaultTitle.rawValue, subtitle: AlertMessages.failedSocialLoginSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: nil)
     }
     
     class func failedAuth() -> AlertMessage {
