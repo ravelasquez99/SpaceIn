@@ -64,13 +64,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
         if let error = error {
-            print("failed to login to google \(error.localizedDescription)")//breadcrumb
+            NotificationCenter.default.post(name: .DidFailGoogleLogin, object: nil)
+            print("failed to login to google \(error.localizedDescription)")
             return
         }
         
         print("we signed in with google \(user)")
         
-        guard let authentication = user.authentication else { return } //breadcrumb
+        guard let authentication = user.authentication else {
+            NotificationCenter.default.post(name: .DidFailAuthentication, object: nil)
+            return
+        }
         let credential = FIRGoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                           accessToken: authentication.accessToken)
         FirebaseHelper.loginWithCredential(credential: credential, andUser: user)

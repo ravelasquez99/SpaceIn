@@ -314,6 +314,7 @@ extension LoginRegisterVC { //UI calls
     
     func addSpinner() {
         self.view.addSubview(self.spinner)
+        self.view.isUserInteractionEnabled = false
         self.constrainSpinner()
         self.spinner.startAnimating()
         self.spinner.hidesWhenStopped = true
@@ -321,6 +322,7 @@ extension LoginRegisterVC { //UI calls
     
     func stopSpinner() {
         self.spinner.stopAnimating()
+        self.view.isUserInteractionEnabled = true
     }
     
     fileprivate func constrainSpinner() {

@@ -58,8 +58,8 @@ class LoginRegisterVC : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.addObservers()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.segueToHomePage), name: .DidSetCurrentUser, object: nil)
         self.addConstantViews()
         self.view.removeConstraints(self.view.constraints)
         self.view.backgroundColor = UIColor.white
@@ -75,6 +75,21 @@ class LoginRegisterVC : UIViewController {
         super.viewDidDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
         NotificationCenter.default.removeObserver(self)
+    }
+
+//MARK: Initialization code
+    
+    private func addButtonTargets() {
+        self.socialLoginButton.addTarget(self, action: #selector(self.socialLoginPressed), for: .touchUpInside)
+        self.signupLoginButton.addTarget(self, action: #selector(self.loginRegisterPressed), for: .touchUpInside)
+        self.switchLoginRegisterButton.addTarget(self, action: #selector(self.switchState), for: .touchUpInside)
+    }
+    
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.segueToHomePage), name: .DidSetCurrentUser, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.failedSocialLogin), name: .DidFailGoogleLogin, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.failedAuth), name: .DidFailAuthentication, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.googleErrorOccurred), name: .DidFailLogin, object: nil)
     }
     
     fileprivate func userIsSignedIn() -> Bool {
@@ -101,7 +116,10 @@ class LoginRegisterVC : UIViewController {
         }
     }
     
+//MARK: Buttons Pressed
+    
     func socialLoginPressed() {
+        self.addSpinner()
         GIDSignIn.sharedInstance().signIn()
     }
     
@@ -137,6 +155,7 @@ class LoginRegisterVC : UIViewController {
         })
         
     }
+    
     private func registerIfWeCan() {
         let registerStateIsValid = self.registerStateIsValid()
         if registerStateIsValid.0 == false {
@@ -163,6 +182,7 @@ class LoginRegisterVC : UIViewController {
         })
         
     }
+    //MARK: Validation
     
     private func formIsValid() -> (Bool, AlertMessage?) {
         return self.state == .register ? self.registerStateIsValid() : self.loginStateIsValid()
@@ -198,34 +218,6 @@ class LoginRegisterVC : UIViewController {
     private func loginStateIsValid() -> (Bool, AlertMessage?) {
         return self.isValidEmailAddress(email: self.emailTextField.text!) ? (true, nil) : (false, AlertMessage.invalidEmail())
     }
-    
-    private func presentErrorMessageWithAlert(alert: AlertMessage) {
-        let alertController = UIAlertController(title: alert.alertTitle, message: alert.alertSubtitle, preferredStyle: .alert)
-        
-        if alert.actionButton1Title.isValidString() {
-            alertController.addAction(UIAlertAction(title: alert.actionButton1Title, style: .default, handler: nil))
-        }
-        
-        if alert.actionButton2title != nil {
-            if alert.actionButton2title!.isValidString() {
-                alertController.addAction(UIAlertAction(title: alert.actionButton2title!, style: .default, handler: nil))
-            }
-        }
-        
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-    private func handleFireBaseReturnTypre(returnType: FirebaseReturnType) {
-        self.stopSpinner()
-        let alertMessage = AlertMessage.alertMessageForFireBaseReturnType(returnType: returnType)
-        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle, preferredStyle: .alert)
-        if alertMessage.actionButton1Title.isValidString() {
-            alertController.addAction(UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil))
-        }
-        
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
     private func isValidEmailAddress(email: String) -> Bool {
         if email.isValidString() {
             if !email.contains("@") {
@@ -255,6 +247,8 @@ class LoginRegisterVC : UIViewController {
         return text.characters.count > 5 && text.characters.count < 15
     }
     
+    
+    //MARK: State management
     func switchState() {
         let stateToSwitchTo = self.state == .register ? LoginRegisterState.login : LoginRegisterState.register
         self.switchToState(state: stateToSwitchTo)
@@ -273,13 +267,61 @@ class LoginRegisterVC : UIViewController {
         }
     }
     
-    private func addButtonTargets() {
-        self.socialLoginButton.addTarget(self, action: #selector(self.socialLoginPressed), for: .touchUpInside)
-        self.signupLoginButton.addTarget(self, action: #selector(self.loginRegisterPressed), for: .touchUpInside)
-        self.switchLoginRegisterButton.addTarget(self, action: #selector(self.switchState), for: .touchUpInside)
+    //MARK: Error handling
+    private func handleFireBaseReturnTypre(returnType: FirebaseReturnType) {
+        self.stopSpinner()
+        let alertMessage = AlertMessage.alertMessageForFireBaseReturnType(returnType: returnType)
+        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle, preferredStyle: .alert)
+        if alertMessage.actionButton1Title.isValidString() {
+            alertController.addAction(UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil))
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
     }
+    
+    func failedSocialLogin() {
+        OperationQueue.main.addOperation {
+            [weak self] in
+            self?.stopSpinner()
+            self?.presentErrorMessageWithAlert(alert: AlertMessage.failedSocialLogin())
+        }
+    }
+    
+    func failedAuth() {
+        OperationQueue.main.addOperation {
+            [weak self] in
+            self?.stopSpinner()
+            self?.presentErrorMessageWithAlert(alert: AlertMessage.failedAuth())
+        }
+    }
+    
+    func googleErrorOccurred() {
+        OperationQueue.main.addOperation {
+            [weak self] in
+            self?.stopSpinner()
+            self?.presentErrorMessageWithAlert(alert: AlertMessage.failedAuth())
+        }
+    }
+    
+    private func presentErrorMessageWithAlert(alert: AlertMessage) {
+        let alertController = UIAlertController(title: alert.alertTitle, message: alert.alertSubtitle, preferredStyle: .alert)
+        
+        if alert.actionButton1Title.isValidString() {
+            alertController.addAction(UIAlertAction(title: alert.actionButton1Title, style: .default, handler: nil))
+        }
+        
+        if alert.actionButton2title != nil {
+            if alert.actionButton2title!.isValidString() {
+                alertController.addAction(UIAlertAction(title: alert.actionButton2title!, style: .default, handler: nil))
+            }
+            //breadcrumb- we need to handle actions for secondary calls
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
 }
-
+    
 extension LoginRegisterVC : GIDSignInUIDelegate {
     
 }

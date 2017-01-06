@@ -10,7 +10,7 @@ import Foundation
 
 class SpaceInUser {
     
-    public static var currentUser : SpaceInUser? {
+    public static var current : SpaceInUser? {
         didSet {
             SpaceInUser.didSetCurrentUser()
         }
@@ -27,7 +27,7 @@ class SpaceInUser {
     }
     
     class func didSetCurrentUser() {
-        if SpaceInUser.currentUser != nil {
+        if SpaceInUser.current != nil {
             NotificationCenter.default.post(name: .DidSetCurrentUser, object: nil)
         }
     }

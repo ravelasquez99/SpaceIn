@@ -31,6 +31,13 @@ enum AlertMessages: String {
     
     case networkIssueTitle = "Network Error"
     case networkIssueSubtitle = "Oops, something went wrong with the network. Please try again later"
+    
+    case failedSocialLoginTitle = "Sorry"
+    case failedSocialLoginSubtitle = "Something went wrong with Google login. Please try again later"
+
+    case failedAuthTitle = "Authentication Error"
+    case failedAuthSubTitle = "Oops, something went wrong with the authentication. Please try again later"
+
 }
 
 class AlertMessage {
@@ -99,6 +106,14 @@ class AlertMessage {
         }
         
         return AlertMessage(title: titleMessage, subtitle: subtitleMessage, actionButtontitle: alertButtonMessageOne, secondButtonTitle: nil)
+    }
+    
+    class func failedSocialLogin() -> AlertMessage {
+        return AlertMessage(title: AlertMessages.failedSocialLoginTitle.rawValue, subtitle: AlertMessages.failedSocialLoginSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: nil)
+    }
+    
+    class func failedAuth() -> AlertMessage {
+        return AlertMessage(title: AlertMessages.failedAuthTitle.rawValue, subtitle: AlertMessages.failedAuthSubTitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: nil)
     }
 }
 

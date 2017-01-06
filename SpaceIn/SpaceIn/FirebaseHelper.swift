@@ -63,7 +63,7 @@ class FirebaseHelper {
                 completion("", "", "", FirebaseHelper.feedback(forError: err!))
                 return
             } else {
-                SpaceInUser.currentUser = SpaceInUser(name: name, email: email, uid: user.uid)
+                SpaceInUser.current = SpaceInUser(name: name, email: email, uid: user.uid)
                 completion(name, email, user.uid, .Success)
             }
             print("Saved user successfully into Firebase db")
@@ -142,13 +142,14 @@ class FirebaseHelper {
     class func loginWithCredential(credential: FIRAuthCredential, andUser user: GIDGoogleUser) {
         FIRAuth.auth()?.signIn(with: credential, completion: { (returnedUser, error) in
             if error != nil {
-                print("there was an error") //breadcrumb
+                NotificationCenter.default.post(name: .DidFailLogin, object: nil)
+                print("there was an error") 
             } else if returnedUser != nil {
                 FirebaseHelper.addUserToDatabase(user: returnedUser!, name: user.profile.name, email: user.profile.email, completion: { one, two, three, returnType in
                     print("we should have updated the database with a user")
                 })
             } else {
-                //breadcrumb
+                NotificationCenter.default.post(name: .DidFailLogin, object: nil)
             }
         })
     }
