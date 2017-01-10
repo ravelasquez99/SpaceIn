@@ -63,7 +63,6 @@ class FirebaseHelper {
                 completion("", "", "", FirebaseHelper.feedback(forError: err!))
                 return
             } else {
-                SpaceInUser.current = SpaceInUser(name: name, email: email, uid: user.uid)
                 completion(name, email, user.uid, .Success)
             }
             print("Saved user successfully into Firebase db")
@@ -145,7 +144,12 @@ class FirebaseHelper {
                 NotificationCenter.default.post(name: .DidFailLogin, object: nil)
                 print("there was an error") 
             } else if returnedUser != nil {
-                FirebaseHelper.addUserToDatabase(user: returnedUser!, name: user.profile.name, email: user.profile.email, completion: { one, two, three, returnType in
+                FirebaseHelper.addUserToDatabase(user: returnedUser!, name: user.profile.name, email: user.profile.email, completion: { userName, userEmail, userID, returnType in
+                    if returnType == .Success {
+                        SpaceInUser.current = SpaceInUser(name: userName, email: userEmail, uid: userID)
+                    } else {
+                        NotificationCenter.default.post(name: .DidFailLogin, object: nil)
+                    }
                     print("we should have updated the database with a user")
                 })
             } else {
