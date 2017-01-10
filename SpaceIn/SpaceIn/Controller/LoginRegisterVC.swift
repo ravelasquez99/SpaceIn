@@ -149,7 +149,7 @@ class LoginRegisterVC : UIViewController {
             if returntype != .Success {
                 self.handleFireBaseReturnTypre(returnType: returntype)
             } else {
-                self.segueToHomePage()
+                self.segueToHomePage() //breadcrumb - we need to get the users info
             }
         })
         
