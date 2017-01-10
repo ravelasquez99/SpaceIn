@@ -156,6 +156,7 @@ extension LoginRegisterVC { //UI calls
         self.layoutBackgroundImageView()
         self.updateSubviewsForStateChange()
         self.constrainRegisterView()
+        self.constrainSpinner()
         UIApplication.shared.statusBarStyle = .default
     }
     
@@ -240,6 +241,7 @@ extension LoginRegisterVC { //UI calls
         self.removeRegisterSpecificViews()
         self.updateSubviewsForStateChange()
         self.constraintSignInView()
+        self.constrainSpinner()
         UIApplication.shared.statusBarStyle = .lightContent
     }
     
@@ -313,33 +315,32 @@ extension LoginRegisterVC { //UI calls
     }
     
     func addSpinner() {
-        self.view.addSubview(self.spinner)
+        self.spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        self.view.addSubview(self.spinner!)
         self.view.isUserInteractionEnabled = false
         self.constrainSpinner()
-        self.spinner.startAnimating()
-        self.spinner.hidesWhenStopped = true
+        self.spinner!.startAnimating()
+        self.spinner!.hidesWhenStopped = true
     }
     
     func stopSpinner() {
-        self.spinner.stopAnimating()
-        self.view.isUserInteractionEnabled = true
+        if self.spinner != nil {
+            self.spinner!.stopAnimating()
+            self.view.isUserInteractionEnabled = true
+            self.spinner!.removeFromSuperview()
+            self.spinner = nil
+        }
+
     }
     
     fileprivate func constrainSpinner() {
-        if self.spinnerConstraints.count == 0 {
-            self.spinner.translatesAutoresizingMaskIntoConstraints = false
-            let centerX = self.spinner.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-            let centerY = self.spinner.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
-            let width = self.spinner.widthAnchor.constraint(equalToConstant: 60)
-            let height = self.spinner.heightAnchor.constraint(equalToConstant: 60)
-            self.spinnerConstraints = [centerX, centerY, width, height]
-            for constraint in self.spinnerConstraints {
-                constraint.isActive = true
-            }
-        } else {
-            self.view.removeConstraints(self.spinnerConstraints)
-            self.spinnerConstraints.removeAll()
-            self.constrainSpinner()
+        if self.spinner != nil {
+            self.view.bringSubview(toFront: self.spinner!)
+            self.spinner!.translatesAutoresizingMaskIntoConstraints = false
+            self.spinner!.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            self.spinner!.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+            self.spinner!.widthAnchor.constraint(equalToConstant: 60).isActive = true
+            self.spinner!.heightAnchor.constraint(equalToConstant: 60).isActive = true
         }
     }
     

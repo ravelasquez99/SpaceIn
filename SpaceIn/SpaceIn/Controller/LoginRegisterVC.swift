@@ -31,7 +31,7 @@ class LoginRegisterVC : UIViewController {
     let socialLoginButton = RoundedButton(filledIn: false, color: StyleGuideManager.loginButtonBorderColor)
     let bottomButtonsView = UIView(frame: CGRect.zero)
     let switchLoginRegisterButton = UIButton(type: .custom)
-    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    var spinner : UIActivityIndicatorView?
     var spinnerConstraints = [NSLayoutConstraint]()
     
     //Register only views
@@ -54,11 +54,11 @@ class LoginRegisterVC : UIViewController {
         self.addButtonTargets()
         self.setTextFieldDelegates()
         FirebaseHelper.setUIDelegateTo(delegate: self)
+        self.addObservers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.addObservers()
         
         self.addConstantViews()
         self.view.removeConstraints(self.view.constraints)
