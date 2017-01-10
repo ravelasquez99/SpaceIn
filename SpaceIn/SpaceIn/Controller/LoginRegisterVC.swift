@@ -74,7 +74,6 @@ class LoginRegisterVC : UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
-        NotificationCenter.default.removeObserver(self)
     }
 
 //MARK: Initialization code
