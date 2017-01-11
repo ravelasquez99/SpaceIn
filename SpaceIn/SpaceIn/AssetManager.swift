@@ -13,6 +13,7 @@ enum AssetName: String {
     case logoWhite = "logoWhite"
     case logoColored = "logoColored"
     case loginBackground = "loginBackground"
+    case signUpButtonGradient = "gradientGreen"
     
 }
 

@@ -119,6 +119,10 @@ extension LoginRegisterVC { //UI calls
         
         let socialTitle = self.state == .register ? "Sign up with Google" : "Sign in with Google"
         self.socialLoginButton.setTitle(socialTitle, for: .normal)
+        
+        let backgroundImage = self.state == .register ? UIImage(named: AssetName.signUpButtonGradient.rawValue) : UIImage()
+        self.signupLoginButton.setBackgroundImage(backgroundImage, for: .normal)
+        self.socialLoginButton.setBackgroundImage(backgroundImage, for: .normal)
 
         let switchTitle = self.state == .register ? "Sign In" : "Sign Up"
         self.switchLoginRegisterButton.setTitle(switchTitle, for: .normal)
