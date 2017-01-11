@@ -135,7 +135,7 @@ extension LoginRegisterVC { //UI calls
     
     private func updateTextFieldsForStateChange() {
         self.setColorsForTextField(textField: self.emailTextField, withPlaceHolerText: "Email")
-        self.setColorsForTextField(textField: self.fullNameTextField, withPlaceHolerText: "Full name")
+        self.setColorsForTextField(textField: self.fullNameTextField, withPlaceHolerText: "Name")
         self.setColorsForTextField(textField: self.passwordTextField, withPlaceHolerText: "Password")
         self.setColorsForTextField(textField: self.confirmPasswordTextField, withPlaceHolerText: "Confirm Password")
     }
