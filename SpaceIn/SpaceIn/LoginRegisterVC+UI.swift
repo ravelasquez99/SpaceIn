@@ -114,13 +114,13 @@ extension LoginRegisterVC { //UI calls
         self.socialLoginButton.setFilledInState(filledIn: self.state == .register)
         self.signupLoginButton.setFilledInState(filledIn: self.state == .register)
         
-        let signUpTitle = self.state == .register ? "Sign Up" : "Sign in"
+        let signUpTitle = self.state == .register ? "Sign Up" : "Sign In"
         self.signupLoginButton.setTitle(signUpTitle, for: .normal)
         
-        let socialTitle = self.state == .register ? "Sign Up With Google" : "Sign In With Google"
+        let socialTitle = self.state == .register ? "Sign up with Google" : "Sign in with Google"
         self.socialLoginButton.setTitle(socialTitle, for: .normal)
 
-        let switchTitle = self.state == .register ? "Sign in" : "Sign Up"
+        let switchTitle = self.state == .register ? "Sign In" : "Sign Up"
         self.switchLoginRegisterButton.setTitle(switchTitle, for: .normal)
         
         let switchColor = self.state == .register ? StyleGuideManager.registerPageTextColor : StyleGuideManager.loginPageTextColor
