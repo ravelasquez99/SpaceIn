@@ -198,11 +198,11 @@ class LoginRegisterVC : UIViewController {
             
         } else if !self.passwordShortEnough(text: self.passwordTextField.text!){
         
-            return (false, AlertMessage.passwordTooShort())
+            return (false, AlertMessage.passwordTooLong())
             
         }  else if !self.passwordIsLongEnough(text: self.passwordTextField.text!) {
             
-            return (false, AlertMessage.passwordTooLong())
+            return (false, AlertMessage.passwordTooShort())
             
         } else if self.passwordTextField.text != self.confirmPasswordTextField.text {
             
