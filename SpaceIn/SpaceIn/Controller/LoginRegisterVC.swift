@@ -55,7 +55,7 @@ class LoginRegisterVC : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.userIsSignedIn() == true {
-            self.segueToHomePage()
+            self.goAway()
         }
         
         self.addButtonTargets()
@@ -95,7 +95,7 @@ class LoginRegisterVC : UIViewController {
     }
     
     private func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.segueToHomePage), name: .DidSetCurrentUser, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goAway), name: .DidSetCurrentUser, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.failedSocialLogin), name: .DidFailGoogleLogin, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.failedAuth), name: .DidFailAuthentication, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.googleErrorOccurred), name: .DidFailLogin, object: nil)
@@ -105,11 +105,10 @@ class LoginRegisterVC : UIViewController {
         return FirebaseHelper.userIsLoggedIn()
     }
     
-    func segueToHomePage() {
+    func goAway() {
         OperationQueue.main.addOperation {
             [weak self] in
-            self?.stopSpinner()
-            self?.performSegue(withIdentifier: "login", sender: self)
+            self?.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -167,7 +166,7 @@ class LoginRegisterVC : UIViewController {
             if returntype != .Success {
                 self.handleFireBaseReturnTypre(returnType: returntype)
             } else {
-                self.segueToHomePage() //breadcrumb - we need to get the users info
+                self.goAway() //breadcrumb - we need to get the users info
             }
         })
         

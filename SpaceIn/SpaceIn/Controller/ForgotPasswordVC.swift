@@ -25,6 +25,7 @@ class ForgotPasswordVC: UIViewController {
     let emailTextField = ToplessTextField()
     let sendEmailButton = RoundedButton(filledIn: true, color: StyleGuideManager.loginButtonBorderColor)
     var delegate: ForgotPasswordVCDelegate?
+    var activityIndicator: UIActivityIndicatorView?
     
     var didSetup = false
     
@@ -173,6 +174,28 @@ extension ForgotPasswordVC {
         self.sendEmailButton.heightAnchor.constraint(equalToConstant: LoginRegisterVC.buttonHeights).isActive = true
         self.sendEmailButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
     }
+    
+    fileprivate func addSpinner() {
+        self.view.isUserInteractionEnabled = false
+        if self.activityIndicator == nil {
+            self.activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            self.view.addSubview(self.activityIndicator!)
+            self.activityIndicator?.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            self.activityIndicator?.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+            self.activityIndicator?.constrainWidthAndHeightToValueAndActivate(value: 50)
+        }
+        self.activityIndicator?.startAnimating()
+        self.activityIndicator?.isHidden = false
+        self.activityIndicator?.hidesWhenStopped = true
+
+        //breadcrumb
+    }
+    
+    fileprivate func stopSpinner() {
+        self.view.isUserInteractionEnabled = true
+        self.activityIndicator?.stopAnimating()
+        self.activityIndicator?.isHidden = true
+    }
 }
 
 
@@ -186,12 +209,7 @@ extension ForgotPasswordVC {
         if !LoginRegisterVC.isValidEmailAddress(email: self.emailTextField.text!) {
             self.presentInvalidEmail()
         } else {
-            //check firbase for account with that email
-            //do reset process
-            // once sent do func below
-            //follow all paths and make sure you have all covered- user with email doesnn't exist, lost internet
-            //also don't disable the ui for this one. it should just work
-            self.presentEmailSentAndDismiss()
+            self.sendResetEmailIfWeCan()
         }
     }
 }
@@ -208,7 +226,32 @@ extension ForgotPasswordVC {
         self.present(alertController, animated: false, completion: nil)
     }
     
+    func sendResetEmailIfWeCan() {
+        self.addSpinner()
+        FirebaseHelper.sendResetEmailTo(email: self.emailTextField.text!, completion: { returnType in
+            if returnType == .Success {
+                self.presentEmailSentAndDismiss()
+            } else {
+                self.presentAlertMessage(alertMessage: AlertMessage.alertMessageForFireBaseReturnType(returnType: returnType))
+            }
+        })
+    }
+    
+    func presentAlertMessage(alertMessage: AlertMessage) {
+        self.stopSpinner()
+        
+        let alertController = UIAlertController(title: alertMessage.alertTitle!, message: alertMessage.alertSubtitle!, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil))
+            
+        if let alertAction2 = alertMessage.actionButton2title {
+            alertController.addAction(UIAlertAction(title: alertAction2, style: .default, handler: nil))
+        }
+        
+        self.present(alertController, animated: false, completion: nil)
+    }
+    
     func presentEmailSentAndDismiss() {
+        self.stopSpinner()
         let alertMessage = AlertMessage.passwordResetSent()
         let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle!, preferredStyle: .alert)
         let okAction = UIAlertAction(title: alertMessage.actionButton1Title, style: .default) { (action) in
@@ -216,8 +259,8 @@ extension ForgotPasswordVC {
         }
         alertController.addAction(okAction)
         self.present(alertController, animated: false, completion: nil)
-        
     }
+    
     
 }
 

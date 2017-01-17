@@ -81,6 +81,16 @@ class FirebaseHelper {
         })
     }
     
+    class func sendResetEmailTo(email: String, completion: @escaping (_ returnType: FirebaseReturnType) -> Void) {
+        FIRAuth.auth()?.sendPasswordReset(withEmail: email) { (error) in
+            if error == nil {
+                completion(FirebaseReturnType.Success)
+            } else {
+                completion(FirebaseHelper.feedback(forError: error!))
+            }
+        }
+    }
+    
     private class func feedback(forError error: Error) -> FirebaseReturnType {
         var returnType = FirebaseReturnType.Unknown
         
