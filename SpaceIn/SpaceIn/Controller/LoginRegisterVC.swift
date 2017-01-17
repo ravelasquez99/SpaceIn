@@ -207,7 +207,7 @@ class LoginRegisterVC : UIViewController {
     }
     
     private func registerStateIsValid() -> (Bool, AlertMessage?) {
-        if !self.isValidEmailAddress(email: self.emailTextField.text!) {
+        if !LoginRegisterVC.isValidEmailAddress(email: self.emailTextField.text!) {
             
             return (false, AlertMessage.invalidEmail())
             
@@ -234,10 +234,10 @@ class LoginRegisterVC : UIViewController {
     }
     
     private func loginStateIsValid() -> (Bool, AlertMessage?) {
-        return self.isValidEmailAddress(email: self.emailTextField.text!) ? (true, nil) : (false, AlertMessage.invalidEmail())
+        return LoginRegisterVC.isValidEmailAddress(email: self.emailTextField.text!) ? (true, nil) : (false, AlertMessage.invalidEmail())
     }
     
-    private func isValidEmailAddress(email: String) -> Bool {
+    class func isValidEmailAddress(email: String) -> Bool {
         if email.isValidString() {
             if !email.contains("@") {
                 return false

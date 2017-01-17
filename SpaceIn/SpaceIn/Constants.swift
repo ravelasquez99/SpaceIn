@@ -16,8 +16,9 @@ extension Notification.Name {
     static let DidFailLogin = Notification.Name("did-fail-login-firebase")
 }
 
-enum SpacInCopy: String {
+enum SpaceinCopy: String {
     case forgotPasswordTitle = "Trouble logging in?"
-    case forgotPasswordSubtitle = "Enter your email and we'll send you a link to get back into your account"
+    case forgotPasswordSubtitle = "Enter your email and we'll send you a link to get back into your account."
     case forgotPasswordPageButtonCopy = "Send login link"
+    
 }

@@ -53,10 +53,9 @@ public class StyleGuideManager {
     //MARK: - Forgot Password
     static let forgotPasswordTextColor = UIColor(withNumbersFor: 66, green: 80, blue: 83)
     
-    func forgotPasswordTitleFont() -> UIFont {
-        return UIFont(name: "Helvetica Light", size: 27)!
+    func forgotPasswordPageFont() -> UIFont {
+        return UIFont(name: "Helvetica Light", size: 17)!
     }
-    
 }
 
 extension UIColor {

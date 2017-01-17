@@ -23,6 +23,7 @@ class ForgotPasswordVC: UIViewController {
     let troubleLogginInLabel = UILabel()
     let instructionsLabel = UILabel()
     let emailTextField = ToplessTextField()
+    let sendEmailButton = RoundedButton(filledIn: true, color: StyleGuideManager.loginButtonBorderColor)
     var delegate: ForgotPasswordVCDelegate?
     
     var didSetup = false
@@ -54,7 +55,7 @@ extension ForgotPasswordVC {
     }
     
     fileprivate func addSubviewsAndSetThemAsConstrainable() {
-        let viewsToAdd = [self.closeButton, self.logoImageView, self.troubleLogginInLabel, self.instructionsLabel, self.emailTextField]
+        let viewsToAdd = [self.closeButton, self.logoImageView, self.troubleLogginInLabel, self.instructionsLabel, self.emailTextField, self.sendEmailButton]
         
         for view in viewsToAdd {
             self.view.addSubview(view)
@@ -67,6 +68,9 @@ extension ForgotPasswordVC {
         self.setupCloseButton()
         self.setupLogoImageView()
         self.setupTroubleLoggingInLabel()
+        self.setupInstructionsLabel()
+        self.setupEmailTextField()
+        self.setupButton()
     }
     
     fileprivate func setupCloseButton() {
@@ -100,8 +104,8 @@ extension ForgotPasswordVC {
     }
     
     fileprivate func setupTroubleLoggingInLabel() {
-        self.troubleLogginInLabel.text = SpacInCopy.forgotPasswordTitle.rawValue
-        self.troubleLogginInLabel.font = StyleGuideManager.sharedInstance.forgotPasswordTitleFont()
+        self.troubleLogginInLabel.text = SpaceinCopy.forgotPasswordTitle.rawValue
+        self.troubleLogginInLabel.font = StyleGuideManager.sharedInstance.forgotPasswordPageFont()
         self.troubleLogginInLabel.textColor = StyleGuideManager.forgotPasswordTextColor
         self.troubleLogginInLabel.textAlignment = .center
         
@@ -114,6 +118,62 @@ extension ForgotPasswordVC {
         self.troubleLogginInLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.troubleLogginInLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
+    
+    fileprivate func setupInstructionsLabel() {
+        self.instructionsLabel.text = SpaceinCopy.forgotPasswordSubtitle.rawValue
+        self.instructionsLabel.textAlignment = .center
+        self.instructionsLabel.font = StyleGuideManager.sharedInstance.forgotPasswordPageFont()
+        self.instructionsLabel.textColor = StyleGuideManager.forgotPasswordTextColor
+        self.instructionsLabel.numberOfLines = 3
+        self.instructionsLabel.lineBreakMode = .byWordWrapping
+        self.constrainInstructionsLabel()
+        
+    }
+    
+    fileprivate func constrainInstructionsLabel() {
+        self.instructionsLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 40).isActive = true
+        self.instructionsLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -40).isActive = true
+        self.instructionsLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        self.instructionsLabel.topAnchor.constraint(equalTo: self.troubleLogginInLabel.bottomAnchor, constant: 15).isActive = true
+    }
+    
+    fileprivate func setupEmailTextField() {
+        self.emailTextField.borderColor = StyleGuideManager.registerTextFieldTextColor
+        self.emailTextField.selectedBorderColor = StyleGuideManager.registerTextFieldSelectedColor
+
+        let placeholderTextColor = StyleGuideManager.registerPlaceholderTextColor
+        let placeholderText = "email"
+        let font = StyleGuideManager.sharedInstance.forgotPasswordPageFont()
+        self.emailTextField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: placeholderTextColor, NSFontAttributeName: font])
+        self.emailTextField.textColor = StyleGuideManager.registerTextFieldTextColor
+        self.constrainEmailTextField()
+
+    }
+    
+    fileprivate func constrainEmailTextField() {
+        self.emailTextField.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
+        self.emailTextField.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+        self.emailTextField.topAnchor.constraint(equalTo: self.instructionsLabel.bottomAnchor, constant: 40).isActive = true
+        self.emailTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
+        self.emailTextField.toplessTextfieldDelegate = self
+        
+    }
+    
+    fileprivate func setupButton() {
+        let backgroundImage = UIImage(named: AssetName.signUpButtonGradient.rawValue)
+        self.sendEmailButton.setFilledInState(filledIn: true)
+        self.sendEmailButton.setBackgroundImage(backgroundImage, for: .normal)
+        self.sendEmailButton.setTitle(SpaceinCopy.forgotPasswordPageButtonCopy.rawValue, for: .normal)
+        self.sendEmailButton.addTarget(self, action: #selector(self.sendButtonPressed), for: .touchUpInside)
+        self.constrainButton()
+    }
+    
+    fileprivate func constrainButton() {
+        self.sendEmailButton.topAnchor.constraint(equalTo: self.emailTextField.bottomAnchor, constant: 50).isActive = true
+        self.sendEmailButton.widthAnchor.constraint(equalTo: self.emailTextField.widthAnchor).isActive = true
+        self.sendEmailButton.heightAnchor.constraint(equalToConstant: LoginRegisterVC.buttonHeights).isActive = true
+        self.sendEmailButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+    }
 }
 
 
@@ -124,6 +184,26 @@ extension ForgotPasswordVC {
     }
     
     func sendButtonPressed() {
-        
+        if !LoginRegisterVC.isValidEmailAddress(email: self.emailTextField.text!) {
+            
+        }
     }
+}
+
+extension ForgotPasswordVC: ToplessTextFieldDelegate {
+    func toplessTextFieldDidBeginEditing() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    func handleTap(gesture: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+        self.view.removeGestureRecognizer(gesture)
+    }
+    
+    //These funcs are stubbed because we don't need them.
+    func didDismissKeyboard(textField: ToplessTextField) {}
+    func toplessTextFieldDidEndEdting() {}
+
+
 }
