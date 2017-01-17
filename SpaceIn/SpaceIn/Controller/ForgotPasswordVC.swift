@@ -92,7 +92,7 @@ extension ForgotPasswordVC {
     fileprivate func constrainLogo() {
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        self.logoImageView.constrainWidthAndHeightToValue(value: 50)
+        self.logoImageView.constrainWidthAndHeightToValueAndActivate(value: 50)
     }
     
     }
