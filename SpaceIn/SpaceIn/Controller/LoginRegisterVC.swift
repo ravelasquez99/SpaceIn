@@ -20,6 +20,10 @@ class LoginRegisterVC : UIViewController {
     static let imageWidthHeight = CGFloat(100)
     static let textFieldHeights = CGFloat(40)
     static var buttonHeights = CGFloat(50)
+    static let closeButtonWidthHeight = CGFloat(40)
+    static let closeButtonTopPadding = CGFloat(20)
+    static let closeButtonSidePadding = CGFloat(-20)
+
     
     //PersistentViews
     var backgroundImageView = UIImageView(frame: CGRect.zero)
@@ -31,6 +35,7 @@ class LoginRegisterVC : UIViewController {
     let socialLoginButton = RoundedButton(filledIn: false, color: StyleGuideManager.loginButtonBorderColor)
     let bottomButtonsView = UIView(frame: CGRect.zero)
     let switchLoginRegisterButton = UIButton(type: .custom)
+    let closeButton = UIButton(frame: CGRect.zero)
     var spinner : UIActivityIndicatorView?
     var spinnerConstraints = [NSLayoutConstraint]()
     
@@ -86,6 +91,7 @@ class LoginRegisterVC : UIViewController {
         self.signupLoginButton.addTarget(self, action: #selector(self.loginRegisterPressed), for: .touchUpInside)
         self.switchLoginRegisterButton.addTarget(self, action: #selector(self.switchState), for: .touchUpInside)
         self.forgotPasswordButton.addTarget(self, action: #selector(self.forgotPasswordPressed), for: .touchUpInside)
+        self.closeButton.addTarget(self, action: #selector(self.closeButtonPressed), for: .touchUpInside)
     }
     
     private func addObservers() {
@@ -128,6 +134,10 @@ class LoginRegisterVC : UIViewController {
     
     func forgotPasswordPressed() {
         self.doForgotPassword()
+    }
+    
+    func closeButtonPressed() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     private func loginIfWeCan() {

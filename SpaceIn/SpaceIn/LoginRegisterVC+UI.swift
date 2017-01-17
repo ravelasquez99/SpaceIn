@@ -31,6 +31,11 @@ extension LoginRegisterVC { //UI calls
         
         self.switchLoginRegisterButton.setTitleColor(UIColor.gray, for: .highlighted)
         self.setTextFieldKeyboardSettings()
+        
+        let backImage = UIImage(named: AssetName.backButton.rawValue)
+        self.closeButton.setImage(backImage, for: .normal)
+        self.closeButton.imageView?.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
+        self.closeButton.imageView?.contentMode = .scaleAspectFit
 
     }
     
@@ -43,6 +48,7 @@ extension LoginRegisterVC { //UI calls
         self.view.addSubview(self.orLabel)
         self.view.addSubview(self.socialLoginButton)
         self.view.addSubview(self.bottomButtonsView)
+        self.view.addSubview(self.closeButton)
         self.bottomButtonsView.addSubview(self.switchLoginRegisterButton)
     }
     
@@ -60,6 +66,7 @@ extension LoginRegisterVC { //UI calls
         self.confirmPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
         self.divider.translatesAutoresizingMaskIntoConstraints = false
         self.forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
+        self.closeButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
     //MARK: - Shared UI Calls (Login + Register)
@@ -189,6 +196,11 @@ extension LoginRegisterVC { //UI calls
             centeredView.widthAnchor.constraint(equalToConstant: widthForViews).isActive = true
             centeredView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
         }
+        
+        self.closeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: LoginRegisterVC.closeButtonWidthHeight).isActive = true
+        self.closeButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: LoginRegisterVC.closeButtonSidePadding).isActive = true
+        self.closeButton.constrainWidthAndHeightToValueAndActivate(value: LoginRegisterVC.closeButtonWidthHeight)
+        
        
         //setup vertical spacing
         self.passwordTextField.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -5).isActive = true
@@ -312,6 +324,10 @@ extension LoginRegisterVC { //UI calls
         self.switchLoginRegisterButton.topAnchor.constraint(equalTo: self.bottomButtonsView.topAnchor).isActive = true
         self.switchLoginRegisterButton.leftAnchor.constraint(equalTo:self.divider.rightAnchor, constant: 20).isActive = true
         self.switchLoginRegisterButton.bottomAnchor.constraint(equalTo: self.bottomButtonsView.bottomAnchor).isActive = true
+        
+        self.closeButton.constrainWidthAndHeightToValueAndActivate(value: LoginRegisterVC.closeButtonWidthHeight)
+        self.closeButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.closeButton.topAnchor.constraint(equalTo: self.bottomButtonsView.bottomAnchor, constant: 10).isActive = true
     }
     
     func addSpinner() {

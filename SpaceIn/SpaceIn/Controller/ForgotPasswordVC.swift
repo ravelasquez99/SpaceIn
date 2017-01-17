@@ -15,7 +15,7 @@ protocol ForgotPasswordVCDelegate {
 
 class ForgotPasswordVC: UIViewController {
     //MARK: - Class Constants
-    static let backButtonWidthHeight = CGFloat(40)
+    static let closeButtonWidthHeight = CGFloat(40)
     
     //Constants
     let closeButton = UIButton()
@@ -80,12 +80,9 @@ extension ForgotPasswordVC {
     }
     
     fileprivate func constrainCloseButton() {
-        let buttonPadding = ForgotPasswordVC.backButtonWidthHeight
-        self.closeButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20).isActive = true
-        self.closeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: buttonPadding).isActive = true
-        
-        self.closeButton.widthAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
-        self.closeButton.heightAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
+        self.closeButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: LoginRegisterVC.closeButtonSidePadding).isActive = true
+        self.closeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: LoginRegisterVC.closeButtonWidthHeight).isActive = true
+        self.closeButton.constrainWidthAndHeightToValueAndActivate(value: LoginRegisterVC.closeButtonWidthHeight)
     }
 
     fileprivate func setupLogoImageView() {
