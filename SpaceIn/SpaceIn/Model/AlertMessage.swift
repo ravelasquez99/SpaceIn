@@ -44,6 +44,10 @@ enum AlertMessages: String {
 
     case failedAuthTitle = "Authentication Error"
     case failedAuthSubTitle = "Oops, something went wrong with the authentication. Please try again later"
+    
+    case emailSentTitle = "Email Sent"
+    case emailSentSubtitle = "An email with further instructions has been sent"
+    case emailSentButtonTitle = "OK"
 
 }
 
@@ -84,6 +88,10 @@ class AlertMessage {
     
     class func invalidName() -> AlertMessage {
         return AlertMessage(title: AlertMessages.invalidNameTitle.rawValue, subtitle: "", actionButtontitle: "Ok", secondButtonTitle: "")
+    }
+    
+    class func passwordResetSent() -> AlertMessage {
+        return AlertMessage(title: AlertMessages.emailSentTitle.rawValue, subtitle: AlertMessages.emailSentSubtitle.rawValue, actionButtontitle: AlertMessages.emailSentButtonTitle.rawValue, secondButtonTitle: "")
     }
     
     class func alertMessageForFireBaseReturnType(returnType: FirebaseReturnType) -> AlertMessage {

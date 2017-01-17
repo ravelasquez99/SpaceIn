@@ -37,7 +37,6 @@ class ForgotPasswordVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setup()
-        
     }
 }
 
@@ -185,11 +184,46 @@ extension ForgotPasswordVC {
     
     func sendButtonPressed() {
         if !LoginRegisterVC.isValidEmailAddress(email: self.emailTextField.text!) {
-            
+            self.presentInvalidEmail()
+        } else {
+            //check firbase for account with that email
+            //do reset process
+            // once sent do func below
+            //follow all paths and make sure you have all covered- user with email doesnn't exist, lost internet
+            //also don't disable the ui for this one. it should just work
+            self.presentEmailSentAndDismiss()
         }
     }
 }
 
+
+//MARK: - Send To Firebase and Alerts
+extension ForgotPasswordVC {
+    
+    func presentInvalidEmail() {
+        let alertMessage = AlertMessage.invalidEmail()
+        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle!, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: false, completion: nil)
+    }
+    
+    func presentEmailSentAndDismiss() {
+        let alertMessage = AlertMessage.passwordResetSent()
+        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle!, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: alertMessage.actionButton1Title, style: .default) { (action) in
+            self.delegate?.closeForgotPasswordVC()
+        }
+        alertController.addAction(okAction)
+        self.present(alertController, animated: false, completion: nil)
+        
+    }
+    
+}
+
+
+
+//MARK: - TextFieldDelegate
 extension ForgotPasswordVC: ToplessTextFieldDelegate {
     func toplessTextFieldDidBeginEditing() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
