@@ -15,7 +15,7 @@ class ForgotPasswordVC: UIViewController {
     
     //Constants
     let backButton = UIButton()
-    let loginImageView = UIImageView()
+    let logoImageView = UIImageView()
     let troubleLogginInLabel = UILabel()
     let instructionsLabel = UILabel()
     let emailTextField = ToplessTextField()
@@ -49,7 +49,7 @@ extension ForgotPasswordVC {
     }
     
     fileprivate func addSubviewsAndSetThemAsConstrainable() {
-        let viewsToAdd = [self.backButton, self.loginImageView, self.troubleLogginInLabel, self.instructionsLabel, self.emailTextField]
+        let viewsToAdd = [self.backButton, self.logoImageView, self.troubleLogginInLabel, self.instructionsLabel, self.emailTextField]
         
         for view in viewsToAdd {
             self.view.addSubview(view)
@@ -64,16 +64,13 @@ extension ForgotPasswordVC {
     }
     
     fileprivate func setupBackButton() {
-        let backImage = UIImage(named: "SpaceinBack")
+        let backImage = UIImage(named: AssetName.backButton.rawValue)
         self.backButton.setImage(backImage, for: .normal)
         self.backButton.imageView?.contentMode = .scaleAspectFit
         
         self.constrainBackButton()
         
         self.backButton.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
-    }
-    
-    fileprivate func setupLogoImageView() {
     }
     
     fileprivate func constrainBackButton() {
@@ -84,7 +81,21 @@ extension ForgotPasswordVC {
         self.backButton.widthAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
         self.backButton.heightAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
     }
-}
+
+    fileprivate func setupLogoImageView() {
+        self.logoImageView.image = UIImage(named: AssetName.logoColored.rawValue)
+        self.logoImageView.contentMode = .scaleAspectFit
+        
+        self.constrainLogo()
+    }
+    
+    fileprivate func constrainLogo() {
+        self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        self.logoImageView.constrainWidthAndHeightToValue(value: 50)
+    }
+    
+    }
 
 
 //MARK: - Targets

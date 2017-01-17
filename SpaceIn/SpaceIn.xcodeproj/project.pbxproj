@@ -10,6 +10,7 @@
 		D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */; };
 		D8280FC61E11A3B300D47D83 /* SpaceInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */; };
 		D832FD971E25E19F00FDE311 /* ForgotPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832FD961E25E19F00FDE311 /* ForgotPasswordVC.swift */; };
+		D8404A871E2DA10B0072AE25 /* UIView+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8404A861E2DA10B0072AE25 /* UIView+Convenience.swift */; };
 		D849EB291E06011800A49B5C /* LoginRegisterVC+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB281E06011800A49B5C /* LoginRegisterVC+UI.swift */; };
 		D849EB2B1E08E5B400A49B5C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB2A1E08E5B300A49B5C /* Constants.swift */; };
 		D849EB2D1E08E8A200A49B5C /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB2C1E08E8A200A49B5C /* AlertMessage.swift */; };
@@ -36,6 +37,7 @@
 		D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpaceInUser.swift; path = Model/SpaceInUser.swift; sourceTree = "<group>"; };
 		D832FD961E25E19F00FDE311 /* ForgotPasswordVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ForgotPasswordVC.swift; path = Controller/ForgotPasswordVC.swift; sourceTree = "<group>"; };
 		D838E9551DF7AE6100F08F17 /* SpaceIn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpaceIn.entitlements; sourceTree = "<group>"; };
+		D8404A861E2DA10B0072AE25 /* UIView+Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Convenience.swift"; sourceTree = "<group>"; };
 		D849EB281E06011800A49B5C /* LoginRegisterVC+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginRegisterVC+UI.swift"; sourceTree = "<group>"; };
 		D849EB2A1E08E5B300A49B5C /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D849EB2C1E08E8A200A49B5C /* AlertMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertMessage.swift; path = Model/AlertMessage.swift; sourceTree = "<group>"; };
@@ -82,6 +84,14 @@
 				A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		D8404A851E2DA0F20072AE25 /* ViewHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				D8404A861E2DA10B0072AE25 /* UIView+Convenience.swift */,
+			);
+			name = ViewHelpers;
 			sourceTree = "<group>";
 		};
 		D894EEBE1DDC26170039D92A = {
@@ -138,6 +148,7 @@
 				D8D7465E1DF1228700A1EE70 /* MapView.swift */,
 				D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */,
 				D8FD46431E01021100873565 /* RoundedButton.swift */,
+				D8404A851E2DA0F20072AE25 /* ViewHelpers */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -305,6 +316,7 @@
 				D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */,
 				D849EB2B1E08E5B400A49B5C /* Constants.swift in Sources */,
 				D849EB2D1E08E8A200A49B5C /* AlertMessage.swift in Sources */,
+				D8404A871E2DA10B0072AE25 /* UIView+Convenience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
