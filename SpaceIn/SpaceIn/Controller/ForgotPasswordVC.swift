@@ -41,7 +41,7 @@ class ForgotPasswordVC: UIViewController {
 }
 
 
-//UI Related
+//MARK: - UI
 extension ForgotPasswordVC {
     
     func setup() {
@@ -66,6 +66,7 @@ extension ForgotPasswordVC {
     fileprivate func setupSubviews() {
         self.setupCloseButton()
         self.setupLogoImageView()
+        self.setupTroubleLoggingInLabel()
     }
     
     fileprivate func setupCloseButton() {
@@ -94,11 +95,26 @@ extension ForgotPasswordVC {
     
     fileprivate func constrainLogo() {
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        self.logoImageView.constrainWidthAndHeightToValueAndActivate(value: 50)
+        self.logoImageView.topAnchor.constraint(equalTo: self.closeButton.bottomAnchor, constant: 20).isActive = true
+        self.logoImageView.constrainWidthAndHeightToValueAndActivate(value: LoginRegisterVC.closeButtonWidthHeight * 2)
     }
     
+    fileprivate func setupTroubleLoggingInLabel() {
+        self.troubleLogginInLabel.text = SpacInCopy.forgotPasswordTitle.rawValue
+        self.troubleLogginInLabel.font = StyleGuideManager.sharedInstance.forgotPasswordTitleFont()
+        self.troubleLogginInLabel.textColor = StyleGuideManager.forgotPasswordTextColor
+        self.troubleLogginInLabel.textAlignment = .center
+        
+        self.constrainTroubleLoggingInLabel()
     }
+    
+    fileprivate func constrainTroubleLoggingInLabel() {
+        self.troubleLogginInLabel.topAnchor.constraint(equalTo: self.logoImageView.bottomAnchor, constant: 45).isActive = true
+        self.troubleLogginInLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.troubleLogginInLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.troubleLogginInLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    }
+}
 
 
 //MARK: - Targets

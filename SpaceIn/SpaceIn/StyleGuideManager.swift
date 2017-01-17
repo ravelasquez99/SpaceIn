@@ -36,6 +36,7 @@ public class StyleGuideManager {
     static let registerTextFieldTextColor = UIColor(withNumbersFor: 36, green: 217, blue: 255)
     static let registerPageTextColor = UIColor.darkGray
     
+    
     func loginFontLarge() -> UIFont {
         return UIFont(name: "Helvetica Light", size: 30)!
 
@@ -48,6 +49,14 @@ public class StyleGuideManager {
     func loginPageSmallFont() -> UIFont {
         return UIFont(name: "Helvetica Light", size: 13)!
     }
+    
+    //MARK: - Forgot Password
+    static let forgotPasswordTextColor = UIColor(withNumbersFor: 66, green: 80, blue: 83)
+    
+    func forgotPasswordTitleFont() -> UIFont {
+        return UIFont(name: "Helvetica Light", size: 27)!
+    }
+    
 }
 
 extension UIColor {
