@@ -336,13 +336,18 @@ extension LoginRegisterVC : GIDSignInUIDelegate {
 
 
 //MARK: - Forgot Password
-extension LoginRegisterVC {
+extension LoginRegisterVC: ForgotPasswordVCDelegate {
     fileprivate func doForgotPassword() {
         if self.forgotPasswordVC == nil {
             self.forgotPasswordVC = ForgotPasswordVC()
+            self.forgotPasswordVC?.delegate = self
         }
         
-        self.navigationController?.pushViewController(self.forgotPasswordVC!, animated: true)
+        self.present(self.forgotPasswordVC!, animated: true, completion: nil)
+    }
+    
+    func closeForgotPasswordVC() {
+        self.forgotPasswordVC?.dismiss(animated: true, completion: nil)
     }
 }
 

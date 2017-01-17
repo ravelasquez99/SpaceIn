@@ -9,16 +9,21 @@
 import Foundation
 import UIKit
 
+protocol ForgotPasswordVCDelegate {
+    func closeForgotPasswordVC()
+}
+
 class ForgotPasswordVC: UIViewController {
     //MARK: - Class Constants
     static let backButtonWidthHeight = CGFloat(40)
     
     //Constants
-    let backButton = UIButton()
+    let closeButton = UIButton()
     let logoImageView = UIImageView()
     let troubleLogginInLabel = UILabel()
     let instructionsLabel = UILabel()
     let emailTextField = ToplessTextField()
+    var delegate: ForgotPasswordVCDelegate?
     
     var didSetup = false
     
@@ -49,7 +54,7 @@ extension ForgotPasswordVC {
     }
     
     fileprivate func addSubviewsAndSetThemAsConstrainable() {
-        let viewsToAdd = [self.backButton, self.logoImageView, self.troubleLogginInLabel, self.instructionsLabel, self.emailTextField]
+        let viewsToAdd = [self.closeButton, self.logoImageView, self.troubleLogginInLabel, self.instructionsLabel, self.emailTextField]
         
         for view in viewsToAdd {
             self.view.addSubview(view)
@@ -59,27 +64,28 @@ extension ForgotPasswordVC {
     }
     
     fileprivate func setupSubviews() {
-        self.setupBackButton()
+        self.setupCloseButton()
         self.setupLogoImageView()
     }
     
-    fileprivate func setupBackButton() {
+    fileprivate func setupCloseButton() {
         let backImage = UIImage(named: AssetName.backButton.rawValue)
-        self.backButton.setImage(backImage, for: .normal)
-        self.backButton.imageView?.contentMode = .scaleAspectFit
+        self.closeButton.setImage(backImage, for: .normal)
+        self.closeButton.imageView?.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
+        self.closeButton.imageView?.contentMode = .scaleAspectFit
         
-        self.constrainBackButton()
+        self.constrainCloseButton()
         
-        self.backButton.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
+        self.closeButton.addTarget(self, action: #selector(self.closeButtonPressed), for: .touchUpInside)
     }
     
-    fileprivate func constrainBackButton() {
+    fileprivate func constrainCloseButton() {
         let buttonPadding = ForgotPasswordVC.backButtonWidthHeight
-        self.backButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20).isActive = true
-        self.backButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: buttonPadding).isActive = true
+        self.closeButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20).isActive = true
+        self.closeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: buttonPadding).isActive = true
         
-        self.backButton.widthAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
-        self.backButton.heightAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
+        self.closeButton.widthAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
+        self.closeButton.heightAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
     }
 
     fileprivate func setupLogoImageView() {
@@ -100,9 +106,8 @@ extension ForgotPasswordVC {
 
 //MARK: - Targets
 extension ForgotPasswordVC {
-    func backButtonPressed() {
-        // _ is there to silence the warning. I don't need to send any messages back to the login register vc
-        _ = self.navigationController?.popViewController(animated: true)
+    func closeButtonPressed() {
+        self.delegate?.closeForgotPasswordVC()
     }
     
     func sendButtonPressed() {
