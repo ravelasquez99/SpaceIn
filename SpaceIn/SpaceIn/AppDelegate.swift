@@ -23,6 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
+        
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let mapViewController = storyboard.instantiateViewController(withIdentifier: "MapVC") as! MapViewController
+        self.window?.rootViewController = mapViewController
+        self.window?.makeKeyAndVisible()
+        
         return true
     }
 

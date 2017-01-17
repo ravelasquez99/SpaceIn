@@ -45,6 +45,8 @@ class LoginRegisterVC : UIViewController {
     
     var state = LoginRegisterState.login
     
+    var forgotPasswordVC: ForgotPasswordVC?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.userIsSignedIn() == true {
@@ -82,6 +84,7 @@ class LoginRegisterVC : UIViewController {
         self.socialLoginButton.addTarget(self, action: #selector(self.socialLoginPressed), for: .touchUpInside)
         self.signupLoginButton.addTarget(self, action: #selector(self.loginRegisterPressed), for: .touchUpInside)
         self.switchLoginRegisterButton.addTarget(self, action: #selector(self.switchState), for: .touchUpInside)
+        self.forgotPasswordButton.addTarget(self, action: #selector(self.forgotPasswordPressed), for: .touchUpInside)
     }
     
     private func addObservers() {
@@ -120,6 +123,10 @@ class LoginRegisterVC : UIViewController {
     func socialLoginPressed() {
         self.addSpinner()
         GIDSignIn.sharedInstance().signIn()
+    }
+    
+    func forgotPasswordPressed() {
+        print("forgot!")
     }
     
     private func loginIfWeCan() {
@@ -181,8 +188,9 @@ class LoginRegisterVC : UIViewController {
         })
         
     }
-    //MARK: Validation
     
+    
+    //MARK: Validation
     private func formIsValid() -> (Bool, AlertMessage?) {
         return self.state == .register ? self.registerStateIsValid() : self.loginStateIsValid()
     }
@@ -319,11 +327,20 @@ class LoginRegisterVC : UIViewController {
         
         self.present(alertController, animated: true, completion: nil)
     }
-    
 }
     
 extension LoginRegisterVC : GIDSignInUIDelegate {
     
+}
+
+
+//MARK: - Forgot Password
+extension LoginRegisterVC {
+    func doForgotPassword() {
+        if self.forgotPasswordVC == nil {
+            self.forgotPasswordVC = ForgotPasswordVC()
+        }
+    }
 }
 
 //how to call fb

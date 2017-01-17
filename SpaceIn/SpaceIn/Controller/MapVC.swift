@@ -15,6 +15,7 @@ import MapKit
 class MapViewController: UIViewController {
     
     @IBOutlet var mapView: MapView!
+    var loginRegisterVC: LoginRegisterVC?
 
     
     override func viewDidLoad() {
@@ -24,10 +25,22 @@ class MapViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        FirebaseHelper.signOut()
+        self.presentLoginRegister()
     }
     
     @IBAction func animate(_ sender: UIButton) {
+    }
+}
+
+
+//MARK: - Login/Register
+extension MapViewController {
+    fileprivate func presentLoginRegister() {
+        if self.loginRegisterVC == nil {
+            self.loginRegisterVC = LoginRegisterVC()
+        }
+        
+        self.present(self.loginRegisterVC!, animated: true, completion: nil)
     }
 }
 
