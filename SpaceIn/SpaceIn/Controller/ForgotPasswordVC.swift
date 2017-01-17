@@ -10,6 +10,9 @@ import Foundation
 import UIKit
 
 class ForgotPasswordVC: UIViewController {
+    //MARK: - Class Constants
+    static let backButtonWidthHeight = CGFloat(40)
+    
     //Constants
     let backButton = UIButton()
     let loginImageView = UIImageView()
@@ -22,14 +25,13 @@ class ForgotPasswordVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
-        self.setup()
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setup()
-        self.view.backgroundColor = UIColor.orange
+        
     }
 }
 
@@ -42,6 +44,8 @@ extension ForgotPasswordVC {
             self.addSubviewsAndSetThemAsConstrainable()
             self.setupSubviews()
         }
+        
+        self.didSetup = true
     }
     
     fileprivate func addSubviewsAndSetThemAsConstrainable() {
@@ -59,23 +63,26 @@ extension ForgotPasswordVC {
         self.setupLogoImageView()
     }
     
-    func constrainSubviews() {
-    }
-    
     fileprivate func setupBackButton() {
+        let backImage = UIImage(named: "SpaceinBack")
+        self.backButton.setImage(backImage, for: .normal)
+        self.backButton.imageView?.contentMode = .scaleAspectFit
+        
         self.constrainBackButton()
+        
+        self.backButton.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
     }
     
     fileprivate func setupLogoImageView() {
-        //self.constrainBackButton()
     }
     
     fileprivate func constrainBackButton() {
-        self.backButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        let buttonPadding = ForgotPasswordVC.backButtonWidthHeight
+        self.backButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20).isActive = true
+        self.backButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: buttonPadding).isActive = true
         
-        self.backButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10).isActive = true
-        self.backButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        self.backButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        self.backButton.widthAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
+        self.backButton.heightAnchor.constraint(equalToConstant: ForgotPasswordVC.backButtonWidthHeight).isActive = true
     }
 }
 
@@ -83,7 +90,8 @@ extension ForgotPasswordVC {
 //MARK: - Targets
 extension ForgotPasswordVC {
     func backButtonPressed() {
-        
+        // _ is there to silence the warning. I don't need to send any messages back to the login register vc
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func sendButtonPressed() {

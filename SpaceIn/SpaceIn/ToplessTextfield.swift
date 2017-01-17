@@ -23,7 +23,7 @@ class ToplessTextField: UITextField, UITextFieldDelegate {
     private var didAddBottom = false
     var toplessTextfieldDelegate: ToplessTextFieldDelegate?
     
-    var borderColor : UIColor = .orange {
+    var borderColor : UIColor = .clear {
         didSet {
             if self.border != nil {
                 self.border!.borderColor = borderColor.cgColor
