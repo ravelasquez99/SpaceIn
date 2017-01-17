@@ -61,6 +61,7 @@ class LoginRegisterVC : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         self.addConstantViews()
         self.view.removeConstraints(self.view.constraints)
@@ -126,7 +127,7 @@ class LoginRegisterVC : UIViewController {
     }
     
     func forgotPasswordPressed() {
-        print("forgot!")
+        self.doForgotPassword()
     }
     
     private func loginIfWeCan() {
@@ -336,10 +337,12 @@ extension LoginRegisterVC : GIDSignInUIDelegate {
 
 //MARK: - Forgot Password
 extension LoginRegisterVC {
-    func doForgotPassword() {
+    fileprivate func doForgotPassword() {
         if self.forgotPasswordVC == nil {
             self.forgotPasswordVC = ForgotPasswordVC()
         }
+        
+        self.navigationController?.pushViewController(self.forgotPasswordVC!, animated: true)
     }
 }
 

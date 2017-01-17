@@ -40,7 +40,10 @@ extension MapViewController {
             self.loginRegisterVC = LoginRegisterVC()
         }
         
-        self.present(self.loginRegisterVC!, animated: true, completion: nil)
+        let navController = UINavigationController()
+        navController.addChildViewController(self.loginRegisterVC!)
+        
+        self.present(navController, animated: true, completion: nil)
     }
 }
 
