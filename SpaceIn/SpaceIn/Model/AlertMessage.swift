@@ -20,6 +20,9 @@ enum AlertMessages: String {
     case invalidPasswordTitle = "Invalid Password"
     case invalidPasswordSubtitle = "This password is not valid"
     
+    case passwordTooShortSubtitle = "This password is too short"
+    case passwordTooLongSubtitle = "This password is too long"
+    
     case mismatchPasswordTitle = "Password's Don't Match"
     case mismatchPasswordSubtitle = "The passwords you have set are not the same"
     
@@ -64,6 +67,16 @@ class AlertMessage {
     class func invalidPassword() -> AlertMessage {
         return AlertMessage(title: AlertMessages.defaultTitle.rawValue, subtitle: AlertMessages.invalidPasswordSubtitle.rawValue, actionButtontitle: AlertMessages.defaultButtontitle.rawValue, secondButtonTitle: "")
     }
+    
+    class func passwordTooShort() -> AlertMessage {
+        return AlertMessage(title: AlertMessages.defaultTitle.rawValue, subtitle: AlertMessages.passwordTooShortSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: "")
+    }
+    
+    class func passwordTooLong() -> AlertMessage {
+        return AlertMessage(title: AlertMessages.defaultTitle.rawValue, subtitle: AlertMessages.passwordTooLongSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: "")
+    }
+    
+    
     
     class func passwordsDontMatch() -> AlertMessage {
         return AlertMessage(title: AlertMessages.defaultTitle.rawValue, subtitle: AlertMessages.mismatchPasswordSubtitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: "")

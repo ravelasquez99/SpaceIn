@@ -126,6 +126,10 @@ extension LoginRegisterVC { //UI calls
         
         let socialTitle = self.state == .register ? "Sign up with Google" : "Sign in with Google"
         self.socialLoginButton.setTitle(socialTitle, for: .normal)
+        
+        let backgroundImage = self.state == .register ? UIImage(named: AssetName.signUpButtonGradient.rawValue) : UIImage()
+        self.signupLoginButton.setBackgroundImage(backgroundImage, for: .normal)
+        self.socialLoginButton.setBackgroundImage(backgroundImage, for: .normal)
 
         let switchTitle = self.state == .register ? "Sign In" : "Sign Up"
         self.switchLoginRegisterButton.setTitle(switchTitle, for: .normal)
@@ -138,7 +142,7 @@ extension LoginRegisterVC { //UI calls
     
     private func updateTextFieldsForStateChange() {
         self.setColorsForTextField(textField: self.emailTextField, withPlaceHolerText: "Email")
-        self.setColorsForTextField(textField: self.fullNameTextField, withPlaceHolerText: "Full name")
+        self.setColorsForTextField(textField: self.fullNameTextField, withPlaceHolerText: "Name")
         self.setColorsForTextField(textField: self.passwordTextField, withPlaceHolerText: "Password")
         self.setColorsForTextField(textField: self.confirmPasswordTextField, withPlaceHolerText: "Confirm Password")
     }

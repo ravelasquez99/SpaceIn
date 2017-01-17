@@ -213,19 +213,19 @@ class LoginRegisterVC : UIViewController {
             
         } else if !self.validateFullName(name: self.fullNameTextField.text!){
             
-            return (false, AlertMessage.invalidPassword())
+            return (false, AlertMessage.invalidName())
             
-        } else if !self.validatePasswordText(text: self.passwordTextField.text!){
+        } else if !self.passwordShortEnough(text: self.passwordTextField.text!){
+        
+            return (false, AlertMessage.passwordTooLong())
             
-            return (false, AlertMessage.invalidPassword())
+        }  else if !self.passwordIsLongEnough(text: self.passwordTextField.text!) {
+            
+            return (false, AlertMessage.passwordTooShort())
             
         } else if self.passwordTextField.text != self.confirmPasswordTextField.text {
             
             return (false, AlertMessage.passwordsDontMatch())
-            
-        } else if !self.validateFullName(name: self.fullNameTextField.text!) {
-            
-            return (false, AlertMessage.invalidName())
             
         } else {
             
@@ -262,8 +262,12 @@ class LoginRegisterVC : UIViewController {
     }
 
     
-    private func validatePasswordText(text: String)-> Bool {
-        return text.characters.count > 5 && text.characters.count < 15
+    private func passwordIsLongEnough(text: String) -> Bool {
+        return text.characters.count > 5
+    }
+    
+    private func passwordShortEnough(text: String) -> Bool {
+        return text.characters.count < 15
     }
     
     
