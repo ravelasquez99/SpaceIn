@@ -223,7 +223,7 @@ extension ForgotPasswordVC {
         let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle!, preferredStyle: .alert)
         let okAction = UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil)
         alertController.addAction(okAction)
-        self.present(alertController, animated: false, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func sendResetEmailIfWeCan() {

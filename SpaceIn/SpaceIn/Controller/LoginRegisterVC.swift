@@ -356,7 +356,7 @@ extension LoginRegisterVC: ForgotPasswordVCDelegate {
             self.forgotPasswordVC?.delegate = self
         }
         
-        self.present(self.forgotPasswordVC!, animated: true, completion: nil)
+        self.present(self.forgotPasswordVC!, animated: false, completion: nil)
     }
     
     func closeForgotPasswordVC() {

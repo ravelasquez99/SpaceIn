@@ -131,7 +131,7 @@ extension LoginRegisterVC { //UI calls
         self.signupLoginButton.setBackgroundImage(backgroundImage, for: .normal)
         self.socialLoginButton.setBackgroundImage(backgroundImage, for: .normal)
 
-        let switchTitle = self.state == .register ? "Sign In" : "Sign Up"
+        let switchTitle = self.state == .register ? "Sign in" : "Sign Up"
         self.switchLoginRegisterButton.setTitle(switchTitle, for: .normal)
         
         let switchColor = self.state == .register ? StyleGuideManager.registerPageTextColor : StyleGuideManager.loginPageTextColor
