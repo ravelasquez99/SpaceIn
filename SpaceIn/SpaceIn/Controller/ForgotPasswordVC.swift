@@ -247,7 +247,7 @@ extension ForgotPasswordVC {
             alertController.addAction(UIAlertAction(title: alertAction2, style: .default, handler: nil))
         }
         
-        self.present(alertController, animated: false, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func presentEmailSentAndDismiss() {
@@ -258,7 +258,7 @@ extension ForgotPasswordVC {
             self.delegate?.closeForgotPasswordVC()
         }
         alertController.addAction(okAction)
-        self.present(alertController, animated: false, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     

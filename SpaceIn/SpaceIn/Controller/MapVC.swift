@@ -25,10 +25,14 @@ class MapViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.presentLoginRegister()
+
     }
     
     @IBAction func animate(_ sender: UIButton) {
+        FirebaseHelper.signOut()
+        if SpaceInUser.current == nil {
+            presentLoginRegister()
+        }
     }
 }
 
