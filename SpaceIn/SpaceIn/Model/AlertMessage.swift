@@ -15,10 +15,10 @@ enum AlertMessages: String {
     case invalidEmailTitle = "Invalid Email"
     case invalidEmailSubTitle = "That email is invalid"
     
-
+    case invalidPasswordSubtitle = "That password is wrong"
     
-    case invalidPasswordTitle = "Invalid Password"
-    case invalidPasswordSubtitle = "This password is not valid"
+    case weakPasswordTitle = "Password too weak"
+    case weakPasswordSubtitle = "Please make sure that the password is not too easy to guess"
     
     case passwordTooShortSubtitle = "This password is too short"
     case passwordTooLongSubtitle = "This password is too long"
@@ -105,9 +105,12 @@ class AlertMessage {
             subtitleMessage = AlertMessages.invalidEmailSubTitle.rawValue
             break
         case .InvalidPassword:
-            titleMessage = AlertMessages.invalidPasswordTitle.rawValue
-            subtitleMessage = AlertMessages.invalidEmailSubTitle.rawValue
+            titleMessage = AlertMessages.defaultTitle.rawValue
+            subtitleMessage = AlertMessages.invalidPasswordSubtitle.rawValue
             break
+        case .weakPassword:
+            titleMessage = AlertMessages.weakPasswordTitle.rawValue
+            subtitleMessage = AlertMessages.weakPasswordTitle.rawValue
         case .UserAlreadyCreated:
             titleMessage = AlertMessages.defaultTitle.rawValue
             subtitleMessage = AlertMessages.userAlreadyExistsSubtitle.rawValue

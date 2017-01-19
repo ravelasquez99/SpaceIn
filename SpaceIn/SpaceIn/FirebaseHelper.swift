@@ -16,6 +16,7 @@ enum FirebaseReturnType {
     case Success
     case NoUID
     case UserNotFound
+    case weakPassword
     
     //Sign in
     case InvalidPassword
@@ -123,6 +124,11 @@ class FirebaseHelper {
                 print("GOOGLE INTERNAL ERROR SEND REPORT TO GOOGLE")
                 print(error)
                 break
+            case .errorCodeWrongPassword:
+                returnType = .InvalidPassword
+                break
+            case .errorCodeWeakPassword:
+                returnType = .weakPassword
             default:
                 print("Create User Error: \(error)")
             }
