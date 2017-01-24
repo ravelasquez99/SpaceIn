@@ -20,6 +20,10 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let status = LocationManager.sharedInstance.userLocationStatus()
+        if status == .Tracking {
+            
+        }
 
     }
     
@@ -39,6 +43,7 @@ class MapViewController: UIViewController {
 
 //MARK: - Login/Register
 extension MapViewController {
+    
     fileprivate func presentLoginRegister() {
         if self.loginRegisterVC == nil {
             self.loginRegisterVC = LoginRegisterVC()
