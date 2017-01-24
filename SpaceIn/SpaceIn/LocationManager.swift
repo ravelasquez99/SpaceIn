@@ -21,10 +21,12 @@ class LocationManager : NSObject {
 
     static let sharedInstance = LocationManager()
     
-    var userLocation: CLLocation?
-    
-    private let locationManager = CLLocationManager()
-    
+    var userLocation: CLLocation? {
+        didSet {
+            self.stopTrackingUser()
+             NotificationCenter.default.post(name: .didSetUserLocation, object: nil)
+        }
+    }
     
     func userLocationStatus() -> UserLocationStatus {
         let status = self.locationStatus()
@@ -42,31 +44,17 @@ class LocationManager : NSObject {
         }
     }
     
-    func startTrackingUser() {
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        self.locationManager.delegate = self
-        self.locationManager.startUpdatingLocation()
-    }
-    
-    func requestUserLocation() {
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        self.locationManager.delegate = self
-        self.locationManager.requestWhenInUseAuthorization()
-        
-    }
-    
-    private func locationStatus() -> CLAuthorizationStatus {
-        return CLLocationManager.authorizationStatus()
-    }
+    fileprivate let locationManager = CLLocationManager()
+
 }
 
+// MARK: - CLLocationManagerDelegate
 extension LocationManager : CLLocationManagerDelegate {
-    
-    //did change
-    //did update
-    
+  
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("we were called")
+        if locations.count > 0  {
+            self.userLocation = locations[0]
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -74,14 +62,39 @@ extension LocationManager : CLLocationManagerDelegate {
         if status == .authorizedWhenInUse {
             self.startTrackingUser()
         } else if status == .denied {
-            // breadcrumb
+            NotificationCenter.default.post(name: .deniedLocationPermission, object: nil)
         } else if status == .notDetermined {
             self.requestUserLocation()
         } else if status == .restricted {
-            // breadcrumb
+            NotificationCenter.default.post(name: .restrictedLocationPermission, object: nil)
         }
-        print(status)
     }
     
     
+}
+
+
+// MARK: - Private
+extension LocationManager {
+    fileprivate func locationStatus() -> CLAuthorizationStatus {
+        return CLLocationManager.authorizationStatus()
+    }
+    
+    fileprivate func requestUserLocation() {
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        self.locationManager.delegate = self
+        self.locationManager.requestWhenInUseAuthorization()
+    }
+    
+    fileprivate func startTrackingUser() {
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        self.locationManager.delegate = self
+        self.locationManager.startUpdatingLocation()
+    }
+    
+    fileprivate func stopTrackingUser() {
+        self.locationManager.stopUpdatingLocation()
+    }
+    
+
 }

@@ -14,6 +14,9 @@ extension Notification.Name {
     static let DidFailGoogleLogin = Notification.Name("did-fail-google-login")
     static let DidFailAuthentication = Notification.Name("did-fail-auth")
     static let DidFailLogin = Notification.Name("did-fail-login-firebase")
+    static let didSetUserLocation = Notification.Name("did-set-user-location")
+    static let deniedLocationPermission = Notification.Name("did-deny-user-location")
+    static let restrictedLocationPermission = Notification.Name("restricted-user-location")
 }
 
 enum SpaceinCopy: String {
