@@ -25,12 +25,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         
-        let hasSeenTutorial = UserDefaults.standard.value(forKey: UserDefaultKeys.hasSeenTutorial.rawValue) != nil
+        let hasSeenTutorial = UserDefaults.standard.bool(forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
         
         if hasSeenTutorial {
             self.makeMapVCTheFirstVC(withMapVC: MapViewController())
         } else {
             self.makeTutorialViewTheFirstView()
+            UserDefaults.standard.setValue(true, forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
+            UserDefaults.standard.synchronize()
         }
         
 
