@@ -11,9 +11,9 @@ import MapKit
 import CoreLocation
 
 enum UserLocationStatus {
-    case Requesting
-    case Tracking
-    case Denied
+    case unknown
+    case authorized
+    case denied
     case Other
 }
 
@@ -28,23 +28,39 @@ class LocationManager : NSObject {
         }
     }
     
+    
     func userLocationStatus() -> UserLocationStatus {
         let status = self.locationStatus()
         
         if status == .authorizedWhenInUse {
-            self.startTrackingUser()
-            return .Tracking
+            return .authorized
         } else if status == .notDetermined {
-            self.requestUserLocation()
-            return .Requesting
+            return .unknown
         } else if status == .denied {
-            return .Denied
+            return .denied
         } else {
             return .Other
         }
     }
     
+    func requestUserLocation() {
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        self.locationManager.delegate = self
+        self.locationManager.requestWhenInUseAuthorization()
+    }
+    
+    func startTrackingUser() {
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        self.locationManager.delegate = self
+        self.locationManager.startUpdatingLocation()
+    }
+    
+    func latestLocation() -> CLLocation? {
+        return self.lastLocation
+    }
+    
     fileprivate let locationManager = CLLocationManager()
+    private var lastLocation: CLLocation?
 
 }
 
@@ -78,18 +94,6 @@ extension LocationManager : CLLocationManagerDelegate {
 extension LocationManager {
     fileprivate func locationStatus() -> CLAuthorizationStatus {
         return CLLocationManager.authorizationStatus()
-    }
-    
-    fileprivate func requestUserLocation() {
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        self.locationManager.delegate = self
-        self.locationManager.requestWhenInUseAuthorization()
-    }
-    
-    fileprivate func startTrackingUser() {
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        self.locationManager.delegate = self
-        self.locationManager.startUpdatingLocation()
     }
     
     fileprivate func stopTrackingUser() {

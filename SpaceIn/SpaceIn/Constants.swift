@@ -25,3 +25,7 @@ enum SpaceinCopy: String {
     case forgotPasswordPageButtonCopy = "Send login link"
     
 }
+
+enum UserDefaultKeys : String {
+    case hasSeenTutorial = "Has seen tutorial"
+}

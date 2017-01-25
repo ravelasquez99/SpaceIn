@@ -12,10 +12,11 @@ import GoogleSignIn
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+    
+    static var sharedInstance: AppDelegate?
 
     var window: UIWindow?
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         // Use Firebase library to configure APIs
@@ -24,12 +25,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         
+        let hasSeenTutorial = UserDefaults.standard.value(forKey: UserDefaultKeys.hasSeenTutorial.rawValue) != nil
         
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let mapViewController = storyboard.instantiateViewController(withIdentifier: "MapVC") as! MapViewController
-        self.window?.rootViewController = mapViewController
-        self.window?.makeKeyAndVisible()
+        if hasSeenTutorial {
+            self.makeMapVCTheFirstVC(withMapVC: MapViewController())
+        } else {
+            self.makeTutorialViewTheFirstView()
+        }
+        
+
         
         return true
     }
@@ -92,6 +96,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
         // ...
+    }
+    
+    func makeMapVCTheFirstVC(withMapVC: MapViewController) {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let mapViewController = storyboard.instantiateViewController(withIdentifier: "MapVC") as! MapViewController
+        self.window?.rootViewController = mapViewController
+        self.window?.makeKeyAndVisible()
+    }
+    
+    func makeTutorialViewTheFirstView() {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let tutorialView = TutorialVC()
+        self.window?.rootViewController = tutorialView
+        self.window?.makeKeyAndVisible()
     }
 }
 
