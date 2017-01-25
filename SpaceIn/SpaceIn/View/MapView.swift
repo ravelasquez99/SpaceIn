@@ -17,26 +17,39 @@ import MapKit
 
 //http://stackoverflow.com/questions/29776549/animate-mapkit-annotation-coordinate-change-in-swift
 
+enum ZoomType {
+    case zoomedIn
+    case zoomedOut
+    case leaveAlone
+    
+}
+
+// MARK: - API
+extension MapView {
+    func setToLocation(location: CLLocation, zoomType: ZoomType) {
+        self._setToLocation(location: location, zoomType: zoomType)
+    }
+}
+
+// MARK: - Initialization and Lifecycle
 class MapView: MKMapView {
     
     static let distance: CLLocationDistance = 650
     static let pitch: CGFloat = 65
     static let heading = 0.0
     
-    let coordinate = CLLocationCoordinate2D(latitude: 37.827774,longitude:  -122.255828)
+    let coordinate = CLLocationCoordinate2D(latitude: 41.8902,longitude:  12.4922)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
         self.camera = self.createDefaultCamera()
-        self.placeDefaultPins()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
         self.camera = self.createDefaultCamera()
-        self.placeDefaultPins()
     }
     
     private func setup() {
@@ -47,20 +60,6 @@ class MapView: MKMapView {
         self.delegate = self
     }
     
-    private func placeDefaultPins() {
-
-        let ano = MKPointAnnotation()
-        ano.coordinate = coordinate
-        self.addAnnotation(ano)
-    }
-    
-    private func createDefaultCamera()-> MKMapCamera {
-        return MKMapCamera(lookingAtCenter: coordinate,
-                              fromDistance: MapView.distance,
-                              pitch: MapView.pitch,
-                              heading: MapView.heading)
-    }
-    
     private func setUserInteraction() {
         self.isZoomEnabled = true
         self.isRotateEnabled = true
@@ -69,6 +68,32 @@ class MapView: MKMapView {
 }
 
 
+// MARK: - Private
+extension MapView {
+    fileprivate func _setToLocation(location: CLLocation, zoomType: ZoomType) {
+        
+    }
+}
+
+// MARK: - Map Setup & Manipulation - Private
+extension MapView {
+    fileprivate func placeDefaultPins() {
+        
+        let ano = MKPointAnnotation()
+        ano.coordinate = coordinate
+        self.addAnnotation(ano)
+    }
+    
+    
+    fileprivate func createDefaultCamera()-> MKMapCamera {
+        return MKMapCamera(lookingAtCenter: coordinate,
+                           fromDistance: MapView.distance,
+                           pitch: MapView.pitch,
+                           heading: MapView.heading)
+    }
+}
+
+// MARK: - Mapview Delegate
 extension MapView: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !(annotation is MKUserLocation) else {

@@ -12,11 +12,13 @@ import CoreLocation
 import MapKit
 
 
+
+//MARK: - Lifecycle
 class MapViewController: UIViewController {
     
     @IBOutlet var mapView: MapView!
     var loginRegisterVC: LoginRegisterVC?
-    private var startingLocation : CLLocation?
+    fileprivate var startingLocation : CLLocation?
     
     fileprivate var weAreWaitingForLocationManager = false
     
@@ -28,6 +30,10 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if self.startingLocation != nil {
+            
+        }
+        print("skjbn")
         //add observers
     }
     
