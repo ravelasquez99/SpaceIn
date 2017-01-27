@@ -147,5 +147,6 @@ extension MapViewController {
 
         defaults.set(lastKnownLat, forKey: UserDefaultKeys.lastKnownSpaceInLattitude.rawValue)
         defaults.set(lastKnownLong, forKey: UserDefaultKeys.lastKnownSpaceInLongitude.rawValue)
+        print("we saved the values")
     }
 }
