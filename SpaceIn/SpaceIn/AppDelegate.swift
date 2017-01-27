@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import GoogleSignIn
+import MapKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -25,15 +26,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         
-        let hasSeenTutorial = UserDefaults.standard.bool(forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
+        
+        let userDefaults = UserDefaults.standard
+        let hasSeenTutorial = userDefaults.bool(forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
         
         if hasSeenTutorial {
-            // breadcrumb (get the last location from somewhere)
-            self.makeMapVCTheFirstVC(withMapVC: MapViewController())
+            if let savedLocation = self.savedCoordinateFromDefualts(defaults: userDefaults) {
+                self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: savedLocation, zoomType: .zoomedIn)
+)
+            } else {
+                self.makeMapVCTheFirstVC(withMapVC: MapViewController())
+            }
+  
         } else {
             self.makeTutorialViewTheFirstView()
-            UserDefaults.standard.setValue(true, forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
-            UserDefaults.standard.synchronize()
+            userDefaults.setValue(true, forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
+            userDefaults.synchronize()
         }
 
         return true
@@ -42,11 +50,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        self.mapVC?.saveState()
+
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        self.mapVC?.saveState()
+
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -59,6 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        self.mapVC?.saveState()
     }
     
     @available(iOS 9.0, *)
@@ -100,6 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     
     func makeMapVCTheFirstVC(withMapVC: MapViewController) {
+        self.mapVC = withMapVC
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = withMapVC
         self.window?.makeKeyAndVisible()
@@ -110,6 +124,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         let tutorialView = TutorialVC()
         self.window?.rootViewController = tutorialView
         self.window?.makeKeyAndVisible()
+    }
+    
+    func savedCoordinateFromDefualts(defaults: UserDefaults) -> CLLocation? {
+        guard let lat = (defaults.value(forKey: UserDefaultKeys.lastKnownSpaceInLattitude.rawValue) as? CGFloat) else {
+            return nil
+        }
+        
+        guard let long = (defaults.value(forKey: UserDefaultKeys.lastKnownSpaceInLongitude.rawValue) as? CGFloat) else {
+            return nil
+        }
+        
+        let lattitude = Double(lat)
+        let longitude = Double(long)
+        
+        return CLLocation(latitude: lattitude, longitude: longitude)
     }
 }
 

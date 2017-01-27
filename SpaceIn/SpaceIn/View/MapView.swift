@@ -65,6 +65,10 @@ class MapView: MKMapView {
         self.isRotateEnabled = true
         self.isScrollEnabled = true
     }
+    
+    deinit {
+        print("testing")
+    }
 }
 
 
@@ -113,9 +117,6 @@ extension MapView {
     
     fileprivate func defaultCamera() -> MKMapCamera {
         return MKMapCamera(lookingAtCenter: coordinate , fromDistance: MapView.defaultDistance, pitch: MapView.defaultPitch, heading: MapView.defaultHeading)
-//        return MKMapCamera(lookingAtCenter: coordinate, fromEyeCoordinate: <#T##CLLocationCoordinate2D#>, eyeAltitude: <#T##CLLocationDistance#>)
-        
- 
     }
     
     fileprivate func zoomedInCamera() -> MKMapCamera {
@@ -167,7 +168,6 @@ extension MapView: MKMapViewDelegate {
             print("satellite")
         }
         
-        
-        print("changed")
+        self.coordinate = self.centerCoordinate
     }
 }

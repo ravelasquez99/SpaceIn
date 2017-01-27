@@ -108,6 +108,8 @@ extension MapViewController {
     }
 }
 
+
+//MARK:- UI calls
 extension MapViewController {
     
     fileprivate func constrain() {
@@ -131,3 +133,19 @@ extension MapViewController {
 }
 
 
+//MARK: - State Management 
+extension MapViewController {
+    func saveState() {
+        let defaults = UserDefaults.standard
+        self.saveMapStatewithDefaults(defaults: defaults)
+        defaults.synchronize()
+    }
+    
+    fileprivate func saveMapStatewithDefaults(defaults: UserDefaults) {
+        let lastKnownLat = CGFloat(self.mapView.coordinate.latitude)
+        let lastKnownLong = CGFloat(self.mapView.coordinate.longitude)
+
+        defaults.set(lastKnownLat, forKey: UserDefaultKeys.lastKnownSpaceInLattitude.rawValue)
+        defaults.set(lastKnownLong, forKey: UserDefaultKeys.lastKnownSpaceInLongitude.rawValue)
+    }
+}
