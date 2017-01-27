@@ -13,9 +13,9 @@ import GoogleSignIn
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
-    static var sharedInstance: AppDelegate?
-
     var window: UIWindow?
+    private var mapVC: MapViewController?
+    private var tutorialVC: TutorialVC?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -28,15 +28,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         let hasSeenTutorial = UserDefaults.standard.bool(forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
         
         if hasSeenTutorial {
+            // breadcrumb (get the last location from somewhere)
             self.makeMapVCTheFirstVC(withMapVC: MapViewController())
         } else {
             self.makeTutorialViewTheFirstView()
             UserDefaults.standard.setValue(true, forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
             UserDefaults.standard.synchronize()
         }
-        
 
-        
         return true
     }
 
@@ -102,9 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func makeMapVCTheFirstVC(withMapVC: MapViewController) {
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let mapViewController = storyboard.instantiateViewController(withIdentifier: "MapVC") as! MapViewController
-        self.window?.rootViewController = mapViewController
+        self.window?.rootViewController = withMapVC
         self.window?.makeKeyAndVisible()
     }
     

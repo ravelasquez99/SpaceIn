@@ -67,7 +67,7 @@ extension TutorialVC {
     func userLocationSet() {
         self.removeLocationManagerObservers()
         if let location = LocationManager.sharedInstance.userLocation {
-            self.loadMapVCWithUserLocation(location: location)
+            self.loadMapVCWithLocation(location: location)
         } else {
             self.loadMapVCWithDefaultLocation()
         }
@@ -81,15 +81,14 @@ extension TutorialVC {
 
 // MARK: - Segues and transitions
 extension TutorialVC {
-    func loadMapVCWithUserLocation(location: CLLocation) {
-        let mapVC = MapViewController(startingLocation: location)
+    
+    func loadMapVCWithLocation(location: CLLocation) {
+        let mapVC = MapViewController(startingLocation: location, zoomType: .zoomedOut)
         self.tellAppDelegateToMakeMapVCRootVC(mapVC: mapVC)
-
     }
     
     func loadMapVCWithDefaultLocation() {
-        let mapVC = MapViewController()
-        self.tellAppDelegateToMakeMapVCRootVC(mapVC: mapVC)
+        self.loadMapVCWithLocation(location: MapViewController.defaultLocation)
     }
     
     func tellAppDelegateToMakeMapVCRootVC(mapVC: MapViewController) {

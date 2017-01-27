@@ -17,39 +17,39 @@ import MapKit
 
 //http://stackoverflow.com/questions/29776549/animate-mapkit-annotation-coordinate-change-in-swift
 
-enum ZoomType {
+enum MapViewZoomType {
     case zoomedIn
     case zoomedOut
     case leaveAlone
+    case defaultType
     
 }
 
 // MARK: - API
 extension MapView {
-    func setToLocation(location: CLLocation, zoomType: ZoomType) {
-        self._setToLocation(location: location, zoomType: zoomType)
+    func setToLocation(location: CLLocation, zoomType: MapViewZoomType, animated: Bool) {
+        self._setToLocation(location: location, zoomType: zoomType, animated: animated)
     }
 }
+
 
 // MARK: - Initialization and Lifecycle
 class MapView: MKMapView {
     
-    static let distance: CLLocationDistance = 650
-    static let pitch: CGFloat = 65
-    static let heading = 0.0
+    static let defaultDistance: CLLocationDistance = 650
+    static let defaultPitch: CGFloat = 65
+    static let defaultHeading = 0.0
     
-    let coordinate = CLLocationCoordinate2D(latitude: 41.8902,longitude:  12.4922)
+    var coordinate = CLLocationCoordinate2D(latitude: 41.8902,longitude:  12.4922)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
-        self.camera = self.createDefaultCamera()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
-        self.camera = self.createDefaultCamera()
     }
     
     private func setup() {
@@ -70,7 +70,11 @@ class MapView: MKMapView {
 
 // MARK: - Private
 extension MapView {
-    fileprivate func _setToLocation(location: CLLocation, zoomType: ZoomType) {
+    fileprivate func _setToLocation(location: CLLocation, zoomType: MapViewZoomType, animated: Bool) {
+        self.coordinate = location.coordinate
+        
+        self.setCameraWithZoomTypeOnceCoordinateIsSet(zoomType: zoomType)
+        self.setCenter(self.coordinate, animated: animated)
         
     }
 }
@@ -78,18 +82,49 @@ extension MapView {
 // MARK: - Map Setup & Manipulation - Private
 extension MapView {
     fileprivate func placeDefaultPins() {
-        
         let ano = MKPointAnnotation()
         ano.coordinate = coordinate
         self.addAnnotation(ano)
     }
     
     
-    fileprivate func createDefaultCamera()-> MKMapCamera {
-        return MKMapCamera(lookingAtCenter: coordinate,
-                           fromDistance: MapView.distance,
-                           pitch: MapView.pitch,
-                           heading: MapView.heading)
+
+}
+
+
+// MARK: - Camera
+extension MapView {
+    fileprivate func setCameraWithZoomTypeOnceCoordinateIsSet(zoomType: MapViewZoomType) {
+        self.camera = cameraForZoomType(zoomType: zoomType)
+    }
+    
+    fileprivate func cameraForZoomType(zoomType: MapViewZoomType) -> MKMapCamera {
+        switch zoomType {
+        case .leaveAlone:
+            return self.camera
+        case .defaultType :
+            return self.defaultCamera()
+        case .zoomedIn:
+            return self.zoomedInCamera()
+        case .zoomedOut:
+            return self.zoomedOutCamera()
+        }
+    }
+    
+    fileprivate func defaultCamera() -> MKMapCamera {
+        return MKMapCamera(lookingAtCenter: coordinate , fromDistance: MapView.defaultDistance, pitch: MapView.defaultPitch, heading: MapView.defaultHeading)
+//        return MKMapCamera(lookingAtCenter: coordinate, fromEyeCoordinate: <#T##CLLocationCoordinate2D#>, eyeAltitude: <#T##CLLocationDistance#>)
+        
+ 
+    }
+    
+    fileprivate func zoomedInCamera() -> MKMapCamera {
+        return MKMapCamera(lookingAtCenter: coordinate, fromDistance: MapView.defaultDistance, pitch: MapView.defaultPitch, heading: MapView.defaultHeading)
+    }
+    
+    fileprivate func zoomedOutCamera() -> MKMapCamera {
+        return MKMapCamera(lookingAtCenter: self.coordinate, fromEyeCoordinate: self.coordinate, eyeAltitude: 50000000)
+        //27,186,078
     }
 }
 
@@ -131,6 +166,8 @@ extension MapView: MKMapViewDelegate {
         } else if mapView.mapType == .satellite {
             print("satellite")
         }
+        
+        
         print("changed")
     }
 }

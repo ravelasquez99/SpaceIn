@@ -15,36 +15,36 @@ import MapKit
 
 //MARK: - Lifecycle
 class MapViewController: UIViewController {
+    static let defaultLocation =  CLLocation(latitude: 41.8902,longitude:  12.4922)    
     
-    @IBOutlet var mapView: MapView!
+    let mapView = MapView(frame: CGRect.zero)
     var loginRegisterVC: LoginRegisterVC?
+    
+    
     fileprivate var startingLocation : CLLocation?
+    fileprivate var zoomType: MapViewZoomType?
+    fileprivate var didSetupInitialMap = false
     
-    fileprivate var weAreWaitingForLocationManager = false
-    
-    convenience init(startingLocation: CLLocation) {
+    convenience init(startingLocation: CLLocation, zoomType: MapViewZoomType) {
         self.init(nibName: nil, bundle: nil)
         self.startingLocation = startingLocation
+        self.zoomType = zoomType
 
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if self.startingLocation != nil {
-            
-        }
-        print("skjbn")
-        //add observers
+        self.addViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("view will appear")
+        self.constrain()
+        self.setupInitialMapViewStateIfNeccessary()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("view did appear")
         self.loginRegisterVC = nil
     }
     
@@ -71,35 +71,6 @@ extension MapViewController {
 //MARK: - User actual location
 extension MapViewController {
     
-    fileprivate func addObserversForLocationManager() {
-        self.weAreWaitingForLocationManager = true
-        
-        let nc = NotificationCenter.default
-        nc.addObserver(self, selector: #selector(self.userLocationSet), name: .didSetUserLocation, object: nil)
-        nc.addObserver(self, selector: #selector(self.userLocationDeniedOrRestricted), name: .deniedLocationPermission, object: nil)
-        nc.addObserver(self, selector: #selector(self.userLocationDeniedOrRestricted), name: .restrictedLocationPermission, object: nil)
-    }
-    
-    @objc fileprivate func userLocationSet() {
-        print("user location set")
-        self.removeLocationManagerObservers()
-    }
-    
-    @objc fileprivate func userLocationDeniedOrRestricted() {
-        print("user location denied")
-        self.removeLocationManagerObservers()
-    }
-    
-    fileprivate func removeLocationManagerObservers() {
-        self.weAreWaitingForLocationManager = false
-        
-        let nc = NotificationCenter.default
-        nc.removeObserver(self, name: .didSetUserLocation, object: nil)
-        nc.removeObserver(self, name: .deniedLocationPermission, object: nil)
-        nc.removeObserver(self, name: .restrictedLocationPermission, object: nil)
-
-    }
-    
     fileprivate func shouldUseUsersLocation() -> Bool {
         return true
     }
@@ -112,6 +83,51 @@ extension MapViewController {
         return CLLocation()
     }
 
+}
+
+
+//MARK: - Interactions with the mapview
+extension MapViewController {
+    
+    fileprivate func setupInitialMapViewStateIfNeccessary() {
+        if self.didSetupInitialMap {
+            return
+        }
+        
+        if self.weCanSetupMapView() {
+            self.mapView.setToLocation(location: self.startingLocation!, zoomType: self.zoomType!, animated: false)
+        } else {
+            self.mapView.setToLocation(location: MapViewController.defaultLocation, zoomType: .defaultType, animated: false)
+        }
+        
+        self.didSetupInitialMap = true
+    }
+    
+    fileprivate func weCanSetupMapView() -> Bool {
+        return self.startingLocation != nil && self.zoomType != nil
+    }
+}
+
+extension MapViewController {
+    
+    fileprivate func constrain() {
+        self.constrainMapView()
+    }
+    
+    
+    fileprivate func constrainMapView() {
+        self.mapView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.mapView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        self.mapView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.mapView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+    }
+    
+    
+    
+    fileprivate func addViews() {
+        self.mapView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.mapView)
+    }
 }
 
 
