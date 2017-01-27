@@ -41,6 +41,7 @@ class MapView: MKMapView {
     static let defaultHeading = 0.0
     
     var coordinate = CLLocationCoordinate2D(latitude: 41.8902,longitude:  12.4922)
+    var userPin: MKPointAnnotation?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,23 +77,45 @@ class MapView: MKMapView {
 extension MapView {
     fileprivate func _setToLocation(location: CLLocation, zoomType: MapViewZoomType, animated: Bool) {
         self.coordinate = location.coordinate
-        
         self.setCameraWithZoomTypeOnceCoordinateIsSet(zoomType: zoomType)
         self.setCenter(self.coordinate, animated: animated)
-        
+        self.setupUserPinBasedOnZoomType(zoomType: zoomType)
+
     }
 }
 
 // MARK: - Map Setup & Manipulation - Private
 extension MapView {
-    fileprivate func placeDefaultPins() {
-        let ano = MKPointAnnotation()
-        ano.coordinate = coordinate
-        self.addAnnotation(ano)
+    fileprivate func addPin(pin: MKPointAnnotation) {
+        self.addAnnotation(pin)
     }
     
+    fileprivate func removePin(pin: MKPointAnnotation) {
+        self.removeAnnotation(pin)
+    }
     
-
+    fileprivate func addUserPin() {
+        if self.userPin == nil {
+            self.userPin = MKPointAnnotation()
+        }
+        self.userPin!.coordinate = self.coordinate
+        self.addPin(pin: self.userPin!)
+    }
+    
+    fileprivate func removeUserPin() {
+        if self.userPin != nil {
+            self.removePin(pin: self.userPin!)
+        }
+    }
+    
+    fileprivate func setupUserPinBasedOnZoomType(zoomType: MapViewZoomType) {
+        
+        if zoomType == .zoomedOut {
+            self.addUserPin()
+        } else {
+            self.removeUserPin()
+        }
+    }
 }
 
 
@@ -111,6 +134,7 @@ extension MapView {
         case .zoomedIn:
             return self.zoomedInCamera()
         case .zoomedOut:
+            
             return self.zoomedOutCamera()
         }
     }
@@ -152,7 +176,7 @@ extension MapView: MKMapViewDelegate {
         if let annotationView = annotationView {
             // Configure your annotation view here
             annotationView.canShowCallout = true
-            annotationView.image = UIImage(named: "Kobe")
+            annotationView.image = UIImage(named: "logoColored")
         }
         
         annotationView?.frame = CGRect(x: 0, y: 0, width: 75, height: 75)
