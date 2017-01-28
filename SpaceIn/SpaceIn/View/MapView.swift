@@ -56,7 +56,7 @@ class MapView: MKMapView {
         }
     }
     
-    var userPin: MKPointAnnotation?
+    var userAnnotation: MKPointAnnotation?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -108,19 +108,40 @@ extension MapView {
     fileprivate func removePin(pin: MKPointAnnotation) {
         self.removeAnnotation(pin)
     }
-    
+}
+
+
+//MARK: - User Location
+extension MapView {
     fileprivate func addUserPin() {
-        if self.userPin == nil {
-            self.userPin = MKPointAnnotation()
+        if self.userAnnotation == nil {
+            self.userAnnotation = MKPointAnnotation()
         }
-        self.userPin!.coordinate = self.coordinate
-        self.userPin?.title = "some title"
-        self.addPin(pin: self.userPin!)
+        self.userAnnotation!.coordinate = self.coordinate
+        self.addPin(pin: self.userAnnotation!)
+        
+    }
+    
+    fileprivate func zoomToUserPin() {
+        if self.userAnnotation != nil {
+//            let locationForUser = CLLocation(latitude: self.userAnnotation!.coordinate.latitude, longitude: self.userAnnotation!.coordinate.longitude)
+//            self.setToLocation(location: locationForUser, zoomType: .zoomedIn, animated: true)
+            
+            // optionally you can set your own boundaries of the zoom
+            let span = MKCoordinateSpanMake(0.005, 0.005)
+            
+            // or use the current map zoom and just center the map
+            // let span = mapView.region.span
+            
+            // now move the map
+            let region = MKCoordinateRegion(center: self.userAnnotation!.coordinate, span: span)
+            self.setRegion(region, animated: true)
+        }
     }
     
     fileprivate func removeUserPin() {
-        if self.userPin != nil {
-            self.removePin(pin: self.userPin!)
+        if self.userAnnotation != nil {
+            self.removePin(pin: self.userAnnotation!)
         }
     }
     
@@ -131,6 +152,10 @@ extension MapView {
         } else {
             self.removeUserPin()
         }
+    }
+    
+    func viewIsUserAnnotaionView(view: MKAnnotationView) -> Bool{
+        return view.annotation?.coordinate.latitude == self.userAnnotation?.coordinate.latitude && view.annotation?.coordinate.longitude == self.userAnnotation?.coordinate.longitude
     }
 }
 
@@ -167,6 +192,7 @@ extension MapView {
     }
 }
 
+
 // MARK: - Mapview Delegate
 extension MapView: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -189,7 +215,7 @@ extension MapView: MKMapViewDelegate {
         
         if let annotationView = annotationView {
             // Configure your annotation view here
-            annotationView.canShowCallout = true
+            annotationView.canShowCallout = false
             annotationView.image = UIImage(named: "logoColored")
         }
         
@@ -211,17 +237,9 @@ extension MapView: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         print("we called did select annotation")
-        let pinToZoomOn = view.annotation
-        
-        // optionally you can set your own boundaries of the zoom
-        let span = MKCoordinateSpanMake(0.5, 0.5)
-        
-        // or use the current map zoom and just center the map
-        // let span = mapView.region.span
-        
-        // now move the map
-        let region = MKCoordinateRegion(center: pinToZoomOn!.coordinate, span: span)
-        mapView.setRegion(region, animated: true)
+        if self.viewIsUserAnnotaionView(view: view) {
+            self.zoomToUserPin()
+        }
     }
     
 }
