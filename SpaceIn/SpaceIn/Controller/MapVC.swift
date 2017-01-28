@@ -26,6 +26,11 @@ class MapViewController: UIViewController {
     fileprivate var didSetupInitialMap = false
     fileprivate var didConstrain = false
     
+    override var prefersStatusBarHidden : Bool {
+        return true
+    }
+
+    
     convenience init(startingLocation: CLLocation, zoomType: MapViewZoomType) {
         self.init(nibName: nil, bundle: nil)
         self.currentLocation = startingLocation
@@ -43,6 +48,7 @@ class MapViewController: UIViewController {
         super.viewWillAppear(animated)
         self.constrain()
         self.setupInitialMapViewStateIfNeccessary()
+        UIApplication.shared.isStatusBarHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
