@@ -134,7 +134,6 @@ extension MapView {
         case .zoomedIn:
             return self.zoomedInCamera()
         case .zoomedOut:
-            
             return self.zoomedOutCamera()
         }
     }
@@ -149,7 +148,6 @@ extension MapView {
     
     fileprivate func zoomedOutCamera() -> MKMapCamera {
         return MKMapCamera(lookingAtCenter: self.coordinate, fromEyeCoordinate: self.coordinate, eyeAltitude: 50000000)
-        //27,186,078
     }
 }
 

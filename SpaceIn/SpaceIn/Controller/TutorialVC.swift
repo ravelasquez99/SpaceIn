@@ -83,7 +83,7 @@ extension TutorialVC {
 extension TutorialVC {
     
     func loadMapVCWithLocation(location: CLLocation) {
-        let mapVC = MapViewController(startingLocation: location, zoomType: .zoomedOut)
+        let mapVC = MapViewController(startingLocation: location, zoomType: .zoomedIn)
         self.tellAppDelegateToMakeMapVCRootVC(mapVC: mapVC)
     }
     

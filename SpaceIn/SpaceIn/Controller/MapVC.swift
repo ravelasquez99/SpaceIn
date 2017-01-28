@@ -24,6 +24,7 @@ class MapViewController: UIViewController {
     fileprivate var startingLocation : CLLocation?
     fileprivate var zoomType: MapViewZoomType?
     fileprivate var didSetupInitialMap = false
+    fileprivate var didConstrain = false
     
     convenience init(startingLocation: CLLocation, zoomType: MapViewZoomType) {
         self.init(nibName: nil, bundle: nil)
@@ -113,7 +114,9 @@ extension MapViewController {
 extension MapViewController {
     
     fileprivate func constrain() {
-        self.constrainMapView()
+        if self.didConstrain == false {
+            self.constrainMapView()
+        }
     }
     
     
