@@ -124,18 +124,9 @@ extension MapView {
     
     fileprivate func zoomToUserPin() {
         if self.userAnnotation != nil {
-//            let locationForUser = CLLocation(latitude: self.userAnnotation!.coordinate.latitude, longitude: self.userAnnotation!.coordinate.longitude)
-//            self.setToLocation(location: locationForUser, zoomType: .zoomedIn, animated: true)
-            
-            // optionally you can set your own boundaries of the zoom
-            let span = MKCoordinateSpanMake(0.005, 0.005)
-            
-            // or use the current map zoom and just center the map
-            // let span = mapView.region.span
-            
-            // now move the map
-            let region = MKCoordinateRegion(center: self.userAnnotation!.coordinate, span: span)
-            self.setRegion(region, animated: true)
+            let location = CLLocation(latitude: self.userAnnotation!.coordinate.latitude, longitude: self.userAnnotation!.coordinate.longitude)
+            self.setToLocation(location: location, zoomType: .zoomedIn, animated: true)
+            self.removeUserPin()
         }
     }
     
@@ -163,7 +154,7 @@ extension MapView {
 // MARK: - Camera
 extension MapView {
     fileprivate func setCameraWithZoomTypeOnceCoordinateIsSet(zoomType: MapViewZoomType) {
-        self.camera = cameraForZoomType(zoomType: zoomType)
+        self.setCamera(self.cameraForZoomType(zoomType: zoomType), animated: true)
     }
     
     fileprivate func cameraForZoomType(zoomType: MapViewZoomType) -> MKMapCamera {
