@@ -58,6 +58,7 @@ class MapView: MKMapView {
     }
     
     var userAnnotation: MKPointAnnotation?
+    var didFinishLoadingMap = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -96,6 +97,7 @@ extension MapView {
         self.setCameraWithZoomTypeOnceCoordinateIsSet(zoomType: zoomType)
         self.setCenter(self.coordinate, animated: animated)
         self.setupUserPinBasedOnZoomType(zoomType: zoomType)
+        print("we finished set to location")
 
     }
 }
@@ -166,6 +168,7 @@ extension MapView {
     func viewIsUserAnnotaionView(view: MKAnnotationView) -> Bool{
         return view.annotation?.coordinate.latitude == self.userAnnotation?.coordinate.latitude && view.annotation?.coordinate.longitude == self.userAnnotation?.coordinate.longitude
     }
+
 }
 
 
@@ -247,7 +250,17 @@ extension MapView: MKMapViewDelegate {
             print("satellite")
         }
         
+        if self.didFinishLoadingMap {
+            self.removeUserPin()
+        }
+  
         self.coordinate = self.centerCoordinate
+    }
+    
+    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+        if self.didFinishLoadingMap == false {
+            self.didFinishLoadingMap = true
+        }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -257,4 +270,10 @@ extension MapView: MKMapViewDelegate {
         }
     }
     
+}
+
+extension CLLocationCoordinate2D {
+    func isEqualToCoordinate(coordinate: CLLocationCoordinate2D) -> Bool {
+        return self.latitude == coordinate.latitude && self.longitude == coordinate.longitude
+    }
 }
