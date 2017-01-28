@@ -114,6 +114,7 @@ extension MapView {
             self.userPin = MKPointAnnotation()
         }
         self.userPin!.coordinate = self.coordinate
+        self.userPin?.title = "some title"
         self.addPin(pin: self.userPin!)
     }
     
@@ -207,4 +208,20 @@ extension MapView: MKMapViewDelegate {
         
         self.coordinate = self.centerCoordinate
     }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        print("we called did select annotation")
+        let pinToZoomOn = view.annotation
+        
+        // optionally you can set your own boundaries of the zoom
+        let span = MKCoordinateSpanMake(0.5, 0.5)
+        
+        // or use the current map zoom and just center the map
+        // let span = mapView.region.span
+        
+        // now move the map
+        let region = MKCoordinateRegion(center: pinToZoomOn!.coordinate, span: span)
+        mapView.setRegion(region, animated: true)
+    }
+    
 }
