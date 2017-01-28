@@ -32,15 +32,30 @@ extension MapView {
     }
 }
 
+// MARK: - Map View Delegate
+protocol MapViewDelegate {
+    func centerChangedToCoordinate(coordinate: CLLocationCoordinate2D)
+}
+
 
 // MARK: - Initialization and Lifecycle
 class MapView: MKMapView {
     
+    
+    //MARK: - Static vars/Lets
     static let defaultDistance: CLLocationDistance = 650
     static let defaultPitch: CGFloat = 65
     static let defaultHeading = 0.0
     
-    var coordinate = CLLocationCoordinate2D(latitude: 41.8902,longitude:  12.4922)
+    
+    //MARK: - Instance vars/lets
+    var mapViewDelagate: MapViewDelegate?
+    var coordinate = CLLocationCoordinate2D(latitude: 41.8902,longitude:  12.4922) {
+        didSet {
+            self.mapViewDelagate?.centerChangedToCoordinate(coordinate: self.coordinate)
+        }
+    }
+    
     var userPin: MKPointAnnotation?
 
     override init(frame: CGRect) {

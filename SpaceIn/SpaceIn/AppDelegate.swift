@@ -32,9 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         if hasSeenTutorial {
             if let savedLocation = self.savedCoordinateFromDefualts(defaults: userDefaults) {
-                self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: savedLocation, zoomType: .zoomedIn))
+                self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: savedLocation, zoomType: .zoomedOut))
             } else {
-                
                 self.makeMapVCTheFirstVC(withMapVC: MapViewController())
             }
   

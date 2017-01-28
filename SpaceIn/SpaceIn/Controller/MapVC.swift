@@ -21,20 +21,21 @@ class MapViewController: UIViewController {
     var loginRegisterVC: LoginRegisterVC?
     
     
-    fileprivate var startingLocation : CLLocation?
+    fileprivate var currentLocation : CLLocation? = MapViewController.defaultLocation
     fileprivate var zoomType: MapViewZoomType?
     fileprivate var didSetupInitialMap = false
     fileprivate var didConstrain = false
     
     convenience init(startingLocation: CLLocation, zoomType: MapViewZoomType) {
         self.init(nibName: nil, bundle: nil)
-        self.startingLocation = startingLocation
+        self.currentLocation = startingLocation
         self.zoomType = zoomType
 
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.mapView.mapViewDelagate = self
         self.addViews()
     }
     
@@ -88,7 +89,7 @@ extension MapViewController {
 
 
 //MARK: - Interactions with the mapview
-extension MapViewController {
+extension MapViewController: MapViewDelegate {
     
     fileprivate func setupInitialMapViewStateIfNeccessary() {
         if self.didSetupInitialMap {
@@ -96,17 +97,23 @@ extension MapViewController {
         }
         
         if self.weCanSetupMapView() {
-            self.mapView.setToLocation(location: self.startingLocation!, zoomType: self.zoomType!, animated: false)
+            self.mapView.setToLocation(location: self.currentLocation!, zoomType: self.zoomType!, animated: false)
         } else {
-            self.mapView.setToLocation(location: MapViewController.defaultLocation, zoomType: .defaultType, animated: false)
+            self.mapView.setToLocation(location: self.currentLocation!, zoomType: .defaultType, animated: false)
         }
         
         self.didSetupInitialMap = true
     }
     
     fileprivate func weCanSetupMapView() -> Bool {
-        return self.startingLocation != nil && self.zoomType != nil
+        return self.currentLocation != nil && self.zoomType != nil
     }
+    
+    func centerChangedToCoordinate(coordinate: CLLocationCoordinate2D) {
+        self.currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        self.saveState()
+    }
+
 }
 
 
@@ -145,8 +152,8 @@ extension MapViewController {
     }
     
     fileprivate func saveMapStatewithDefaults(defaults: UserDefaults) {
-        let lastKnownLat = CGFloat(self.mapView.coordinate.latitude)
-        let lastKnownLong = CGFloat(self.mapView.coordinate.longitude)
+        let lastKnownLat = CGFloat(self.currentLocation!.coordinate.latitude)
+        let lastKnownLong = CGFloat(self.currentLocation!.coordinate.longitude)
 
         defaults.set(lastKnownLat, forKey: UserDefaultKeys.lastKnownSpaceInLattitude.rawValue)
         defaults.set(lastKnownLong, forKey: UserDefaultKeys.lastKnownSpaceInLongitude.rawValue)
