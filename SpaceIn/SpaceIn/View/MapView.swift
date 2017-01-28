@@ -22,6 +22,7 @@ enum MapViewZoomType {
     case zoomedOut
     case leaveAlone
     case defaultType
+    case rotate
     
 }
 
@@ -125,9 +126,26 @@ extension MapView {
     fileprivate func zoomToUserPin() {
         if self.userAnnotation != nil {
             let location = CLLocation(latitude: self.userAnnotation!.coordinate.latitude, longitude: self.userAnnotation!.coordinate.longitude)
-            self.setToLocation(location: location, zoomType: .zoomedIn, animated: true)
+            self.zoomInToUserAnnotationWithOverTheTopView()
             self.removeUserPin()
+            
+            
+            //we have to wait for the zoom to finish before rotating the camera
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+                UIView.animate(withDuration: 1.0, animations: {
+                    //this rotates the camera
+                    self._setToLocation(location: location, zoomType: .rotate, animated: true)
+                })
+            })
+            
         }
+    }
+    
+    fileprivate func zoomInToUserAnnotationWithOverTheTopView() {
+        let span = MKCoordinateSpanMake(0.00005, 0.00005)
+//        MKCoordinateSpan(latitudeDelta: <#T##CLLocationDegrees#>, longitudeDelta: <#T##CLLocationDegrees#>)
+        let region = MKCoordinateRegion(center: self.userAnnotation!.coordinate, span: span)
+        self.setRegion(region, animated: true)
     }
     
     fileprivate func removeUserPin() {
@@ -167,6 +185,8 @@ extension MapView {
             return self.zoomedInCamera()
         case .zoomedOut:
             return self.zoomedOutCamera()
+        case .rotate:
+            return self.rotedCamera()
         }
     }
     
@@ -180,6 +200,10 @@ extension MapView {
     
     fileprivate func zoomedOutCamera() -> MKMapCamera {
         return MKMapCamera(lookingAtCenter: self.coordinate, fromEyeCoordinate: self.coordinate, eyeAltitude: 50000000)
+    }
+    
+    fileprivate func rotedCamera() -> MKMapCamera {
+        return MKMapCamera(lookingAtCenter: self.centerCoordinate, fromDistance: self.camera.altitude, pitch: MapView.defaultPitch, heading: MapView.defaultHeading)
     }
 }
 
