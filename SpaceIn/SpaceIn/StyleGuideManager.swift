@@ -38,7 +38,9 @@ public class StyleGuideManager {
     
     //Map
     static let floatingSpaceinLabelColor = UIColor(withNumbersFor: 8, green: 203, blue: 252)
+    static let floatingSpaceinNeonBackground = UIColor(withNumbersFor: 4, green: 144, blue: 237)
     static let floatingSpaceinLabelFont = UIFont(name: "Helvetica-Bold", size: 72)
+    
 
     
     
