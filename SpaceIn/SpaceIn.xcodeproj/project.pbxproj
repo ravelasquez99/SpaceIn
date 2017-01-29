@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */; };
 		D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */; };
 		D8280FC61E11A3B300D47D83 /* SpaceInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */; };
 		D832FD971E25E19F00FDE311 /* ForgotPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832FD961E25E19F00FDE311 /* ForgotPasswordVC.swift */; };
@@ -35,6 +36,7 @@
 		036A50A7C319BF6AAF4DEA2C /* Pods_SpaceIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpaceIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A06FBF98DDBC98EB5FFB788 /* Pods-SpaceIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.debug.xcconfig"; sourceTree = "<group>"; };
 		A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.release.xcconfig"; sourceTree = "<group>"; };
+		D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceInConvenience.swift; sourceTree = "<group>"; };
 		D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToplessTextfield.swift; sourceTree = "<group>"; };
 		D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpaceInUser.swift; path = Model/SpaceInUser.swift; sourceTree = "<group>"; };
 		D832FD961E25E19F00FDE311 /* ForgotPasswordVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ForgotPasswordVC.swift; path = Controller/ForgotPasswordVC.swift; sourceTree = "<group>"; };
@@ -90,6 +92,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		D8083D5B1E3D79C700F5309C /* Convenience */ = {
+			isa = PBXGroup;
+			children = (
+				D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */,
+			);
+			name = Convenience;
+			sourceTree = "<group>";
+		};
 		D8404A851E2DA0F20072AE25 /* ViewHelpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +134,7 @@
 				D894EEE31DDEA4C60039D92A /* Model */,
 				D894EEE41DDEA4CC0039D92A /* View */,
 				D894EEE51DDEA4D10039D92A /* Controller */,
+				D8083D5B1E3D79C700F5309C /* Convenience */,
 				D8F954761DF117010058A1CB /* External */,
 				D894EED11DDC26180039D92A /* Assets.xcassets */,
 				D894EED31DDC26180039D92A /* LaunchScreen.storyboard */,
@@ -311,6 +322,7 @@
 				D8FD46441E01021100873565 /* RoundedButton.swift in Sources */,
 				D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */,
 				D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */,
+				D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */,
 				D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */,
 				D8FE550E1E36485F00156F27 /* LocationManager.swift in Sources */,
 				D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */,

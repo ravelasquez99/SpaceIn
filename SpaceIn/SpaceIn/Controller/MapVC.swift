@@ -18,6 +18,7 @@ class MapViewController: UIViewController {
     static let defaultLocation =  CLLocation(latitude: 41.8902,longitude:  12.4922)    
     
     let mapView = MapView(frame: CGRect.zero)
+    let logoView = UIView.init(asConstrainable: true, frame: CGRect.zero)
     var loginRegisterVC: LoginRegisterVC?
     
     
@@ -118,6 +119,12 @@ extension MapViewController: MapViewDelegate {
     func centerChangedToCoordinate(coordinate: CLLocationCoordinate2D) {
         self.currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         self.saveState()
+        
+        if self.mapView.camera.altitude >= MapView.zoomedOutAltitiude - 1000 { // we subtrack 1000 because the map alsways set's it's camera altitude a little lower than anticipated
+            self.logoView.isHidden = false
+        } else {
+            self.logoView.isHidden = true
+        }
     }
 
 }
@@ -129,6 +136,7 @@ extension MapViewController {
     fileprivate func constrain() {
         if self.didConstrain == false {
             self.constrainMapView()
+            self.constrainLogoView()
         }
     }
     
@@ -140,11 +148,23 @@ extension MapViewController {
         self.mapView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
     }
     
+    fileprivate func constrainLogoView() {
+        self.logoView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.logoView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.logoView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        self.logoView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        //placeholder
+        self.logoView.backgroundColor = UIColor.green
+    }
+    
     
     
     fileprivate func addViews() {
         self.mapView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.mapView)
+        self.view.addSubview(self.logoView)
+        
     }
 }
 

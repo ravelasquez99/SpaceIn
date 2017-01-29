@@ -47,6 +47,7 @@ class MapView: MKMapView {
     static let defaultDistance: CLLocationDistance = 650
     static let defaultPitch: CGFloat = 65
     static let defaultHeading = 0.0
+    static let zoomedOutAltitiude: CLLocationDistance =  40000000
     
     
     //MARK: - Instance vars/lets
@@ -189,7 +190,7 @@ extension MapView {
         case .zoomedOut:
             return self.zoomedOutCamera()
         case .rotate:
-            return self.rotedCamera()
+            return self.rotatedCamera()
         }
     }
     
@@ -202,10 +203,10 @@ extension MapView {
     }
     
     fileprivate func zoomedOutCamera() -> MKMapCamera {
-        return MKMapCamera(lookingAtCenter: self.coordinate, fromEyeCoordinate: self.coordinate, eyeAltitude: 50000000)
+        return MKMapCamera(lookingAtCenter: self.coordinate, fromEyeCoordinate: self.coordinate, eyeAltitude: MapView.zoomedOutAltitiude)
     }
     
-    fileprivate func rotedCamera() -> MKMapCamera {
+    fileprivate func rotatedCamera() -> MKMapCamera {
         return MKMapCamera(lookingAtCenter: self.centerCoordinate, fromDistance: self.camera.altitude, pitch: MapView.defaultPitch, heading: MapView.defaultHeading)
     }
 }
@@ -272,8 +273,3 @@ extension MapView: MKMapViewDelegate {
     
 }
 
-extension CLLocationCoordinate2D {
-    func isEqualToCoordinate(coordinate: CLLocationCoordinate2D) -> Bool {
-        return self.latitude == coordinate.latitude && self.longitude == coordinate.longitude
-    }
-}
