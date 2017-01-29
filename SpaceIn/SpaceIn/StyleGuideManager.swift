@@ -36,7 +36,13 @@ public class StyleGuideManager {
     static let registerTextFieldTextColor = UIColor(withNumbersFor: 36, green: 217, blue: 255)
     static let registerPageTextColor = UIColor.darkGray
     
+    //Map
+    static let floatingSpaceinLabelColor = UIColor(withNumbersFor: 8, green: 203, blue: 252)
+    static let floatingSpaceinLabelFont = UIFont(name: "Helvetica-Bold", size: 60)
+
     
+    
+    //Fonts
     func loginFontLarge() -> UIFont {
         return UIFont(name: "Helvetica Light", size: 30)!
 
@@ -50,6 +56,8 @@ public class StyleGuideManager {
         return UIFont(name: "Helvetica Light", size: 13)!
     }
     
+    
+    
     //MARK: - Forgot Password
     static let forgotPasswordTextColor = UIColor(withNumbersFor: 66, green: 80, blue: 83)
     
@@ -58,12 +66,4 @@ public class StyleGuideManager {
     }
 }
 
-extension UIColor {
-    convenience init(withNumbersFor red: CGFloat , green: CGFloat, blue: CGFloat, alpha: CGFloat? = 1.0) {
-        let redNumber = red / 255
-        let greenNumber = green / 255
-        let blueNumber = blue / 255
-        
-        self.init(red: redNumber , green: greenNumber, blue: blueNumber, alpha: alpha!)
-    }
-}
+

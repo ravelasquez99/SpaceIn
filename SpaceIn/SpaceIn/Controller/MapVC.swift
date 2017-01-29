@@ -18,7 +18,7 @@ class MapViewController: UIViewController {
     static let defaultLocation =  CLLocation(latitude: 41.8902,longitude:  12.4922)    
     
     let mapView = MapView(frame: CGRect.zero)
-    let logoView = UIView.init(asConstrainable: true, frame: CGRect.zero)
+    let logoView = UILabel(asConstrainable: true, frame: CGRect.zero)
     var loginRegisterVC: LoginRegisterVC?
     
     
@@ -152,10 +152,15 @@ extension MapViewController {
         self.logoView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.logoView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.logoView.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        self.logoView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        self.logoView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         
-        //placeholder
-        self.logoView.backgroundColor = UIColor.green
+    }
+    
+    func setupLogoView() {
+        self.logoView.text = SpaceinCopy.spaceInFloatingLabelText.rawValue
+        self.logoView.textColor =  StyleGuideManager.floatingSpaceinLabelColor
+        self.logoView.font = StyleGuideManager.floatingSpaceinLabelFont
+        self.logoView.textAlignment = .center
     }
     
     
@@ -164,7 +169,7 @@ extension MapViewController {
         self.mapView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.mapView)
         self.view.addSubview(self.logoView)
-        
+        self.setupLogoView()
     }
 }
 

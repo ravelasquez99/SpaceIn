@@ -23,6 +23,7 @@ enum SpaceinCopy: String {
     case forgotPasswordTitle = "Trouble logging in?"
     case forgotPasswordSubtitle = "Enter your email and we'll send you a link to get back into your account."
     case forgotPasswordPageButtonCopy = "Send login link"
+    case spaceInFloatingLabelText = "Spacein"
     
 }
 
