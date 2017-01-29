@@ -15,7 +15,9 @@ import MapKit
 
 //MARK: - Lifecycle
 class MapViewController: UIViewController {
-    static let defaultLocation =  CLLocation(latitude: 41.8902,longitude:  12.4922)    
+    static let defaultLocation =  CLLocation(latitude: 41.8902,longitude:  12.4922)
+    static let zoomLevelForShowingSpaceinView: CLLocationDistance =  MapView.zoomedOutAltitiude - 15000000
+    static let spaceinViewPadding: CGFloat = 40
     
     let mapView = MapView(frame: CGRect.zero)
     let logoView = UILabel(asConstrainable: true, frame: CGRect.zero)
@@ -120,7 +122,7 @@ extension MapViewController: MapViewDelegate {
         self.currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         self.saveState()
         
-        if self.mapView.camera.altitude >= MapView.zoomedOutAltitiude - 1000 { // we subtrack 1000 because the map alsways set's it's camera altitude a little lower than anticipated
+        if self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView {
             self.logoView.isHidden = false
         } else {
             self.logoView.isHidden = true
@@ -150,8 +152,8 @@ extension MapViewController {
     
     fileprivate func constrainLogoView() {
         self.logoView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.logoView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        self.logoView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        self.logoView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: MapViewController.spaceinViewPadding).isActive = true
+        self.logoView.heightAnchor.constraint(equalToConstant: 90).isActive = true
         self.logoView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         
     }

@@ -47,7 +47,8 @@ class MapView: MKMapView {
     static let defaultDistance: CLLocationDistance = 650
     static let defaultPitch: CGFloat = 65
     static let defaultHeading = 0.0
-    static let zoomedOutAltitiude: CLLocationDistance =  40000000
+    static let zoomedOutAltitiude: CLLocationDistance =  50000000
+    
     
     
     //MARK: - Instance vars/lets
