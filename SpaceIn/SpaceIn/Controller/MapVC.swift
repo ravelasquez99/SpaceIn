@@ -199,29 +199,3 @@ extension MapViewController {
         print("we saved the values")
     }
 }
-
-//class GlowingLabel: UILabel {
-//    override func draw(_ rect: CGRect) {
-//        let context = UIGraphicsGetCurrentContext()
-//        let insideColor = UIColor(colorLiteralRed: 69/255, green: 254.0/255, blue: 0, alpha: 1)
-//        let outsideColor = UIColor(colorLiteralRed: 22/255, green: 145/255, blue: 0, alpha: 0.8)
-//        let blueColor = UIColor(colorLiteralRed: 104/255, green: 248/255, blue: 0, alpha: 0.7)
-//        
-//        context?.setStrokeColor(outsideColor.cgColor)
-//    }
-//    
-//    CGContextRef ctx = UIGraphicsGetCurrentContext();
-//
-//    UIColor *insideColor = [UIColor colorWithRed:69.0/255.0 green:254.0/255.0 blue:0 alpha:1];
-//    UIColor *outlineColor = [UIColor colorWithRed:22.0/255.0 green:145.0/255.0 blue:0 alpha:0.8];
-//    UIColor *blurColor = [UIColor colorWithRed:104.0/255.0 green: 248.0/255.0 blue:0 alpha:0.7];
-//    
-//    CGContextSetStrokeColorWithColor(ctx, outlineColor.CGColor);
-//    CGContextSetFillColorWithColor(ctx, insideColor.CGColor);
-//    CGContextSetLineWidth(ctx, self.font.pointSize/60.0);
-//    CGContextSetShadowWithColor(ctx, CGSizeMake(0, 0), self.font.pointSize / 10.0, blurColor.CGColor);
-//    CGContextSetTextDrawingMode(ctx, kCGTextFillStroke);
-//    
-//    [self.text drawInRect:self.bounds withFont:self.font lineBreakMode:self.lineBreakMode alignment:self.textAlignment];
-//
-//}
