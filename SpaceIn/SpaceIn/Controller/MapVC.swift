@@ -188,7 +188,6 @@ extension MapViewController {
         self.logoView.layer.masksToBounds = false
         
         self.logoContainerView.contentView = self.logoView
-        self.logoContainerView.shimmeringAnimationOpacity = 0.9
         self.logoContainerView.isShimmering = true
         //shimmeringOpacity
         
