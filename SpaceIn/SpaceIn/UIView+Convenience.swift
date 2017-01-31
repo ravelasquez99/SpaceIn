@@ -8,9 +8,4 @@
 
 import UIKit
 
-extension UIView {
-    func constrainWidthAndHeightToValueAndActivate(value: CGFloat) {
-        self.widthAnchor.constraint(equalToConstant: value).isActive = true
-        self.heightAnchor.constraint(equalToConstant: value).isActive = true
-    }
-}
+

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */; };
 		D8083D5F1E3D8C5600F5309C /* FloatingSpaceinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8083D5E1E3D8C5600F5309C /* FloatingSpaceinView.swift */; };
+		D817FDB61E40DCBC00A79ED3 /* JoystickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D817FDB51E40DCBC00A79ED3 /* JoystickView.swift */; };
 		D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */; };
 		D8280FC61E11A3B300D47D83 /* SpaceInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */; };
 		D832FD971E25E19F00FDE311 /* ForgotPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832FD961E25E19F00FDE311 /* ForgotPasswordVC.swift */; };
@@ -39,6 +40,7 @@
 		A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.release.xcconfig"; sourceTree = "<group>"; };
 		D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceInConvenience.swift; sourceTree = "<group>"; };
 		D8083D5E1E3D8C5600F5309C /* FloatingSpaceinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingSpaceinView.swift; sourceTree = "<group>"; };
+		D817FDB51E40DCBC00A79ED3 /* JoystickView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JoystickView.swift; path = View/JoystickView.swift; sourceTree = "<group>"; };
 		D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToplessTextfield.swift; sourceTree = "<group>"; };
 		D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpaceInUser.swift; path = Model/SpaceInUser.swift; sourceTree = "<group>"; };
 		D832FD961E25E19F00FDE311 /* ForgotPasswordVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ForgotPasswordVC.swift; path = Controller/ForgotPasswordVC.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				D8D7465E1DF1228700A1EE70 /* MapView.swift */,
 				D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */,
 				D8FD46431E01021100873565 /* RoundedButton.swift */,
+				D817FDB51E40DCBC00A79ED3 /* JoystickView.swift */,
 				D8404A851E2DA0F20072AE25 /* ViewHelpers */,
 				D8083D5E1E3D8C5600F5309C /* FloatingSpaceinView.swift */,
 			);
@@ -330,6 +333,7 @@
 				D8FE550E1E36485F00156F27 /* LocationManager.swift in Sources */,
 				D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */,
 				D8D746651DF1236A00A1EE70 /* FirebaseHelper.swift in Sources */,
+				D817FDB61E40DCBC00A79ED3 /* JoystickView.swift in Sources */,
 				D8D746671DF128BA00A1EE70 /* LoginRegisterVC.swift in Sources */,
 				D8280FC61E11A3B300D47D83 /* SpaceInUser.swift in Sources */,
 				D8CB6A411E38E41D00F7D070 /* TutorialVC.swift in Sources */,

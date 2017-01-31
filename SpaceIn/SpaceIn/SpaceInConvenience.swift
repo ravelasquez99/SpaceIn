@@ -14,6 +14,12 @@ extension UIView {
         self.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = !asConstrainable
     }
+    
+    func constrainWidthAndHeightToValueAndActivate(value: CGFloat) {
+        self.widthAnchor.constraint(equalToConstant: value).isActive = true
+        self.heightAnchor.constraint(equalToConstant: value).isActive = true
+    }
+    
 }
 
 extension UILabel {
