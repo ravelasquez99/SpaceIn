@@ -11,6 +11,7 @@ import UIKit
 import CoreLocation
 import MapKit
 import QuartzCore
+import Shimmer
 
 
 
@@ -22,6 +23,7 @@ class MapViewController: UIViewController {
     
     let mapView = MapView(frame: CGRect.zero)
     let logoView = UILabel(asConstrainable: true, frame: CGRect.zero)
+    let logoContainerView = FBShimmeringView(frame: CGRect.zero)
     var loginRegisterVC: LoginRegisterVC?
     
     
@@ -139,7 +141,9 @@ extension MapViewController {
     fileprivate func addViews() {
         self.mapView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.mapView)
-        self.view.addSubview(self.logoView)
+        self.logoContainerView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.logoContainerView)
+        self.logoContainerView.addSubview(self.logoView)
         self.setupLogoView()
     }
     
@@ -159,8 +163,13 @@ extension MapViewController {
     }
     
     fileprivate func constrainLogoView() {
-        self.logoView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.logoView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: MapViewController.spaceinViewPadding).isActive = true
+        self.logoContainerView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.logoContainerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: MapViewController.spaceinViewPadding).isActive = true
+        self.logoContainerView.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        self.logoContainerView.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        
+        self.logoView.centerXAnchor.constraint(equalTo: self.logoContainerView.centerXAnchor).isActive = true
+        self.logoView.topAnchor.constraint(equalTo: self.logoContainerView.topAnchor).isActive = true
         self.logoView.heightAnchor.constraint(equalToConstant: 90).isActive = true
         self.logoView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         
@@ -177,6 +186,12 @@ extension MapViewController {
         self.logoView.layer.shadowOpacity = 0.9
         self.logoView.layer.shadowOffset = CGSize(width: 0, height: 0)
         self.logoView.layer.masksToBounds = false
+        
+        self.logoContainerView.contentView = self.logoView
+        self.logoContainerView.shimmeringAnimationOpacity = 0.9
+        self.logoContainerView.isShimmering = true
+        //shimmeringOpacity
+        
         
     }
 }

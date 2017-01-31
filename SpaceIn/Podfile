@@ -10,5 +10,6 @@ target 'SpaceIn' do
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'GoogleSignIn'
+  pod ‘Shimmer', '~> 1.0'
 
 end
