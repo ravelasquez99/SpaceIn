@@ -53,7 +53,7 @@ class MapView: MKMapView {
     
     //MARK: - Instance vars/lets
     var mapViewDelagate: MapViewDelegate?
-    var coordinate = CLLocationCoordinate2D(latitude: 41.8902,longitude:  12.4922) {
+    fileprivate var coordinate = CLLocationCoordinate2D(latitude: 41.8902,longitude:  12.4922) {
         didSet {
             self.mapViewDelagate?.centerChangedToCoordinate(coordinate: self.coordinate)
         }
@@ -216,9 +216,30 @@ extension MapView {
 // MARK: - Mapview Delegate
 extension MapView: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard !(annotation is MKUserLocation) else {
+        
+        // 1. we check if it is the user annotation and if so return nil
+        if annotation is MKUserLocation {
             return nil
         }
+        
+        guard let userAnnotation = annotation as? UserAnnotation else {
+            return nil
+        }
+        
+        //2. get the identifier for the annotation
+        //3. if the view exists, return it
+        if let viewToReturn = mapView.dequeueReusableAnnotationView(withIdentifier: userAnnotation.uid) {
+            viewToReturn.annotation = annotation
+            return viewToReturn
+        } else {
+            
+        }
+        
+        //4. Else, create the view
+        //5. set the frame and content mode
+        //6. return it
+        
+        
         
         // Better to make this class property
         let annotationIdentifier = "AnnotationIdentifier"
