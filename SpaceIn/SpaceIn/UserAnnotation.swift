@@ -8,14 +8,16 @@
 
 import MapKit
 
-class UserAnnotation: MKPointAnnotation {
-    var name: String = ""
-    var uid: String = ""
+class SpaceinUserAnnotation: MKPointAnnotation {
+    let name: String
+    let uid: String
+    let user: SpaceInUser
     
-    convenience init(withUser user: SpaceInUser, coordinate: CLLocationCoordinate2D) {
-        self.init()
+    init(withUser user: SpaceInUser, coordinate: CLLocationCoordinate2D) {
         self.name = user.name
         self.uid = user.uid
+        self.user = user
+        super.init()
         self.coordinate = coordinate
     }
 }

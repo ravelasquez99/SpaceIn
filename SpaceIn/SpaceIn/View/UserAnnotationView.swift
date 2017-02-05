@@ -14,6 +14,7 @@ class UserAnnotationView: MKAnnotationView {
     
     convenience init (annotation: MKAnnotation, user: SpaceInUser) {
         self.init(annotation: annotation, reuseIdentifier: user.uid)
+        self.backgroundColor = .green
     }
 
 }

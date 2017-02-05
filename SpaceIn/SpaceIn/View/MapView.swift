@@ -222,7 +222,7 @@ extension MapView: MKMapViewDelegate {
             return nil
         }
         
-        guard let userAnnotation = annotation as? UserAnnotation else {
+        guard let userAnnotation = annotation as? SpaceinUserAnnotation else {
             return nil
         }
         
@@ -231,39 +231,16 @@ extension MapView: MKMapViewDelegate {
         if let viewToReturn = mapView.dequeueReusableAnnotationView(withIdentifier: userAnnotation.uid) {
             viewToReturn.annotation = annotation
             return viewToReturn
-        } else {
+        } else {  //4. Else, create the view
+            let annotationView = UserAnnotationView(annotation: userAnnotation, user: userAnnotation.user)
+            //5. set the frame and content mode
+            //6. return it
+            annotationView.frame = CGRect(x: 0, y: 0, width: 75, height: 75)
+            annotationView.contentMode = .scaleAspectFit
+            return annotationView
+            //start here and actually add one of the user annotation types and test this code
             
         }
-        
-        //4. Else, create the view
-        //5. set the frame and content mode
-        //6. return it
-        
-        
-        
-        // Better to make this class property
-        let annotationIdentifier = "AnnotationIdentifier"
-        
-        var annotationView: MKAnnotationView?
-        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
-            annotationView = dequeuedAnnotationView
-            annotationView?.annotation = annotation
-        }
-        else {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        }
-        
-        if let annotationView = annotationView {
-            // Configure your annotation view here
-            annotationView.canShowCallout = false
-            annotationView.image = UIImage(named: "logoColored")
-        }
-        
-        annotationView?.frame = CGRect(x: 0, y: 0, width: 75, height: 75)
-        annotationView?.contentMode = .scaleAspectFit
-        
-        return annotationView
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
