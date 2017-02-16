@@ -123,6 +123,7 @@ extension MapViewController: MapViewDelegate {
     
     func centerChangedToCoordinate(coordinate: CLLocationCoordinate2D) {
         self.currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
         self.saveState()
         
         if self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView {

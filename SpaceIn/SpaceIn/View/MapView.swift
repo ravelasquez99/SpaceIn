@@ -119,8 +119,8 @@ extension MapView {
 //MARK: - User Location
 extension MapView {
     fileprivate func addUserPin() {
-        if self.userAnnotation == nil {
-            self.userAnnotation = MKPointAnnotation()
+        if self.userAnnotation == nil && SpaceInUser.current != nil {
+            self.userAnnotation = SpaceinUserAnnotation(withUser: SpaceInUser.current!, coordinate: self.coordinate)
         }
         self.userAnnotation!.coordinate = self.coordinate
         self.addPin(pin: self.userAnnotation!)
@@ -233,10 +233,6 @@ extension MapView: MKMapViewDelegate {
             return viewToReturn
         } else {  //4. Else, create the view
             let annotationView = UserAnnotationView(annotation: userAnnotation, user: userAnnotation.user)
-            //5. set the frame and content mode
-            //6. return it
-            annotationView.frame = CGRect(x: 0, y: 0, width: 75, height: 75)
-            annotationView.contentMode = .scaleAspectFit
             return annotationView
             //start here and actually add one of the user annotation types and test this code
             

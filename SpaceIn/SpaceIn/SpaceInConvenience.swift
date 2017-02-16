@@ -29,6 +29,23 @@ extension UILabel {
     }
 }
 
+extension UIImageView {
+    convenience init(asConstrainable: Bool) {
+        self.init(frame: CGRect.zero)
+        self.translatesAutoresizingMaskIntoConstraints = !asConstrainable
+    }
+    
+    convenience init(image: UIImage?, asConstrainable: Bool) {
+        self.init(image: image)
+        self.translatesAutoresizingMaskIntoConstraints = !asConstrainable
+    }
+    
+    convenience init(image: UIImage?, highlightedImage: UIImage?, constrainable: Bool) {
+        self.init(image: image, highlightedImage: highlightedImage)
+        self.translatesAutoresizingMaskIntoConstraints = !constrainable
+    }
+}
+
 extension CLLocationCoordinate2D {
     func isEqualToCoordinate(coordinate: CLLocationCoordinate2D) -> Bool {
         return self.latitude == coordinate.latitude && self.longitude == coordinate.longitude

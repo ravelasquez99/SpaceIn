@@ -32,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         if hasSeenTutorial {
             if let savedLocation = self.savedCoordinateFromDefualts(defaults: userDefaults) {
+                self.setupUserSettingsWithLocation(coordinate: savedLocation)
                 self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: savedLocation, zoomType: .zoomedOut))
             } else {
                 self.makeMapVCTheFirstVC(withMapVC: MapViewController())
@@ -138,6 +139,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         let longitude = Double(long)
         
         return CLLocation(latitude: lattitude, longitude: longitude)
+    }
+    
+    func setupUserSettingsWithLocation(coordinate: CLLocation) {
+        if let loggedInUser = FirebaseHelper.loggedInUser() {
+            SpaceInUser.current = SpaceInUser(fireBaseUser: loggedInUser)
+        } else if SpaceInUser.current == nil {
+            SpaceInUser.current = SpaceInUser(name: "Ricky", email: "ravelasquez99@gmail.com", uid: "12345678")
+        }
     }
 }
 

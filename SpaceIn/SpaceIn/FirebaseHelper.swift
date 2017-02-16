@@ -138,8 +138,8 @@ class FirebaseHelper {
         return returnType
     }
     
-    class func userIsLoggedIn() -> Bool {
-        return FIRAuth.auth()?.currentUser != nil
+    class func loggedInUser() -> FIRUser? {
+        return FIRAuth.auth()?.currentUser
     }
     
     class func signOut() {

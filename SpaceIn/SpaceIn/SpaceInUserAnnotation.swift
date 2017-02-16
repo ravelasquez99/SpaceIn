@@ -1,5 +1,5 @@
 //
-//  UserAnnotation.swift
+//  SpaceinUserAnnotation
 //  SpaceIn
 //
 //  Created by Richard Velazquez on 2/4/17.

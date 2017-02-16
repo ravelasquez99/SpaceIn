@@ -20,7 +20,7 @@
 		D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894EECA1DDC26170039D92A /* AppDelegate.swift */; };
 		D894EED21DDC26180039D92A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D894EED11DDC26180039D92A /* Assets.xcassets */; };
 		D894EED51DDC26180039D92A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D894EED31DDC26180039D92A /* LaunchScreen.storyboard */; };
-		D8B48E2A1E46EBBA00647D7B /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B48E291E46EBBA00647D7B /* UserAnnotation.swift */; };
+		D8B48E2A1E46EBBA00647D7B /* SpaceInUserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B48E291E46EBBA00647D7B /* SpaceInUserAnnotation.swift */; };
 		D8B48E2C1E46EE3D00647D7B /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B48E2B1E46EE3D00647D7B /* UserAnnotationView.swift */; };
 		D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */; };
 		D8CA4C1C1DFA5879004665F0 /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */; };
@@ -56,7 +56,7 @@
 		D894EED11DDC26180039D92A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D894EED41DDC26180039D92A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D894EED61DDC26180039D92A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8B48E291E46EBBA00647D7B /* UserAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
+		D8B48E291E46EBBA00647D7B /* SpaceInUserAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceInUserAnnotation.swift; sourceTree = "<group>"; };
 		D8B48E2B1E46EE3D00647D7B /* UserAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserAnnotationView.swift; path = View/UserAnnotationView.swift; sourceTree = "<group>"; };
 		D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyleGuideManager.swift; sourceTree = "<group>"; };
 		D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
@@ -155,7 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				D8D746641DF1236A00A1EE70 /* FirebaseHelper.swift */,
-				D8B48E291E46EBBA00647D7B /* UserAnnotation.swift */,
+				D8B48E291E46EBBA00647D7B /* SpaceInUserAnnotation.swift */,
 				D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */,
 				D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */,
 				D849EB2A1E08E5B300A49B5C /* Constants.swift */,
@@ -337,7 +337,7 @@
 				D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */,
 				D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */,
 				D8FE550E1E36485F00156F27 /* LocationManager.swift in Sources */,
-				D8B48E2A1E46EBBA00647D7B /* UserAnnotation.swift in Sources */,
+				D8B48E2A1E46EBBA00647D7B /* SpaceInUserAnnotation.swift in Sources */,
 				D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */,
 				D8D746651DF1236A00A1EE70 /* FirebaseHelper.swift in Sources */,
 				D817FDB61E40DCBC00A79ED3 /* JoystickView.swift in Sources */,
