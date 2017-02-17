@@ -33,9 +33,7 @@ class MapViewController: UIViewController {
     fileprivate var didConstrain = false
     var viewHasAppeared = false
     
-    override var prefersStatusBarHidden : Bool {
-        return true
-    }
+
 
     
     convenience init(startingLocation: CLLocation, zoomType: MapViewZoomType) {
@@ -47,6 +45,7 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.statusBarStyle = .lightContent
         self.mapView.mapViewDelagate = self
         self.addViews()
     }
@@ -55,7 +54,7 @@ class MapViewController: UIViewController {
         super.viewWillAppear(animated)
         self.constrain()
         self.setupInitialMapViewStateIfNeccessary()
-        UIApplication.shared.isStatusBarHidden = true
+        //UIApplication.shared.isStatusBarHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,6 +62,7 @@ class MapViewController: UIViewController {
         self.loginRegisterVC = nil
         self.viewHasAppeared = true
     }
+    
     
     @IBAction func animate(_ sender: UIButton) {
         FirebaseHelper.signOut()
@@ -128,13 +128,19 @@ extension MapViewController: MapViewDelegate {
         SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
         self.saveState()
         
-        if self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView {
-            self.logoView.isHidden = false
-        } else {
-            self.logoView.isHidden = true
-        }
+        let weAreZoomedOut = self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
+        self.logoView.isHidden = !weAreZoomedOut
+        self.showStatusBar(show: weAreZoomedOut)
+//        if self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView {
+//            self.logoView.isHidden = false
+//        } else {
+//            self.logoView.isHidden = true
+//        }
     }
-
+    
+    fileprivate func showStatusBar(show: Bool) {
+         UIApplication.shared.isStatusBarHidden = !show
+    }
 }
 
 
