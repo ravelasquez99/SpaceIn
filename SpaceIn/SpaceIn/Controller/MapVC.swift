@@ -31,6 +31,7 @@ class MapViewController: UIViewController {
     fileprivate var zoomType: MapViewZoomType?
     fileprivate var didSetupInitialMap = false
     fileprivate var didConstrain = false
+    var viewHasAppeared = false
     
     override var prefersStatusBarHidden : Bool {
         return true
@@ -60,6 +61,7 @@ class MapViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loginRegisterVC = nil
+        self.viewHasAppeared = true
     }
     
     @IBAction func animate(_ sender: UIButton) {
@@ -206,6 +208,18 @@ extension MapViewController {
         let defaults = UserDefaults.standard
         self.saveMapStatewithDefaults(defaults: defaults)
         defaults.synchronize()
+    }
+    
+    func appEntetedBackground() {
+        if self.mapView.didFinishLoadingMap == true {
+            self.mapView.didFinishLoadingMap = false
+        }
+    }
+    
+    func appEnteredForeground() {
+        if self.mapView.didFinishLoadingMap == false && viewHasAppeared {
+            self.mapView.didFinishLoadingMap = true
+        }
     }
     
     fileprivate func saveMapStatewithDefaults(defaults: UserDefaults) {
