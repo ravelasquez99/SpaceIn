@@ -24,7 +24,7 @@ class TutorialVC : UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.askForLocationPermission()
+        self.loadLocationPermissionPage()
     }
 }
 
@@ -95,5 +95,22 @@ extension TutorialVC {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.makeMapVCTheFirstVC(withMapVC: mapVC)
     }
+    
+    func loadLocationPermissionPage() {
+        let askLocationVC = AskLocationVC()
+        askLocationVC.delegate = self
+        self.present(askLocationVC, animated: true) { 
+            
+        }
+    }
+}
+
+extension TutorialVC: AskLocationVCDelegate {
+    func finishedLocationAskingForVc(vc: AskLocationVC) {
+        vc.dismiss(animated: true) { 
+            
+        }
+    }
+    
 }
     

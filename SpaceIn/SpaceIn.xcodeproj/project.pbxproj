@@ -30,6 +30,7 @@
 		D8D746631DF122D700A1EE70 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D746621DF122D700A1EE70 /* Main.storyboard */; };
 		D8D746651DF1236A00A1EE70 /* FirebaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D746641DF1236A00A1EE70 /* FirebaseHelper.swift */; };
 		D8D746671DF128BA00A1EE70 /* LoginRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D746661DF128B900A1EE70 /* LoginRegisterVC.swift */; };
+		D8DBDF551E56BB4C001908DE /* AskLocationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DBDF541E56BB4C001908DE /* AskLocationVC.swift */; };
 		D8F954781DF1173A0058A1CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8F954771DF1173A0058A1CB /* GoogleService-Info.plist */; };
 		D8FD46441E01021100873565 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD46431E01021100873565 /* RoundedButton.swift */; };
 		D8FE550E1E36485F00156F27 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FE550D1E36485F00156F27 /* LocationManager.swift */; };
@@ -66,6 +67,7 @@
 		D8D746621DF122D700A1EE70 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = View/Main.storyboard; sourceTree = "<group>"; };
 		D8D746641DF1236A00A1EE70 /* FirebaseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseHelper.swift; sourceTree = "<group>"; };
 		D8D746661DF128B900A1EE70 /* LoginRegisterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegisterVC.swift; path = Controller/LoginRegisterVC.swift; sourceTree = "<group>"; };
+		D8DBDF541E56BB4C001908DE /* AskLocationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AskLocationVC.swift; path = Controller/AskLocationVC.swift; sourceTree = "<group>"; };
 		D8F954771DF1173A0058A1CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D8FD46431E01021100873565 /* RoundedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		D8FE550D1E36485F00156F27 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				D849EB281E06011800A49B5C /* LoginRegisterVC+UI.swift */,
 				D8D746601DF122C100A1EE70 /* MapVC.swift */,
 				D8CB6A401E38E41D00F7D070 /* TutorialVC.swift */,
+				D8DBDF541E56BB4C001908DE /* AskLocationVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8FD46441E01021100873565 /* RoundedButton.swift in Sources */,
+				D8DBDF551E56BB4C001908DE /* AskLocationVC.swift in Sources */,
 				D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */,
 				D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */,
 				D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */,

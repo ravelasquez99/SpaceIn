@@ -32,6 +32,7 @@
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="p8v-Sl-cG5" secondAttribute="bottom" id="wnt-gL-uN6"/>
                         </constraints>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
