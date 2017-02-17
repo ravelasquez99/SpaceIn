@@ -9,18 +9,18 @@
 import UIKit
 import MapKit
 
-extension UIView {
+public extension UIView {
     convenience init(asConstrainable: Bool, frame: CGRect) {
         self.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = !asConstrainable
     }
     
-    func constrainWidthAndHeightToValueAndActivate(value: CGFloat) {
+    public func constrainWidthAndHeightToValueAndActivate(value: CGFloat) {
         self.widthAnchor.constraint(equalToConstant: value).isActive = true
         self.heightAnchor.constraint(equalToConstant: value).isActive = true
     }
     
-    func constrainPinInside(view: UIView) {
+    public func constrainPinInside(view: UIView) {
         self.makeConstrainable()
         
         self.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -29,8 +29,27 @@ extension UIView {
         self.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
     
-    func makeConstrainable() {
-        self.translatesAutoresizingMaskIntoConstraints = false
+    public func constrainCenterInside(view: UIView) {
+        self.makeConstrainable()
+        
+        self.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        self.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
+    
+    public func constrainToHeight(height: CGFloat) {
+        self.makeConstrainable()
+        self.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+    
+    public func constrainToWidth(width: CGFloat) {
+        self.makeConstrainable()
+        self.widthAnchor.constraint(equalToConstant: width)
+    }
+    
+    public func makeConstrainable() {
+        if self.translatesAutoresizingMaskIntoConstraints == true {
+            fatalError("You are trying to constrain a view that is not constrainable \(self)")
+        }
     }
     
 }

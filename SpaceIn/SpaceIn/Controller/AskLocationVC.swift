@@ -53,6 +53,7 @@ extension AskLocationVC {
     
     private func setupSubviews() {
         self.gradientView.contentMode = .scaleToFill
+        self.brokenPinView.contentMode = .scaleAspectFit
     }
     
     private func addSubviews() {
@@ -64,14 +65,20 @@ extension AskLocationVC {
     
     private func constrainSubviews() {
         self.constrainGradientView()
+        self.constrainPinView()
     }
     
     private func constrainGradientView() {
         self.gradientView.constrainPinInside(view: self.view)
     }
     
-    private func constrainLogoView() {
+    private func constrainPinView() {
+        self.brokenPinView.constrainCenterInside(view: self.view)
         
+        //width = 3/4 height
+        let height = self.view.frame.height / 6.9
+        self.brokenPinView.constrainToHeight(height: height)
+        self.brokenPinView.constrainToWidth(width: height * 0.75)
     }
     
     
