@@ -58,6 +58,10 @@ public class StyleGuideManager {
         return UIFont(name: "Helvetica Light", size: 13)!
     }
     
+    func askLocationViewFont() -> UIFont {
+        return UIFont(name: "Helvetica Light", size: 19)!
+    }
+    
     
     
     //MARK: - Forgot Password

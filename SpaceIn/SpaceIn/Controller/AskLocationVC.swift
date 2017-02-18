@@ -54,6 +54,12 @@ extension AskLocationVC {
     private func setupSubviews() {
         self.gradientView.contentMode = .scaleToFill
         self.brokenPinView.contentMode = .scaleAspectFit
+        
+        self.explanationLabel.text = SpaceinCopy.locationPermissionViewBottomText.rawValue
+        self.explanationLabel.font = StyleGuideManager.sharedInstance.askLocationViewFont()
+        self.explanationLabel.textColor = UIColor.white
+        self.explanationLabel.textAlignment = .center
+        self.explanationLabel.lineBreakMode = .byTruncatingTail
     }
     
     private func addSubviews() {
@@ -66,6 +72,7 @@ extension AskLocationVC {
     private func constrainSubviews() {
         self.constrainGradientView()
         self.constrainPinView()
+        self.constrainExplanationLabel()
     }
     
     private func constrainGradientView() {
@@ -79,6 +86,16 @@ extension AskLocationVC {
         let height = self.view.frame.height / 6.9
         self.brokenPinView.constrainToHeight(height: height)
         self.brokenPinView.constrainToWidth(width: height * 0.75)
+    }
+    
+    private func constrainExplanationLabel() {
+        self.explanationLabel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
+        
+        let sidePadding = CGFloat(10)
+        self.explanationLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: sidePadding).isActive = true
+        self.explanationLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -sidePadding).isActive = true
+        
+        self.explanationLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     
