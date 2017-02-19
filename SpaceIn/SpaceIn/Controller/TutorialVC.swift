@@ -38,8 +38,8 @@ class TutorialVC : UIViewController {
 // MARK: - Segues and transitions
 extension TutorialVC {
     func loadLocationPermissionPage() {
-        let askLocationVC = AskLocationVC()
-        askLocationVC.delegate = self
+        let askLocationVC = LoginRegisterVC()
+        //askLocationVC.delegate = self
         self.present(askLocationVC, animated: true) { 
             
         }

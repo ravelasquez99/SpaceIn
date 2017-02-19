@@ -119,7 +119,7 @@ extension MapView {
 //MARK: - User Location
 extension MapView {
     fileprivate func addUserPin() {
-        if self.userAnnotation == nil && SpaceInUser.current != nil {
+        if self.userAnnotation == nil {
             self.userAnnotation = SpaceinUserAnnotation(withUser: SpaceInUser.current!, coordinate: self.coordinate)
         }
         

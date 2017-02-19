@@ -14,7 +14,6 @@ extension LoginRegisterVC { //UI calls
         self.addConstantSubviews()
         self.setViewsAsConstrainable()
         self.setFonts()
-        self.logoImageView.image = AssetManager.imageForAssetName(name: AssetName.logoColored)
         self.orLabel.textAlignment = .center
         self.orLabel.text = "or"
         
@@ -110,6 +109,9 @@ extension LoginRegisterVC { //UI calls
     fileprivate func updateSubviewsForStateChange() {
         self.backgroundImageView.image = self.state == .register ?  nil : AssetManager.imageForAssetName(name: .loginBackground)
         
+        self.logoImageView.image = self.state == .register ?  AssetManager.imageForAssetName(name: AssetName.logoColored) : AssetManager.imageForAssetName(name: AssetName.logoWhite)
+
+        
         self.backgroundImageView.backgroundColor = UIColor.clear
         self.updateButtonsForStateChange()
         self.updateTextFieldsForStateChange()
@@ -168,6 +170,7 @@ extension LoginRegisterVC { //UI calls
         self.updateSubviewsForStateChange()
         self.constrainRegisterView()
         self.constrainSpinner()
+        UIApplication.shared.isStatusBarHidden = true
         UIApplication.shared.statusBarStyle = .default
     }
     
@@ -213,9 +216,9 @@ extension LoginRegisterVC { //UI calls
         self.confirmPasswordTextField.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: paddingBetweenTextFields).isActive = true
         
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
-        self.logoImageView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
-        self.logoImageView.bottomAnchor.constraint(equalTo: self.emailTextField.topAnchor, constant: -30).isActive = true
+        self.logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10).isActive = true
+        self.logoImageView.bottomAnchor.constraint(equalTo: self.emailTextField.topAnchor, constant: -10).isActive = true
+        self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidth).isActive = true
         
         self.signupLoginButton.topAnchor.constraint(equalTo: self.confirmPasswordTextField.bottomAnchor, constant: 40).isActive = true
         self.signupLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -258,6 +261,7 @@ extension LoginRegisterVC { //UI calls
         self.updateSubviewsForStateChange()
         self.constraintSignInView()
         self.constrainSpinner()
+        UIApplication.shared.isStatusBarHidden = false
         UIApplication.shared.statusBarStyle = .lightContent
     }
     
@@ -276,8 +280,8 @@ extension LoginRegisterVC { //UI calls
         self.emailTextField.heightAnchor.constraint(equalToConstant: LoginRegisterVC.textFieldHeights).isActive = true
         
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
-        self.logoImageView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidthHeight).isActive = true
+        self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidth + 10).isActive = true
+        self.logoImageView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidth  + 40).isActive = true
         self.logoImageView.bottomAnchor.constraint(equalTo: self.emailTextField.topAnchor, constant: -60).isActive = true
         
         var heightRemaining = self.view.frame.height / 2 - LoginRegisterVC.textFieldHeights / 2 - 5

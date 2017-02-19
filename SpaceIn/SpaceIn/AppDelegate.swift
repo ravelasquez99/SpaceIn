@@ -113,7 +113,7 @@ extension AppDelegate: TutorialVCDelegate {
             self.setupUserSettingsWithLocation(location: MapViewController.defaultLocation)
         }
         
-        self.setupInitialMapVC()
+        self.setupUserSettingsAndLaunchMapVC()
     }
     
     fileprivate func determineAndLoadInitialVC() {
@@ -122,7 +122,7 @@ extension AppDelegate: TutorialVCDelegate {
         let hasSeenTutorial = userDefaults.bool(forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
         
         if hasSeenTutorial {
-            self.setupInitialMapVC()
+            self.setupUserSettingsAndLaunchMapVC()
         } else {
             self.makeTutorialViewTheFirstView()
             userDefaults.setValue(true, forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
@@ -130,7 +130,7 @@ extension AppDelegate: TutorialVCDelegate {
         }
     }
     
-    private func setupInitialMapVC() {
+    private func setupUserSettingsAndLaunchMapVC() {
         let location: CLLocation
         
         //We check for location in this order 1. the spaceinuserlocation has been set 2. The location manager has a location (which means we can from tutorial most likely 3. We have a saved locations which means we didn't come from the tutorial 4. default location
@@ -147,6 +147,7 @@ extension AppDelegate: TutorialVCDelegate {
             location = CLLocation(latitude: userDefaultsLocation.coordinate.latitude, longitude: userDefaultsLocation.coordinate.longitude)
         }  else {
             location = MapViewController.defaultLocation
+            self.setupUserSettingsWithLocation(location: location)
         }
         
         self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: location, zoomType: .zoomedOut))

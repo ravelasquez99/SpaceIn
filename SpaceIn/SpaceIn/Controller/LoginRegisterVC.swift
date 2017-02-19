@@ -17,7 +17,7 @@ enum LoginRegisterState {
 
 class LoginRegisterVC : UIViewController {
     
-    static let imageWidthHeight = CGFloat(100)
+    static let imageWidth = CGFloat(100)
     static let textFieldHeights = CGFloat(40)
     static var buttonHeights = CGFloat(50)
     static let closeButtonWidthHeight = CGFloat(40)
@@ -77,6 +77,7 @@ class LoginRegisterVC : UIViewController {
         } else {
             self.layoutSignInView()
         }
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {

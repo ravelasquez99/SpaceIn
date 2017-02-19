@@ -49,6 +49,7 @@ extension ForgotPasswordVC {
         if self.didSetup == false {
             self.addSubviewsAndSetThemAsConstrainable()
             self.setupSubviews()
+
         }
         
         self.didSetup = true
@@ -100,7 +101,8 @@ extension ForgotPasswordVC {
     fileprivate func constrainLogo() {
         self.logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.logoImageView.topAnchor.constraint(equalTo: self.closeButton.bottomAnchor, constant: 20).isActive = true
-        self.logoImageView.constrainWidthAndHeightToValueAndActivate(value: LoginRegisterVC.closeButtonWidthHeight * 2)
+        self.logoImageView.widthAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidth + 10).isActive = true
+        self.logoImageView.heightAnchor.constraint(equalToConstant: LoginRegisterVC.imageWidth  + 40).isActive = true
     }
     
     fileprivate func setupTroubleLoggingInLabel() {
