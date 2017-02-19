@@ -112,7 +112,7 @@ extension AppDelegate: TutorialVCDelegate {
         } else {
             self.setupUserSettingsWithLocation(location: MapViewController.defaultLocation)
         }
-        
+
         self.setupUserSettingsAndLaunchMapVC()
     }
     
@@ -149,8 +149,20 @@ extension AppDelegate: TutorialVCDelegate {
             location = MapViewController.defaultLocation
             self.setupUserSettingsWithLocation(location: location)
         }
+                
+        self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: location, zoomType: zoomStateForMapVC()))
+    }
+    
+    private func zoomStateForMapVC()-> MapViewZoomType {
+        let userDefaults = UserDefaults.standard
         
-        self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: location, zoomType: .zoomedOut))
+        let hasSeenMap = userDefaults.bool(forKey: UserDefaultKeys.hasSeenMapBefore.rawValue)
+        
+        if hasSeenMap {
+            return MapViewZoomType.zoomedOut
+        } else {
+            return MapViewZoomType.zoomedIn
+        }
     }
     
     private func makeMapVCTheFirstVC(withMapVC: MapViewController) {

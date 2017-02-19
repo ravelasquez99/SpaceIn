@@ -32,4 +32,5 @@ enum UserDefaultKeys : String {
     case hasSeenTutorial = "Has seen tutorial" // we can never change this
     case lastKnownSpaceInLattitude = "lastKnownLattitude" // we can never change this
     case lastKnownSpaceInLongitude = "lastKnownLongitude" // we can never change this
+    case hasSeenMapBefore = "hasSeenMapBefore" // we can never change this
 }
