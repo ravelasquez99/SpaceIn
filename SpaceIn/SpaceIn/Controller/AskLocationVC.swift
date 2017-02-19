@@ -23,19 +23,21 @@ class AskLocationVC: UIViewController {
     fileprivate let gradientView = UIImageView(image: UIImage(named: AssetName.spaceinGradient.rawValue), asConstrainable: true)
     
     fileprivate var didSetupView = false
+    fileprivate var weAreWaitingForLocationManager = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.makeSureWeDontAlreadyHaveTheUsersLocationPermissions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupView()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
     }
 }
 
@@ -59,7 +61,12 @@ extension AskLocationVC {
         self.explanationLabel.font = StyleGuideManager.sharedInstance.askLocationViewFont()
         self.explanationLabel.textColor = UIColor.white
         self.explanationLabel.textAlignment = .center
-        self.explanationLabel.lineBreakMode = .byTruncatingTail
+        self.explanationLabel.lineBreakMode = .byWordWrapping
+        self.explanationLabel.numberOfLines = 2
+        
+        self.okayButtom.setTitle("Okay", for: .normal)
+        self.okayButtom.titleLabel?.font = StyleGuideManager.sharedInstance.askLocationViewFont()
+        self.okayButtom.addTarget(self, action: #selector(self.okayPressed), for: .touchUpInside)
     }
     
     private func addSubviews() {
@@ -73,6 +80,7 @@ extension AskLocationVC {
         self.constrainGradientView()
         self.constrainPinView()
         self.constrainExplanationLabel()
+        self.constrainOkayButton()
     }
     
     private func constrainGradientView() {
@@ -80,7 +88,9 @@ extension AskLocationVC {
     }
     
     private func constrainPinView() {
-        self.brokenPinView.constrainCenterInside(view: self.view)
+        self.brokenPinView.translatesAutoresizingMaskIntoConstraints = false
+        self.brokenPinView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.brokenPinView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -40).isActive = true
         
         //width = 3/4 height
         let height = self.view.frame.height / 6.9
@@ -89,14 +99,90 @@ extension AskLocationVC {
     }
     
     private func constrainExplanationLabel() {
-        self.explanationLabel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
+        self.explanationLabel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -40).isActive = true
         
-        let sidePadding = CGFloat(10)
+        let sidePadding = CGFloat(20)
         self.explanationLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: sidePadding).isActive = true
         self.explanationLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -sidePadding).isActive = true
         
         self.explanationLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
+    private func constrainOkayButton() {
+        self.okayButtom.translatesAutoresizingMaskIntoConstraints = false
+        self.okayButtom.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.okayButtom.topAnchor.constraint(equalTo: self.brokenPinView.bottomAnchor, constant: 70).isActive = true
+        self.okayButtom.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        self.okayButtom.widthAnchor.constraint(equalToConstant: self.view.frame.width * 0.70).isActive = true
+    }
     
+    
+}
+
+// MARK: - Functionality
+extension AskLocationVC {
+    func okayPressed() {
+        self.askForLocationPermission()
+    }
+}
+
+
+// MARK:- Location
+extension AskLocationVC {
+    
+    fileprivate func makeSureWeDontAlreadyHaveTheUsersLocationPermissions() {
+        let status = LocationManager.sharedInstance.userLocationStatus()
+        if status == .authorized {
+            self.addObserversForLocationManager()
+            LocationManager.sharedInstance.startTrackingUser()
+        } else if status == .denied {
+            self.delegate?.finishedLocationAskingForVc(vc: self)
+        }
+    }
+    
+    fileprivate func askForLocationPermission() {
+        
+        let locationPermissionStatus = LocationManager.sharedInstance.userLocationStatus()
+        
+        if locationPermissionStatus == .authorized {
+            self.addObserversForLocationManager()
+            LocationManager.sharedInstance.startTrackingUser()
+        } else if locationPermissionStatus == .unknown {
+            self.addObserversForLocationManager()
+            LocationManager.sharedInstance.requestUserLocation()
+        } else {
+            //it is denied or other so we should pull out
+            self.delegate?.finishedLocationAskingForVc(vc: self)
+        }
+    }
+    
+    
+    fileprivate func addObserversForLocationManager() {
+        self.weAreWaitingForLocationManager = true
+        
+        let nc = NotificationCenter.default
+        nc.addObserver(self, selector: #selector(self.userLocationSet), name: .didSetUserLocation, object: nil)
+        nc.addObserver(self, selector: #selector(self.userLocationDeniedOrRestricted), name: .deniedLocationPermission, object: nil)
+        nc.addObserver(self, selector: #selector(self.userLocationDeniedOrRestricted), name: .restrictedLocationPermission, object: nil)
+    }
+    
+    private func removeLocationManagerObservers() {
+        self.weAreWaitingForLocationManager = false
+        
+        let nc = NotificationCenter.default
+        nc.removeObserver(self, name: .didSetUserLocation, object: nil)
+        nc.removeObserver(self, name: .deniedLocationPermission, object: nil)
+        nc.removeObserver(self, name: .restrictedLocationPermission, object: nil)
+        
+    }
+    
+    func userLocationSet() {
+        self.removeLocationManagerObservers()
+        self.delegate?.finishedLocationAskingForVc(vc: self)
+    }
+    
+    func userLocationDeniedOrRestricted() {
+        self.removeLocationManagerObservers()
+        self.delegate?.finishedLocationAskingForVc(vc: self)
+    }
 }

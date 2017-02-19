@@ -24,7 +24,7 @@ enum SpaceinCopy: String {
     case forgotPasswordSubtitle = "Enter your email and we'll send you a link to get back into your account."
     case forgotPasswordPageButtonCopy = "Send login link"
     case spaceInFloatingLabelText = "Spacein"
-    case locationPermissionViewBottomText = "We need your location to do awesome stuff"
+    case locationPermissionViewBottomText = "Please give us access to your location so that you can enjoy more of our features"
     
 }
 

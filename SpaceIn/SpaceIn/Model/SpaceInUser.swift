@@ -29,12 +29,14 @@ class SpaceInUser {
         self.uid = uid
     }
     
-    convenience init (fireBaseUser: FIRUser) {
+    convenience init (fireBaseUser: FIRUser, coordinate: CLLocationCoordinate2D) {
         let name = fireBaseUser.displayName ?? ""
         let email = fireBaseUser.email ?? ""
         let uid = fireBaseUser.uid
         
         self.init(name: name, email: email, uid: uid)
+        
+        self.movedToCoordinate(coordinate: coordinate)
     }
     
     class func didSetCurrentUser() {
@@ -45,5 +47,9 @@ class SpaceInUser {
     
     func movedToCoordinate(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
+    }
+    
+    func getCoordinate() -> CLLocationCoordinate2D? {
+        return self.coordinate
     }
 }

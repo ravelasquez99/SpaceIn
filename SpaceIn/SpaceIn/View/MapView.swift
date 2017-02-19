@@ -122,6 +122,8 @@ extension MapView {
         if self.userAnnotation == nil && SpaceInUser.current != nil {
             self.userAnnotation = SpaceinUserAnnotation(withUser: SpaceInUser.current!, coordinate: self.coordinate)
         }
+        
+        
         self.userAnnotation!.coordinate = self.coordinate
         self.addPin(pin: self.userAnnotation!)
         

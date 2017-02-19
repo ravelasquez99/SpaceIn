@@ -54,7 +54,6 @@ class MapViewController: UIViewController {
         super.viewWillAppear(animated)
         self.constrain()
         self.setupInitialMapViewStateIfNeccessary()
-        //UIApplication.shared.isStatusBarHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {

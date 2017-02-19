@@ -15,8 +15,8 @@ import MapKit
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     var window: UIWindow?
-    private var mapVC: MapViewController?
-    private var tutorialVC: TutorialVC?
+    fileprivate var mapVC: MapViewController?
+    fileprivate var tutorialVC: TutorialVC?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -26,23 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         
-        
-        let userDefaults = UserDefaults.standard
-        let hasSeenTutorial = userDefaults.bool(forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
-        
-        if hasSeenTutorial {
-            if let savedLocation = self.savedCoordinateFromDefualts(defaults: userDefaults) {
-                self.setupUserSettingsWithLocation(coordinate: savedLocation)
-                self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: savedLocation, zoomType: .zoomedOut))
-            } else {
-                self.makeMapVCTheFirstVC(withMapVC: MapViewController())
-            }
-  
-        } else {
-            self.makeTutorialViewTheFirstView()
-            userDefaults.setValue(true, forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
-            userDefaults.synchronize()
-        }
+        self.determineAndLoadInitialVC()
 
         return true
     }
@@ -115,21 +99,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         // ...
     }
     
-    func makeMapVCTheFirstVC(withMapVC: MapViewController) {
+}
+
+
+// MARK: - First VC
+extension AppDelegate: TutorialVCDelegate {
+    
+    func tutorialFinished(tutorialVC: TutorialVC) {
+        
+        if let usersLocation = LocationManager.sharedInstance.userLocation {
+            self.setupUserSettingsWithLocation(location: usersLocation)
+        } else {
+            self.setupUserSettingsWithLocation(location: MapViewController.defaultLocation)
+        }
+        
+        self.setupInitialMapVC()
+    }
+    
+    fileprivate func determineAndLoadInitialVC() {
+        
+        let userDefaults = UserDefaults.standard
+        let hasSeenTutorial = userDefaults.bool(forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
+        
+        if hasSeenTutorial {
+            self.setupInitialMapVC()
+        } else {
+            self.makeTutorialViewTheFirstView()
+            userDefaults.setValue(true, forKey: UserDefaultKeys.hasSeenTutorial.rawValue)
+            userDefaults.synchronize()
+        }
+    }
+    
+    private func setupInitialMapVC() {
+        let location: CLLocation
+        
+        //We check for location in this order 1. the spaceinuserlocation has been set 2. The location manager has a location (which means we can from tutorial most likely 3. We have a saved locations which means we didn't come from the tutorial 4. default location
+        
+        if let spaceinUserCoordinate = SpaceInUser.current?.getCoordinate() {
+            location = CLLocation(latitude: spaceinUserCoordinate.latitude, longitude: spaceinUserCoordinate.longitude)
+            
+        } else if let locationManagerLocation = LocationManager.sharedInstance.latestLocation() {
+            location = locationManagerLocation
+            self.setupUserSettingsWithLocation(location: locationManagerLocation)
+            
+        } else if let userDefaultsLocation = self.savedCoordinateFromDefualts(defaults: UserDefaults.standard) {
+            self.setupUserSettingsWithLocation(location: userDefaultsLocation)
+            location = CLLocation(latitude: userDefaultsLocation.coordinate.latitude, longitude: userDefaultsLocation.coordinate.longitude)
+        }  else {
+            location = MapViewController.defaultLocation
+        }
+        
+        self.makeMapVCTheFirstVC(withMapVC: MapViewController(startingLocation: location, zoomType: .zoomedOut))
+    }
+    
+    private func makeMapVCTheFirstVC(withMapVC: MapViewController) {
         self.mapVC = withMapVC
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = withMapVC
         self.window?.makeKeyAndVisible()
     }
     
-    func makeTutorialViewTheFirstView() {
+    private func makeTutorialViewTheFirstView() {
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        let tutorialView = TutorialVC()
-        self.window?.rootViewController = tutorialView
+        let tutorialVC = TutorialVC()
+        self.tutorialVC = tutorialVC
+        self.tutorialVC?.delegate = self
+        self.window?.rootViewController = tutorialVC
         self.window?.makeKeyAndVisible()
     }
     
-    func savedCoordinateFromDefualts(defaults: UserDefaults) -> CLLocation? {
+    private func savedCoordinateFromDefualts(defaults: UserDefaults) -> CLLocation? {
         guard let lat = (defaults.value(forKey: UserDefaultKeys.lastKnownSpaceInLattitude.rawValue) as? CGFloat) else {
             return nil
         }
@@ -144,13 +183,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return CLLocation(latitude: lattitude, longitude: longitude)
     }
     
-    func setupUserSettingsWithLocation(coordinate: CLLocation) {
+    
+    private func setupUserSettingsWithLocation(location: CLLocation) {
         if let loggedInUser = FirebaseHelper.loggedInUser() {
-            SpaceInUser.current = SpaceInUser(fireBaseUser: loggedInUser)
+            SpaceInUser.current = SpaceInUser(fireBaseUser: loggedInUser, coordinate: location.coordinate)
         } else if SpaceInUser.current == nil {
             SpaceInUser.current = SpaceInUser(name: "Ricky", email: "ravelasquez99@gmail.com", uid: "12345678")
+            SpaceInUser.current?.movedToCoordinate(coordinate: location.coordinate)
         }
     }
 }
-
-
