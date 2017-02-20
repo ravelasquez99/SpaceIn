@@ -161,6 +161,7 @@ extension AppDelegate: TutorialVCDelegate {
         if hasSeenMap {
             return MapViewZoomType.zoomedOut
         } else {
+            userDefaults.set(true, forKey: UserDefaultKeys.hasSeenMapBefore.rawValue)
             return MapViewZoomType.zoomedIn
         }
     }

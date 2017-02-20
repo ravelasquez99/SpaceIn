@@ -63,6 +63,8 @@ extension AskLocationVC {
         self.explanationLabel.textAlignment = .center
         self.explanationLabel.lineBreakMode = .byWordWrapping
         self.explanationLabel.numberOfLines = 2
+        self.explanationLabel.minimumScaleFactor = 0.75
+        self.explanationLabel.adjustsFontSizeToFitWidth = true
         
         self.okayButtom.setTitle("Okay", for: .normal)
         self.okayButtom.titleLabel?.font = StyleGuideManager.sharedInstance.askLocationViewFont()
