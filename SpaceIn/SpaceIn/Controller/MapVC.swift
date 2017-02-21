@@ -159,6 +159,7 @@ extension MapViewController {
         if self.didConstrain == false {
             self.constrainMapView()
             self.constrainLogoView()
+            self.constrainJoyStickView()
         }
     }
     
@@ -181,6 +182,14 @@ extension MapViewController {
         self.logoView.heightAnchor.constraint(equalToConstant: 90).isActive = true
         self.logoView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         
+    }
+    
+    fileprivate func constrainJoyStickView() {
+        let joyStickView = JoyStickView(frame: CGRect.zero)
+        self.view.addSubview(joyStickView)
+        joyStickView.constrainWidthAndHeightToValueAndActivate(value: 80)
+        joyStickView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        joyStickView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
     }
     
     func setupLogoView() {

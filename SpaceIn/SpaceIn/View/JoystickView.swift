@@ -8,15 +8,23 @@
 
 import UIKit
 
-class Joystick: UIView {
-    var toggleableViews: [UIView] = []
+class JoyStickView: UIView {
+    
+    let joyStick = CDJoystick()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(joyStick)
+        self.joyStick.translatesAutoresizingMaskIntoConstraints = false
+        self.joyStick.constrainPinInside(view: self)
+        self.joyStick.stickColor = UIColor.white
         
+        //self.joyStick.substrateBorderColor = UIColor.yellow
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 }
