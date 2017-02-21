@@ -104,7 +104,8 @@ public class CDJoystick: UIView {
         let location = touch.location(in: self)
         let centerXPosition = bounds.size.width / 2
         let centerYPosition = bounds.size.height / 2
-        let newPoint = CGPoint(x: location.x - centerXPosition, y: location.y - centerYPosition)
+        let newPoint = CGPoint(x: location.x - centerXPosition, y: centerYPosition - location.y)
+        print("new point: \(newPoint)")
         
         let hypoteneuse = sqrt(pow(newPoint.x, 2) + pow(newPoint.y, 2))
         
@@ -116,63 +117,70 @@ public class CDJoystick: UIView {
         if hypoteneuse <= padding {
             stickView.center = CGPoint(x: newPoint.x + centerXPosition, y: newPoint.y + centerYPosition)
         } else {
-            
             let bearingRadians = atan2(newPoint.y, newPoint.x) // get bearing in radians
             var bearingDegrees = bearingRadians * CGFloat((180.0 / M_PI)) // convert to degrees
             bearingDegrees = (bearingDegrees > 0.0 ? bearingDegrees : (360.0 + bearingDegrees)) // correct discontinuity
-            print("degrees ==== \(bearingDegrees)")
+            //print("degrees ==== \(bearingDegrees)")
             
             var degrees = bearingRadians * CGFloat((180.0 / M_PI))
             degrees = degrees < 0 ? degrees + 180 : degrees
             
-            var newY = padding * sin(degrees)
-            var newX = sqrt(pow(padding, 2) - pow(newY, 2))
+            let sinOF = sin(bearingRadians)
             
-            if bearingDegrees >= 0 && bearingDegrees < 90 {
-                newY = -newY
-                print("bottom right")
-            } else if bearingDegrees >= 90 && bearingDegrees < 180 {
-                newY = -newY
-                newX = -newX
-                print("bottom left")
-            } else if bearingDegrees >= 180 && bearingDegrees < 270 {
-                newX = -newX
-                print("top left")
-            } else if bearingDegrees >= 270 {
-                print("top right")
-            }
-//            let angleInDegrees = -atan(newPoint.x / newPoint.y) * 180 / CGFloat(M_PI)
-//            let angleInRadians = atan(newPoint.x / newPoint.y)
-//            
-           
-//            
-//            let pieOver2 = CGFloat(M_PI)/2
-//            
-//            if angleInRadians > 0 && angleInRadians <= pieOver2{
-//                
-//                //x + y +
-//            } else if angleInRadians > pieOver2 && angleInRadians <= CGFloat(M_PI) {
-//                newX = -newX
-//                //x- y +
-//            } else if angleInRadians > CGFloat(M_PI) && angleInRadians <= 3 * (CGFloat(M_PI) / 2) {
-//                newX = -newX
-//                newY = -newY
-//                //both are negative
-//            } else {
-//                //newY = -newY
-//                print("positive y top right or bottom left")
-//                //x+ y-
-//            }
-//            
-//            print("angle in degrees is \(angleInDegrees)")
-//
-            stickView.center = CGPoint(x: newX + centerXPosition, y: newY + centerYPosition)
+            let generatedY =  padding * sinOF
+            let generatedX = padding * cos(bearingRadians)
+            
+            let newPoint = CGPoint(x: generatedX + centerXPosition, y: centerYPosition - generatedY)
+            stickView.center = newPoint
+
         }
         
         let x = clamp(newPoint.x, lower: -bounds.size.width / 2, upper: bounds.size.width / 2) / (bounds.size.width / 2)
         let y = clamp(newPoint.y, lower: -bounds.size.height / 2, upper: bounds.size.height / 2) / (bounds.size.height / 2)
         
         data = CDJoystickData(velocity: CGPoint(x: x, y: y), angle: -atan2(x, y) + CGFloat(M_PI))
+    }
+    
+    func xLimit(y: CGFloat, padding: CGFloat) -> CGFloat {
+        
+        let paddingSq = pow(padding, 2)
+        let ySq = pow(y, 2)
+        let difference = paddingSq - ySq
+        
+        return sqrt(abs(difference))
+    }
+    
+    func yLimit(x: CGFloat, padding: CGFloat) -> CGFloat {
+        
+        return sqrt(abs(pow(padding, 2) - pow(x, 2)))
+    }
+    
+    func limitedCoordinate(x: CGFloat, y: CGFloat, padding: CGFloat) -> CGPoint {
+        
+        var newX = x
+        var newY = y
+        
+        let xLim = xLimit(y: y, padding: padding)
+        if abs(x) > xLim {
+            
+            if x < 0 {
+                newX = xLim * -1
+            } else {
+                newX = xLim
+            }
+        }
+        
+        let yLim = yLimit(x: x, padding: padding)
+        if abs(y) > yLim {
+            
+            if y < 0 {
+                newY = yLim * -1
+            } else {
+                newY = yLim
+            }
+        }
+        
+        return CGPoint(x: CGFloat(newX), y: CGFloat(newY))
     }
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
