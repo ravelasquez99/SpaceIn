@@ -19,6 +19,7 @@ enum AssetName: String {
     case transparentPin = "mapProfile"
     case spaceinGradient = "gradient"
     case brokenPin = "brokenGPS"
+    case greenCircle = "greenCircle"
     
 }
 

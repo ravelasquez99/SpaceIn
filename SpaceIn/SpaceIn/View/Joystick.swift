@@ -1,3 +1,4 @@
+
 //
 //  CDJoystick.swift
 //  CDJoystick
@@ -61,6 +62,7 @@ public class CDJoystick: UIView {
     private func setup() {
         displayLink = CADisplayLink(target: self, selector: #selector(listen))
         displayLink?.add(to: .current, forMode: .commonModes)
+        self.backgroundColor = UIColor.clear
     }
     
     public func listen() {
@@ -75,6 +77,7 @@ public class CDJoystick: UIView {
         layer.borderColor = substrateBorderColor.cgColor
         layer.borderWidth = substrateBorderWidth
         layer.cornerRadius = bounds.width / 2
+        
         
         stickView.frame = CGRect(origin: .zero, size: stickSize)
         stickView.center = CGPoint(x: bounds.width / 2, y: bounds.height / 2)

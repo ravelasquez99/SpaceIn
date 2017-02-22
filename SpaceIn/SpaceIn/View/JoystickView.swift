@@ -16,15 +16,38 @@ class JoyStickView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(joyStick)
-        self.joyStick.translatesAutoresizingMaskIntoConstraints = false
-        self.joyStick.constrainPinInside(view: self)
-        self.joyStick.stickColor = UIColor.white
+        self.setupJoystick()
         
-        //self.joyStick.substrateBorderColor = UIColor.yellow
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
+//MARK: - Joystick
+extension JoyStickView {
+    
+    fileprivate func setupJoystick() {
+        self.addSubview(joyStick)
+        self.joyStick.translatesAutoresizingMaskIntoConstraints = false
+        self.joyStick.constrainPinInside(view: self)
+        self.joyStick.stickColor = UIColor.white
+        self.setupJoystickGreenCircle()
+    }
+    
+    private func setupJoystickGreenCircle() {
+        self.joyStick.substrateBorderColor = UIColor.clear
+        self.joyStick.substrateBorderColor = UIColor.clear
+
+        let greenCircleImage = UIImage(named: AssetName.greenCircle.rawValue)
+        let imageView = UIImageView(image: greenCircleImage)
+        self.joyStick.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.constrainPinInside(view: self.joyStick)
+        imageView.contentMode = .scaleAspectFill
+        
+        imageView.backgroundColor = UIColor.clear
     }
 }
