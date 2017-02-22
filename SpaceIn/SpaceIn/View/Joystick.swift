@@ -25,9 +25,9 @@ public class CDJoystick: UIView {
     
     @IBInspectable public var substrateColor: UIColor = #colorLiteral(red: 0.7233663201, green: 0.7233663201, blue: 0.7233663201, alpha: 1) { didSet { setNeedsDisplay() }}
     @IBInspectable public var substrateBorderColor: UIColor = #colorLiteral(red: 0.7233663201, green: 0.7233663201, blue: 0.7233663201, alpha: 1) { didSet { setNeedsDisplay() }}
-    @IBInspectable public var substrateBorderWidth: CGFloat = 1.0 { didSet { setNeedsDisplay() }}
+    @IBInspectable public var substrateBorderWidth: CGFloat = 2.0 { didSet { setNeedsDisplay() }}
     
-    @IBInspectable public var stickSize: CGSize = CGSize(width: 60, height: 60) { didSet { setNeedsDisplay() }}
+    @IBInspectable public var stickSize: CGSize = CGSize(width: 50, height: 50) { didSet { setNeedsDisplay() }}
     @IBInspectable public var stickColor: UIColor = #colorLiteral(red: 0.4078193307, green: 0.4078193307, blue: 0.4078193307, alpha: 1) { didSet { setNeedsDisplay() }}
     @IBInspectable public var stickBorderColor: UIColor = #colorLiteral(red: 0.4078193307, green: 0.4078193307, blue: 0.4078193307, alpha: 1) { didSet { setNeedsDisplay() }}
     @IBInspectable public var stickBorderWidth: CGFloat = 1.0 { didSet { setNeedsDisplay() }}
@@ -105,18 +105,20 @@ public class CDJoystick: UIView {
         let centerXPosition = bounds.size.width / 2
         let centerYPosition = bounds.size.height / 2
         let newPoint = CGPoint(x: location.x - centerXPosition, y: centerYPosition - location.y)
-        print("new point: \(newPoint)")
+        //print("new point: \(newPoint)")
         
         let hypoteneuse = sqrt(pow(newPoint.x, 2) + pow(newPoint.y, 2))
         
         let innerCircleHeight = self.stickView.frame.height
         let outerCircleHeight = self.frame.height
         
-        let padding = outerCircleHeight - self.substrateBorderWidth - innerCircleHeight - self.stickView.layer.borderWidth - 5.5
+        let padding = outerCircleHeight - self.substrateBorderWidth - innerCircleHeight - self.stickView.layer.borderWidth - 12.5
         
-        if hypoteneuse <= padding {
-            stickView.center = CGPoint(x: newPoint.x + centerXPosition, y: newPoint.y + centerYPosition)
-        } else {
+        if hypoteneuse <= padding && hypoteneuse >= padding / 2 {
+            print("we are moving from to x:\(newPoint.x) y: \(newPoint.y)) ")
+            stickView.center = CGPoint(x: newPoint.x + centerXPosition, y: centerYPosition - newPoint.y)
+        } else if hypoteneuse > padding {
+            print("we are big")
             let bearingRadians = atan2(newPoint.y, newPoint.x) // get bearing in radians
             var bearingDegrees = bearingRadians * CGFloat((180.0 / M_PI)) // convert to degrees
             bearingDegrees = (bearingDegrees > 0.0 ? bearingDegrees : (360.0 + bearingDegrees)) // correct discontinuity
@@ -130,8 +132,8 @@ public class CDJoystick: UIView {
             let generatedY =  padding * sinOF
             let generatedX = padding * cos(bearingRadians)
             
-            let newPoint = CGPoint(x: generatedX + centerXPosition, y: centerYPosition - generatedY)
-            stickView.center = newPoint
+            let finalPoint = CGPoint(x: generatedX + centerXPosition, y: centerYPosition - generatedY)
+            stickView.center = finalPoint
 
         }
         
