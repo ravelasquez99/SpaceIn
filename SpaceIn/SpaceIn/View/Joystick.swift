@@ -104,85 +104,46 @@ public class CDJoystick: UIView {
         let location = touch.location(in: self)
         let centerXPosition = bounds.size.width / 2
         let centerYPosition = bounds.size.height / 2
-        let newPoint = CGPoint(x: location.x - centerXPosition, y: centerYPosition - location.y)
-        //print("new point: \(newPoint)")
+        let userTouchPointInRelationToCenter = CGPoint(x: location.x - centerXPosition, y: centerYPosition - location.y)
         
-        let hypoteneuse = sqrt(pow(newPoint.x, 2) + pow(newPoint.y, 2))
+        let hypoteneuse = sqrt(pow(userTouchPointInRelationToCenter.x, 2) + pow(userTouchPointInRelationToCenter.y, 2))
         
-        let innerCircleHeight = self.stickView.frame.height
-        let outerCircleHeight = self.frame.height
-        
-        let padding = outerCircleHeight - self.substrateBorderWidth - innerCircleHeight - self.stickView.layer.borderWidth - 12.5
+        let padding = self.padding()
         
         if hypoteneuse <= padding && hypoteneuse >= padding / 2 {
-            print("we are moving from to x:\(newPoint.x) y: \(newPoint.y)) ")
-            stickView.center = CGPoint(x: newPoint.x + centerXPosition, y: centerYPosition - newPoint.y)
+            let finalPoint = CGPoint(x: userTouchPointInRelationToCenter.x + centerXPosition, y: centerYPosition - userTouchPointInRelationToCenter.y)
+            stickView.center = finalPoint
+            self.setDataForPoint(point: finalPoint)
+            
         } else if hypoteneuse > padding {
-            print("we are big")
-            let bearingRadians = atan2(newPoint.y, newPoint.x) // get bearing in radians
-            var bearingDegrees = bearingRadians * CGFloat((180.0 / M_PI)) // convert to degrees
-            bearingDegrees = (bearingDegrees > 0.0 ? bearingDegrees : (360.0 + bearingDegrees)) // correct discontinuity
-            //print("degrees ==== \(bearingDegrees)")
+
+            let bearingRadians = atan2(userTouchPointInRelationToCenter.y, userTouchPointInRelationToCenter.x)
+            var bearingDegrees = bearingRadians * CGFloat((180.0 / M_PI))
+            bearingDegrees = (bearingDegrees > 0.0 ? bearingDegrees : (360.0 + bearingDegrees))
             
-            var degrees = bearingRadians * CGFloat((180.0 / M_PI))
-            degrees = degrees < 0 ? degrees + 180 : degrees
+            let sinOfTheta = sin(bearingRadians)
             
-            let sinOF = sin(bearingRadians)
-            
-            let generatedY =  padding * sinOF
+            let generatedY =  padding * sinOfTheta
             let generatedX = padding * cos(bearingRadians)
             
             let finalPoint = CGPoint(x: generatedX + centerXPosition, y: centerYPosition - generatedY)
             stickView.center = finalPoint
-
+            self.setDataForPoint(point: finalPoint)
         }
-        
-        let x = clamp(newPoint.x, lower: -bounds.size.width / 2, upper: bounds.size.width / 2) / (bounds.size.width / 2)
-        let y = clamp(newPoint.y, lower: -bounds.size.height / 2, upper: bounds.size.height / 2) / (bounds.size.height / 2)
+    }
+    
+    fileprivate func setDataForPoint(point: CGPoint) {
+        let x = clamp(point.x, lower: -bounds.size.width / 2, upper: bounds.size.width / 2) / (bounds.size.width / 2)
+        let y = clamp(point.y, lower: -bounds.size.height / 2, upper: bounds.size.height / 2) / (bounds.size.height / 2)
         
         data = CDJoystickData(velocity: CGPoint(x: x, y: y), angle: -atan2(x, y) + CGFloat(M_PI))
     }
     
-    func xLimit(y: CGFloat, padding: CGFloat) -> CGFloat {
+    fileprivate func padding() -> CGFloat {
+        let innerCircleHeight = self.stickView.frame.height
+        let outerCircleHeight = self.frame.height
         
-        let paddingSq = pow(padding, 2)
-        let ySq = pow(y, 2)
-        let difference = paddingSq - ySq
-        
-        return sqrt(abs(difference))
-    }
-    
-    func yLimit(x: CGFloat, padding: CGFloat) -> CGFloat {
-        
-        return sqrt(abs(pow(padding, 2) - pow(x, 2)))
-    }
-    
-    func limitedCoordinate(x: CGFloat, y: CGFloat, padding: CGFloat) -> CGPoint {
-        
-        var newX = x
-        var newY = y
-        
-        let xLim = xLimit(y: y, padding: padding)
-        if abs(x) > xLim {
-            
-            if x < 0 {
-                newX = xLim * -1
-            } else {
-                newX = xLim
-            }
-        }
-        
-        let yLim = yLimit(x: x, padding: padding)
-        if abs(y) > yLim {
-            
-            if y < 0 {
-                newY = yLim * -1
-            } else {
-                newY = yLim
-            }
-        }
-        
-        return CGPoint(x: CGFloat(newX), y: CGFloat(newY))
+        return outerCircleHeight - self.substrateBorderWidth - innerCircleHeight - self.stickView.layer.borderWidth - 12.5
     }
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
