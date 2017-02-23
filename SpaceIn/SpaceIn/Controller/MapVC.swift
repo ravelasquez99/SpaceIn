@@ -225,7 +225,6 @@ extension MapViewController {
         joyStickView?.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.25).isActive = true
         joyStickView?.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         joyStickView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
-        joyStickView?.backgroundColor = UIColor.green
     }
 }
 

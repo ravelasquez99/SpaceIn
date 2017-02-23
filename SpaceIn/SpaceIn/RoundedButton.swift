@@ -12,6 +12,7 @@ import QuartzCore
 class RoundedButton: UIButton {
     private var color: UIColor?
     private var filledIn: Bool?
+    var borderWidth: CGFloat = 2
     
     convenience init(filledIn: Bool, color: UIColor? ) {
         self.init(frame: CGRect.zero)
@@ -39,7 +40,7 @@ class RoundedButton: UIButton {
     
     private func setupColors() {
         self.backgroundColor = self.filledIn == true ? self.color : UIColor.clear
-        self.layer.borderWidth = self.filledIn == true ? 0 : 2
+        self.layer.borderWidth = self.filledIn == true ? 0 : borderWidth
         self.layer.borderColor = self.filledIn == true ? UIColor.clear.cgColor : self.color?.cgColor
     }
     

@@ -20,6 +20,11 @@ enum AssetName: String {
     case spaceinGradient = "gradient"
     case brokenPin = "brokenGPS"
     case greenCircle = "greenCircle"
+    case threeDCircle = "3dglasses"
+    case locationIcon = "locationIcon"
+    case notification = "notification"
+    case zoomIn = "zoomIn"
+    case zoomOut = "zooomOut"
     
 }
 
