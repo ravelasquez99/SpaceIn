@@ -73,7 +73,7 @@ public class CDJoystick: UIView {
     public override func draw(_ rect: CGRect) {
         alpha = fade
         
-        layer.backgroundColor = substrateColor.cgColor
+        layer.backgroundColor = UIColor.clear.cgColor
         layer.borderColor = substrateBorderColor.cgColor
         layer.borderWidth = substrateBorderWidth
         layer.cornerRadius = bounds.width / 2
