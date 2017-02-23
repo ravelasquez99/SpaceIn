@@ -13,10 +13,13 @@ class JoystickViewController: UIViewController {
 
     var didSetup = false
     fileprivate let threeDButton = RoundedButton(filledIn: false, color: UIColor.white)
-    fileprivate let minusButton = UIButton(type: .custom)
-    fileprivate let plusButton = UIButton(type: .custom)
-    fileprivate let notificationsButton = UIButton(type: .custom)
-    fileprivate let profileButton = UIButton(type: .custom)
+    fileprivate let minusButton = RoundedButton(filledIn: false, color: UIColor.white)
+    fileprivate let plusButton = RoundedButton(filledIn: false, color: UIColor.white)
+    fileprivate let notificationsButton = RoundedButton(filledIn: false, color: UIColor.white)
+    fileprivate let profileButton = RoundedButton(filledIn: false, color: UIColor.white)
+    
+    static let paddingFromJoystick: CGFloat = 10
+    static let joystickMiniButtonMultiplier: CGFloat = 0.55
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,24 +63,27 @@ extension JoystickViewController {
         //setup one button
         let threeDImage = UIImage(named: AssetName.threeDCircle.rawValue)
         self.setupRounded(button: self.threeDButton, withImage: threeDImage)
-        self.threeDButton.rightAnchor.constraint(equalTo: self.joyStickView.leftAnchor, constant: -10).isActive = true
-        self.threeDButton.centerYAnchor.constraint(equalTo: self.joyStickView.centerYAnchor, constant: 10).isActive = true
+        self.threeDButton.rightAnchor.constraint(equalTo: self.joyStickView.leftAnchor, constant: -JoystickViewController.paddingFromJoystick).isActive = true
+        self.threeDButton.centerYAnchor.constraint(equalTo: self.joyStickView.centerYAnchor, constant: JoystickViewController.paddingFromJoystick).isActive = true
         
-       
-        //images
-        //rounded
+        let profileImage = UIImage(named: AssetName.rickyHeadshot.rawValue)
+        self.setupRounded(button: self.profileButton, withImage: profileImage)
+        self.profileButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.profileButton.bottomAnchor.constraint(equalTo: self.joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick).isActive = true
+    
+        
         //alpha
         
     }
     
     private func setupRounded(button: RoundedButton, withImage image: UIImage?) {
         button.setImage(image, for: .normal)
-        button.imageView?.contentMode = .scaleAspectFit
+        button.imageView?.contentMode = .scaleAspectFill
+        
         button.borderWidth = 1.0
-//        button.clipsToBounds = true
-//        button.layer.cornerRadius = self.threeDButton.frame.width / 2
-        button.widthAnchor.constraint(equalTo: self.joyStickView.widthAnchor, multiplier: 0.55).isActive = true
-        button.heightAnchor.constraint(equalTo: self.joyStickView.heightAnchor, multiplier: 0.55).isActive = true
+
+        button.widthAnchor.constraint(equalTo: self.joyStickView.widthAnchor, multiplier: JoystickViewController.joystickMiniButtonMultiplier).isActive = true
+        button.heightAnchor.constraint(equalTo: self.joyStickView.heightAnchor, multiplier: JoystickViewController.joystickMiniButtonMultiplier).isActive = true
     }
     
     //convenience function
