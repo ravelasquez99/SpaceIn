@@ -34,6 +34,7 @@ extension JoyStickView {
         self.joyStick.translatesAutoresizingMaskIntoConstraints = false
         self.joyStick.constrainPinInside(view: self)
         self.joyStick.stickColor = UIColor.white
+        self.joyStick.stickSize = CGSize(width: 60, height: 60)
         self.setupJoystickGreenCircle()
     }
     

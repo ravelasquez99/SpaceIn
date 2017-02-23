@@ -146,7 +146,7 @@ public class CDJoystick: UIView {
         let innerCircleHeight = self.stickView.frame.height
         let outerCircleHeight = self.frame.height
         
-        return outerCircleHeight - self.substrateBorderWidth - innerCircleHeight - self.stickView.layer.borderWidth - 12.5
+        return outerCircleHeight - self.substrateBorderWidth - innerCircleHeight - self.stickView.layer.borderWidth - self.layer.borderWidth - 5    1
     }
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
