@@ -17,6 +17,7 @@
 		D849EB291E06011800A49B5C /* LoginRegisterVC+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB281E06011800A49B5C /* LoginRegisterVC+UI.swift */; };
 		D849EB2B1E08E5B400A49B5C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB2A1E08E5B300A49B5C /* Constants.swift */; };
 		D849EB2D1E08E8A200A49B5C /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849EB2C1E08E8A200A49B5C /* AlertMessage.swift */; };
+		D88E70751E5EA10100714EE5 /* JoystickViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88E70741E5EA10100714EE5 /* JoystickViewController.swift */; };
 		D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894EECA1DDC26170039D92A /* AppDelegate.swift */; };
 		D894EED21DDC26180039D92A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D894EED11DDC26180039D92A /* Assets.xcassets */; };
 		D894EED51DDC26180039D92A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D894EED31DDC26180039D92A /* LaunchScreen.storyboard */; };
@@ -53,6 +54,7 @@
 		D849EB281E06011800A49B5C /* LoginRegisterVC+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginRegisterVC+UI.swift"; sourceTree = "<group>"; };
 		D849EB2A1E08E5B300A49B5C /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D849EB2C1E08E8A200A49B5C /* AlertMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertMessage.swift; path = Model/AlertMessage.swift; sourceTree = "<group>"; };
+		D88E70741E5EA10100714EE5 /* JoystickViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JoystickViewController.swift; path = Controller/JoystickViewController.swift; sourceTree = "<group>"; };
 		D894EEC71DDC26170039D92A /* SpaceIn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceIn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D894EECA1DDC26170039D92A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D894EED11DDC26180039D92A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				D8D746601DF122C100A1EE70 /* MapVC.swift */,
 				D8CB6A401E38E41D00F7D070 /* TutorialVC.swift */,
 				D8DBDF541E56BB4C001908DE /* AskLocationVC.swift */,
+				D88E70741E5EA10100714EE5 /* JoystickViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 				D8DBDF551E56BB4C001908DE /* AskLocationVC.swift in Sources */,
 				D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */,
 				D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */,
+				D88E70751E5EA10100714EE5 /* JoystickViewController.swift in Sources */,
 				D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */,
 				D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */,
 				D8FE550E1E36485F00156F27 /* LocationManager.swift in Sources */,

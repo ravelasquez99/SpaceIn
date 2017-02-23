@@ -25,6 +25,8 @@ class MapViewController: UIViewController {
     let logoView = UILabel(asConstrainable: true, frame: CGRect.zero)
     let logoContainerView = FBShimmeringView(frame: CGRect.zero)
     var loginRegisterVC: LoginRegisterVC?
+    let joystickVC = JoystickViewController()
+
     
     
     fileprivate var currentLocation : CLLocation? = MapViewController.defaultLocation
@@ -153,13 +155,15 @@ extension MapViewController {
         self.view.addSubview(self.logoContainerView)
         self.logoContainerView.addSubview(self.logoView)
         self.setupLogoView()
+        self.setupJoystickVC()
+
     }
     
     fileprivate func constrain() {
         if self.didConstrain == false {
             self.constrainMapView()
             self.constrainLogoView()
-            self.constrainJoyStickView()
+            self.constrainJoystickView()
         }
     }
     
@@ -184,14 +188,6 @@ extension MapViewController {
         
     }
     
-    fileprivate func constrainJoyStickView() {
-        let joyStickView = JoyStickView(frame: CGRect.zero)
-        self.view.addSubview(joyStickView)
-        joyStickView.constrainWidthAndHeightToValueAndActivate(value: 80)
-        joyStickView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        joyStickView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
-    }
-    
     func setupLogoView() {
         self.logoView.text = SpaceinCopy.spaceInFloatingLabelText.rawValue
         self.logoView.textColor =  StyleGuideManager.floatingSpaceinLabelColor
@@ -212,6 +208,24 @@ extension MapViewController {
         //shimmeringOpacity
         
         
+    }
+}
+
+//MARK: - Joystick
+extension MapViewController {
+    fileprivate func setupJoystickVC() {
+        self.addChild(viewController: joystickVC)
+        joystickVC.view.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    fileprivate func constrainJoystickView() {
+        let joyStickView = joystickVC.view
+        
+        joyStickView?.widthAnchor.constraint(equalToConstant: self.view.frame.width * 0.7).isActive = true
+        joyStickView?.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.25).isActive = true
+        joyStickView?.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        joyStickView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
+        joyStickView?.backgroundColor = UIColor.green
     }
 }
 

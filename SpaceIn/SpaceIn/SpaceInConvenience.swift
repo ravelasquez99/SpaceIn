@@ -93,3 +93,11 @@ extension UIColor {
         self.init(red: redNumber , green: greenNumber, blue: blueNumber, alpha: alpha!)
     }
 }
+
+
+extension UIViewController {
+    func addChild(viewController: UIViewController) {
+        self.addChildViewController(viewController)
+        self.view.addSubview(viewController.view)
+    }
+}

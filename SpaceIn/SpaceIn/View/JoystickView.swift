@@ -8,16 +8,26 @@
 
 import UIKit
 
+protocol JoystickViewDelegate: class {
+    func tappedJoyStick()
+}
+
 class JoyStickView: UIView {
     
     let joyStick = CDJoystick()
+    fileprivate var isExpanded = false {
+        didSet {
+            
+        }
+    }
     
+    weak var delegate: JoystickViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.setupJoystick()
-        
+        self.addTapGesture()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -50,5 +60,17 @@ extension JoyStickView {
         imageView.contentMode = .scaleAspectFill
         
         imageView.backgroundColor = UIColor.clear
+    }
+}
+
+//MARK: - TapGesture
+extension JoyStickView {
+    fileprivate func addTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tappedJoyStick))
+        self.joyStick.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func tappedJoyStick() {
+        self.delegate?.tappedJoyStick()
     }
 }
