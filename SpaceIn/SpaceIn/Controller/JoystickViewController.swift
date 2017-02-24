@@ -18,7 +18,7 @@ class JoystickViewController: UIViewController {
     fileprivate let notificationsButton = RoundedButton(filledIn: false, color: UIColor.white)
     fileprivate let profileButton = RoundedButton(filledIn: false, color: UIColor.white)
     
-    static let paddingFromJoystick: CGFloat = 10
+    static let paddingFromJoystick: CGFloat = 12
     static let joystickMiniButtonMultiplier: CGFloat = 0.55
     
     override func viewDidLoad() {
@@ -63,14 +63,28 @@ extension JoystickViewController {
         //setup one button
         let threeDImage = UIImage(named: AssetName.threeDCircle.rawValue)
         self.setupRounded(button: self.threeDButton, withImage: threeDImage)
-        self.threeDButton.rightAnchor.constraint(equalTo: self.joyStickView.leftAnchor, constant: -JoystickViewController.paddingFromJoystick).isActive = true
-        self.threeDButton.centerYAnchor.constraint(equalTo: self.joyStickView.centerYAnchor, constant: JoystickViewController.paddingFromJoystick).isActive = true
+        self.threeDButton.rightAnchor.constraint(equalTo: self.joyStickView.leftAnchor, constant: -JoystickViewController.paddingFromJoystick * 2).isActive = true
+        self.threeDButton.centerYAnchor.constraint(equalTo: self.joyStickView.centerYAnchor, constant: 5).isActive = true
         
         let profileImage = UIImage(named: AssetName.rickyHeadshot.rawValue)
         self.setupRounded(button: self.profileButton, withImage: profileImage)
         self.profileButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.profileButton.bottomAnchor.constraint(equalTo: self.joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick).isActive = true
+        self.profileButton.bottomAnchor.constraint(equalTo: self.joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick - 5).isActive = true
     
+        let notificationImage = UIImage(named: AssetName.notification.rawValue)
+        self.setupRounded(button: self.notificationsButton, withImage: notificationImage)
+        self.notificationsButton.centerYAnchor.constraint(equalTo: self.threeDButton.centerYAnchor).isActive = true
+        self.notificationsButton.leftAnchor.constraint(equalTo: self.joyStickView.rightAnchor, constant: JoystickViewController.paddingFromJoystick * 2).isActive = true
+        
+        let plusImage = UIImage(named: AssetName.zoomIn.rawValue)
+        self.setupRounded(button: self.plusButton, withImage: plusImage)
+        self.plusButton.centerYAnchor.constraint(equalTo: self.joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick / 2).isActive = true
+        self.plusButton.rightAnchor.constraint(equalTo: self.notificationsButton.centerXAnchor, constant: -5).isActive = true
+        
+        let minusImage = UIImage(named: AssetName.zoomOut.rawValue)
+        self.setupRounded(button: self.minusButton, withImage: minusImage)
+        self.minusButton.centerYAnchor.constraint(equalTo: self.joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick / 2).isActive = true
+        self.minusButton.leftAnchor.constraint(equalTo: self.threeDButton.centerXAnchor, constant: 5).isActive = true
         
         //alpha
         
