@@ -88,6 +88,32 @@ extension MapViewController {
 //MARK: - User actual location
 extension MapViewController {
     
+    fileprivate func addObserversForLocationManager() {
+        let nc = NotificationCenter.default
+        nc.addObserver(self, selector: #selector(self.userLocationSet), name: .didSetUserLocation, object: nil)
+        nc.addObserver(self, selector: #selector(self.userLocationDeniedOrRestricted), name: .deniedLocationPermission, object: nil)
+        nc.addObserver(self, selector: #selector(self.userLocationDeniedOrRestricted), name: .restrictedLocationPermission, object: nil)
+    }
+    
+    fileprivate func removeSelfAsObserver() {
+        let nc = NotificationCenter.default
+        nc.removeObserver(self)
+    }
+    
+    func userLocationSet() {
+        self.removeSelfAsObserver()
+        guard let location = LocationManager.sharedInstance.userLocation else {
+            return
+        }
+        self.mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
+    }
+    
+    func userLocationDeniedOrRestricted() {
+        self.removeSelfAsObserver()
+    }
+    
+    
+    
     fileprivate func shouldUseUsersLocation() -> Bool {
         return true
     }
@@ -212,10 +238,11 @@ extension MapViewController {
 }
 
 //MARK: - Joystick
-extension MapViewController {
+extension MapViewController: JoyStickVCDelegate {
     fileprivate func setupJoystickVC() {
         self.addChild(viewController: joystickVC)
         joystickVC.view.translatesAutoresizingMaskIntoConstraints = false
+        self.joystickVC.delegate = self
     }
     
     fileprivate func constrainJoystickView() {
@@ -225,6 +252,35 @@ extension MapViewController {
         joyStickView?.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.25).isActive = true
         joyStickView?.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         joyStickView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
+    }
+    
+    func tappedLocatedMe() {
+        self.addObserversForLocationManager()
+        let status = LocationManager.sharedInstance.userLocationStatus()
+        switch status {
+        case .authorized:
+            LocationManager.sharedInstance.startTrackingUser()
+            break
+        case .unknown:
+            LocationManager.sharedInstance.requestUserLocation()
+            break
+        case .denied:
+            self.tellUserToUpdateLocationSettings()
+            break
+        default:
+            print("we don't know the location status")
+            break
+            
+        }
+        
+    }
+    
+    fileprivate func tellUserToUpdateLocationSettings() {
+        let alertMessage = AlertMessage(title: AlertMessages.locationPermissionResetTitle.rawValue, subtitle: AlertMessages.locationPermissionResetSubTitle.rawValue, actionButtontitle: AlertMessages.okayButtonTitle.rawValue, secondButtonTitle: nil)
+        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 

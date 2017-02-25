@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol JoyStickVCDelegate: class {
+    func tappedLocatedMe()
+}
+
+
 class JoystickViewController: UIViewController {
     let joyStickView = JoyStickView(frame: CGRect.zero)
 
@@ -21,6 +26,7 @@ class JoystickViewController: UIViewController {
     
     fileprivate var didSetup = false
     fileprivate var isShowingButtons = false
+    weak var delegate: JoyStickVCDelegate?
     
     static let paddingFromJoystick: CGFloat = 12
     static let joystickMiniButtonMultiplier: CGFloat = 0.55
@@ -41,6 +47,10 @@ extension JoystickViewController: JoystickViewDelegate {
     func tappedJoyStick() {
         self.showButtons(show: !self.isShowingButtons)
         print("we tapped the joystick")
+    }
+    
+    func tappedLocateMe() {
+        self.delegate?.tappedLocatedMe()
     }
     
     fileprivate func showButtons(show: Bool) {
@@ -166,6 +176,8 @@ extension JoystickViewController {
         self.locateMeButton.setTitle("", for: .normal)
         self.locateMeButton.setImage(UIImage(named: AssetName.locationIcon.rawValue), for: .normal)
         self.locateMeButton.imageView?.contentMode = .scaleAspectFit
+        
+        self.locateMeButton.addTarget(self, action: #selector(self.tappedLocateMe), for: .touchUpInside)
     }
     
     private func constrainThreeDButton() {

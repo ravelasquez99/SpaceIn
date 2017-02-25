@@ -48,6 +48,10 @@ enum AlertMessages: String {
     case emailSentTitle = "Email Sent"
     case emailSentSubtitle = "An email with further instructions has been sent"
     case emailSentButtonTitle = "OK"
+    
+    case locationPermissionResetTitle = "Sorry, but you need to allow us to access your location to use this feature."
+    case locationPermissionResetSubTitle = "Go to settings to fix this!"
+    case okayButtonTitle = "Okay"
 
 }
 
