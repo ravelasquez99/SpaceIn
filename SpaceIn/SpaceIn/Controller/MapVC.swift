@@ -102,10 +102,24 @@ extension MapViewController {
     
     func userLocationSet() {
         self.removeSelfAsObserver()
-        guard let location = LocationManager.sharedInstance.userLocation else {
-            return
+        
+        guard let location = LocationManager.sharedInstance.userLocation else { return }
+        guard let currentUser = SpaceInUser.current else { return }
+        
+        if self.weAreZoomedOut() {
+            self.mapView.shouldRemoveUserPinOnMovement = false
+            self.mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
+        
+            currentUser.movedToCoordinate(coordinate: location.coordinate)
+            self.mapView.addUserPin(withCoordinate: currentUser.getCoordinate()!)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                //we add a second of lag. otherwise the region did change will cause issues
+                self.mapView.shouldRemoveUserPinOnMovement = true
+            })
+        } else {
+            self.mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
         }
-        self.mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
     }
     
     func userLocationDeniedOrRestricted() {
@@ -155,7 +169,7 @@ extension MapViewController: MapViewDelegate {
         SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
         self.saveState()
         
-        let weAreZoomedOut = self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
+        let weAreZoomedOut = self.weAreZoomedOut()
         self.logoView.isHidden = !weAreZoomedOut
         self.showStatusBar(show: weAreZoomedOut)
 //        if self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView {
@@ -163,6 +177,10 @@ extension MapViewController: MapViewDelegate {
 //        } else {
 //            self.logoView.isHidden = true
 //        }
+    }
+    
+    fileprivate func weAreZoomedOut() -> Bool {
+        return  self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
     }
     
     fileprivate func showStatusBar(show: Bool) {
@@ -255,6 +273,7 @@ extension MapViewController: JoyStickVCDelegate {
     }
     
     func tappedLocatedMe() {
+        
         self.addObserversForLocationManager()
         let status = LocationManager.sharedInstance.userLocationStatus()
         switch status {

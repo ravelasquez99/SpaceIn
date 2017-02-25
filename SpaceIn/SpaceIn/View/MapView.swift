@@ -61,6 +61,8 @@ class MapView: MKMapView {
     
     var userAnnotation: MKPointAnnotation?
     var didFinishLoadingMap = false
+    var shouldRemoveUserPinOnMovement = true
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -118,13 +120,13 @@ extension MapView {
 
 //MARK: - User Location
 extension MapView {
-    fileprivate func addUserPin() {
+    public func addUserPin(withCoordinate coordinate: CLLocationCoordinate2D) {
         if self.userAnnotation == nil {
-            self.userAnnotation = SpaceinUserAnnotation(withUser: SpaceInUser.current!, coordinate: self.coordinate)
+            self.userAnnotation = SpaceinUserAnnotation(withUser: SpaceInUser.current!, coordinate: coordinate)
         }
         
         
-        self.userAnnotation!.coordinate = self.coordinate
+        self.userAnnotation!.coordinate = coordinate
         self.addPin(pin: self.userAnnotation!)
         
     }
@@ -154,7 +156,7 @@ extension MapView {
         self.setRegion(region, animated: true)
     }
     
-    fileprivate func removeUserPin() {
+    public func removeUserPin() {
         if self.userAnnotation != nil {
             self.removePin(pin: self.userAnnotation!)
         }
@@ -163,8 +165,8 @@ extension MapView {
     fileprivate func setupUserPinBasedOnZoomType(zoomType: MapViewZoomType) {
         
         if zoomType == .zoomedOut {
-            self.addUserPin()
-        } else {
+            self.addUserPin(withCoordinate: self.coordinate)
+        } else if zoomType != .leaveAlone{
             self.removeUserPin()
         }
     }
@@ -248,7 +250,7 @@ extension MapView: MKMapViewDelegate {
             print("satellite")
         }
         
-        if self.didFinishLoadingMap {
+        if self.didFinishLoadingMap && self.shouldRemoveUserPinOnMovement {
             self.removeUserPin()
         }
   
