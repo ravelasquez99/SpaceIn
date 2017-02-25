@@ -97,7 +97,7 @@ public class CDJoystick: UIView {
         tracking = true
         
         UIView.animate(withDuration: 0.1) {
-            self.touchesMoved(touches, with: event)
+            //self.touchesMoved(touches, with: event)
         }
     }
     

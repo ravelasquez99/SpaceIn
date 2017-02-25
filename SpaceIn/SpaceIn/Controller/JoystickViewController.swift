@@ -17,6 +17,7 @@ class JoystickViewController: UIViewController {
     fileprivate let notificationsButton = RoundedButton(filledIn: false, color: UIColor.white)
     fileprivate let profileContainerButton = RoundedButton(filledIn: false, color: UIColor.white)
     fileprivate let profileButton = RoundedButton(filledIn: false, color: UIColor.clear) //for profile pictures the padding between the border and the image isn't happening so we have to wrap it in a circular view
+    fileprivate let locateMeButton = UIButton(type: .custom)
     
     fileprivate var didSetup = false
     fileprivate var isShowingButtons = false
@@ -47,14 +48,14 @@ extension JoystickViewController: JoystickViewDelegate {
             self.joyStickView.isUserInteractionEnabled = false
             
             if self.isShowingButtons {
-                UIView.animate(withDuration: 2.0, animations: { 
+                UIView.animate(withDuration: 0.5, animations: {
                     self.hideAndDisableButtons()
                 }, completion: { (done) in
                     self.joyStickView.isUserInteractionEnabled = true
                     self.isShowingButtons = false
                 })
             } else {
-                UIView.animate(withDuration: 2.0, animations: {
+                UIView.animate(withDuration: 0.5, animations: {
                     self.showAndEnableButtons()
                 }, completion: { (done) in
                     self.joyStickView.isUserInteractionEnabled = true
@@ -99,6 +100,7 @@ extension JoystickViewController {
         self.setupProfileButton()
         self.constrainNotificationsButton()
         self.constrainPlusAndMinusButtons()
+        self.setupLocateMeButton()
         self.hideAndDisableButtons()
     }
     
@@ -155,6 +157,17 @@ extension JoystickViewController {
         self.minusButton.leftAnchor.constraint(equalTo: self.threeDButton.centerXAnchor, constant: 5).isActive = true
     }
     
+    private func setupLocateMeButton() {
+        self.locateMeButton.centerYAnchor.constraint(equalTo: self.notificationsButton.centerYAnchor).isActive = true
+        self.locateMeButton.widthAnchor.constraint(equalTo: self.plusButton.widthAnchor).isActive = true
+        self.locateMeButton.heightAnchor.constraint(equalTo: self.plusButton.heightAnchor).isActive = true
+        self.locateMeButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -15).isActive = true
+        
+        self.locateMeButton.setTitle("", for: .normal)
+        self.locateMeButton.setImage(UIImage(named: AssetName.locationIcon.rawValue), for: .normal)
+        self.locateMeButton.imageView?.contentMode = .scaleAspectFit
+    }
+    
     private func constrainThreeDButton() {
         //setup one button
         let threeDImage = UIImage(named: AssetName.threeDCircle.rawValue)
@@ -203,7 +216,7 @@ extension JoystickViewController {
     
     //convenience function
     private func buttons() -> [UIButton] {
-        return [self.threeDButton, self.minusButton, self.plusButton, self.notificationsButton] //does not include profile button because it is setup a little differently
+        return [self.threeDButton, self.minusButton, self.plusButton, self.notificationsButton, self.locateMeButton] //does not include profile button because it is setup a little differently
     }
     
 

@@ -221,7 +221,7 @@ extension MapViewController {
     fileprivate func constrainJoystickView() {
         let joyStickView = joystickVC.view
         
-        joyStickView?.widthAnchor.constraint(equalToConstant: self.view.frame.width * 0.7).isActive = true
+        joyStickView?.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
         joyStickView?.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.25).isActive = true
         joyStickView?.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         joyStickView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
