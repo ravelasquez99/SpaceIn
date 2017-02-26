@@ -180,15 +180,6 @@ extension MapViewController: MapViewDelegate {
             SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
             self.saveState()
         }
-
-        
-
-        
-//        if self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView {
-//            self.logoView.isHidden = false
-//        } else {
-//            self.logoView.isHidden = true
-//        }
     }
     
     fileprivate func showStatusBar(show: Bool) {
