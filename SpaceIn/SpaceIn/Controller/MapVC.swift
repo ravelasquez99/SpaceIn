@@ -64,6 +64,10 @@ class MapViewController: UIViewController {
         self.viewHasAppeared = true
     }
     
+    func isZoomedOut() -> Bool {
+        return  self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
+    }
+    
     
     @IBAction func animate(_ sender: UIButton) {
         FirebaseHelper.signOut()
@@ -106,7 +110,7 @@ extension MapViewController {
         guard let location = LocationManager.sharedInstance.userLocation else { return }
         guard let currentUser = SpaceInUser.current else { return }
         
-        if self.weAreZoomedOut() {
+        if self.isZoomedOut() {
             self.mapView.shouldRemoveUserPinOnMovement = false
             self.mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
         
@@ -165,22 +169,26 @@ extension MapViewController: MapViewDelegate {
     }
     
     func centerChangedToCoordinate(coordinate: CLLocationCoordinate2D) {
-        self.currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
-        self.saveState()
         
-        let weAreZoomedOut = self.weAreZoomedOut()
+        let weAreZoomedOut = self.isZoomedOut()
         self.logoView.isHidden = !weAreZoomedOut
         self.showStatusBar(show: weAreZoomedOut)
+        
+        //we are not saving the state if we are zoomed out
+        if !isZoomedOut() {
+            self.currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
+            self.saveState()
+        }
+
+        
+
+        
 //        if self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView {
 //            self.logoView.isHidden = false
 //        } else {
 //            self.logoView.isHidden = true
 //        }
-    }
-    
-    fileprivate func weAreZoomedOut() -> Bool {
-        return  self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
     }
     
     fileprivate func showStatusBar(show: Bool) {

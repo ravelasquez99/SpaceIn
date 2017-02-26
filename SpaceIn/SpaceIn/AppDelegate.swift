@@ -34,14 +34,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-        self.mapVC?.saveState()
+        
+        if (self.mapVC != nil), !self.mapVC!.isZoomedOut() {
+            self.mapVC?.saveState()
+        }
 
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        self.mapVC?.saveState()
+        if (self.mapVC != nil), !self.mapVC!.isZoomedOut() {
+            self.mapVC?.saveState()
+        }
         self.mapVC?.appEntetedBackground()
 
     }
@@ -58,7 +63,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        self.mapVC?.saveState()
+        if (self.mapVC != nil), !self.mapVC!.isZoomedOut() {
+            self.mapVC?.saveState()
+        }
     }
     
     @available(iOS 9.0, *)
