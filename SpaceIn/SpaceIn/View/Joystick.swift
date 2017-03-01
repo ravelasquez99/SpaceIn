@@ -150,7 +150,6 @@ public class CDJoystick: UIView {
         let y = clamp(point.y, lower: -bounds.size.height / 2, upper: bounds.size.height / 2) / (bounds.size.height / 2)
         
         data = CDJoystickData(velocity: CGPoint(x: x, y: y), angle: atan2(y, x))
-        print("data angle is \(data.angle)")
         self.delegate?.joystickDataChanged(ToData: data)
 
     }

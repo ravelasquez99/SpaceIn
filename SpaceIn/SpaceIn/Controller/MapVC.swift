@@ -26,6 +26,7 @@ class MapViewController: UIViewController {
     let logoContainerView = FBShimmeringView(frame: CGRect.zero)
     var loginRegisterVC: LoginRegisterVC?
     let joystickVC = JoystickViewController()
+    let joystickProcessor = JoystickProccesser()
 
     
     
@@ -50,6 +51,7 @@ class MapViewController: UIViewController {
         UIApplication.shared.statusBarStyle = .lightContent
         self.mapView.mapViewDelagate = self
         self.addViews()
+        self.joystickProcessor.mapView = self.mapView
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -260,6 +262,7 @@ extension MapViewController: JoyStickVCDelegate {
         self.addChild(viewController: joystickVC)
         joystickVC.view.translatesAutoresizingMaskIntoConstraints = false
         self.joystickVC.delegate = self
+        self.joystickVC.joyStickView.joyStick.delegate = self.joystickProcessor
     }
     
     fileprivate func constrainJoystickView() {
