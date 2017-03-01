@@ -79,8 +79,8 @@ class MapView: MKMapView {
         self.showsBuildings = true
         self.showsPointsOfInterest = false
         self.showsTraffic = true
-        self.isScrollEnabled = false
-        self.isZoomEnabled = false
+//        self.isScrollEnabled = false
+//        self.isZoomEnabled = false
         self.delegate = self
     }
     
@@ -247,10 +247,12 @@ extension MapView: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         if mapView.mapType == .hybridFlyover {
-            print("hybrid")
+            //print("hybrid")
         } else if mapView.mapType == .satellite {
-            print("satellite")
+            //print("satellite")
         }
+        
+        print("map camera heading is \(self.camera.heading)")
         
         if self.didFinishLoadingMap && self.shouldRemoveUserPinOnMovement {
             self.removeUserPin()
