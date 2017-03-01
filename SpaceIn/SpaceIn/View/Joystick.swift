@@ -8,12 +8,19 @@
 //
 import UIKit
 
+protocol JoystickDelegate : class{
+    func joystickDataChanged(ToData data: CDJoystickData)
+}
+
 public struct CDJoystickData: CustomStringConvertible {
     
     /// (-1.0, -1.0) at bottom left to (1.0, 1.0) at top right
     public var velocity: CGPoint = .zero
     
-    /// 0 at top middle to 6.28 radians going around clockwise
+    //top = pie
+    //bottom = 0
+    //left = 3/4 pie * 2
+    //right pie / 2
     public var angle: CGFloat = 0.0
     
     public var description: String {
@@ -48,6 +55,8 @@ public class CDJoystick: UIView {
             }
         }
     }
+    
+    weak var delegate: JoystickDelegate?
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -116,7 +125,7 @@ public class CDJoystick: UIView {
         if hypoteneuse <= padding && hypoteneuse >= padding / 2 {
             let finalPoint = CGPoint(x: userTouchPointInRelationToCenter.x + centerXPosition, y: centerYPosition - userTouchPointInRelationToCenter.y)
             stickView.center = finalPoint
-            self.setDataForPoint(point: finalPoint)
+            self.setDataForPoint(point: userTouchPointInRelationToCenter)
             
         } else if hypoteneuse > padding {
 
@@ -131,15 +140,19 @@ public class CDJoystick: UIView {
             
             let finalPoint = CGPoint(x: generatedX + centerXPosition, y: centerYPosition - generatedY)
             stickView.center = finalPoint
-            self.setDataForPoint(point: finalPoint)
+            self.setDataForPoint(point: CGPoint(x: generatedX, y: generatedY))
         }
     }
     
     fileprivate func setDataForPoint(point: CGPoint) {
+        //print("point is \(point)")
         let x = clamp(point.x, lower: -bounds.size.width / 2, upper: bounds.size.width / 2) / (bounds.size.width / 2)
         let y = clamp(point.y, lower: -bounds.size.height / 2, upper: bounds.size.height / 2) / (bounds.size.height / 2)
         
-        data = CDJoystickData(velocity: CGPoint(x: x, y: y), angle: -atan2(x, y) + CGFloat(M_PI))
+        data = CDJoystickData(velocity: CGPoint(x: x, y: y), angle: atan2(y, x))
+        print("data angle is \(data.angle)")
+        self.delegate?.joystickDataChanged(ToData: data)
+
     }
     
     fileprivate func padding() -> CGFloat {
