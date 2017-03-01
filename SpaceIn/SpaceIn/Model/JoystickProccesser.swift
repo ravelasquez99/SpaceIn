@@ -12,20 +12,46 @@ import MapKit
 class JoystickProccesser: NSObject, JoystickDelegate {
     
     open weak var mapView: MKMapView!
-    static fileprivate let rightRotationRangeBottom = Range(uncheckedBounds: (0, CGFloat(M_PI * 0.25)))
-    static fileprivate let lowerMovementRange = Range(uncheckedBounds: (CGFloat(M_PI * 0.25), CGFloat(M_PI * 0.75)))
-    static fileprivate let leftRotationRange = Range(uncheckedBounds: (CGFloat(M_PI * 0.75), CGFloat(M_PI * 1.25)))
-    static fileprivate let upperMovementRange = Range(uncheckedBounds: (CGFloat(M_PI * 1.25), CGFloat(M_PI * 1.75)))
-    static fileprivate let rightRotationRangeTop = Range(uncheckedBounds: (CGFloat(M_PI * 1.75), CGFloat(M_PI * 2)))
+    static fileprivate let rightRotationRangeBottom = Range(uncheckedBounds: (-CGFloat(M_PI * 0.25), CGFloat(0)))
+    static fileprivate let downwardMovementRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.75), -CGFloat(M_PI * 0.25)))
+    static fileprivate let leftRotationRangeBottom = Range(uncheckedBounds: (-CGFloat(M_PI), -CGFloat(M_PI * 0.75)))
+    static fileprivate let leftRotationRangeTop = Range(uncheckedBounds: (CGFloat(M_PI * 0.75), CGFloat(M_PI)))
+    static fileprivate let upwardMovementRange = Range(uncheckedBounds: (CGFloat(M_PI * 0.25), CGFloat(M_PI * 0.75)))
+    static fileprivate let rightRotationRangeTop = Range(uncheckedBounds: (CGFloat(0), CGFloat(M_PI * 0.25)))
     
     func joystickDataChanged(ToData data: CDJoystickData) {
-
+        let actionType = self.actionTypeFor(data: data)
+        print(actionType)
+        
     }
 
 }
 
 // MARK:- Joystick input
 extension JoystickProccesser {
+    enum JoystickActionType {
+        case upward
+        case downward
+        case right
+        case left
+        case error
+    }
+    
+    fileprivate func actionTypeFor(data: CDJoystickData) -> JoystickActionType {
+        let angleInRadians = data.angle
+        print(angleInRadians)
+        if JoystickProccesser.rightRotationRangeBottom.contains(angleInRadians) || JoystickProccesser.rightRotationRangeTop.contains(angleInRadians) {
+            return .right
+        } else if JoystickProccesser.downwardMovementRange.contains(angleInRadians) {
+            return .downward
+        } else if JoystickProccesser.leftRotationRangeBottom.contains(angleInRadians) || JoystickProccesser.leftRotationRangeTop.contains(angleInRadians) {
+            return .left
+        } else if JoystickProccesser.upwardMovementRange.contains(angleInRadians) {
+            return .upward
+        } else {
+            return .error
+        }
+    }
  
 }
 
