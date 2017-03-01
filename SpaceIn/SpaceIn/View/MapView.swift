@@ -79,6 +79,8 @@ class MapView: MKMapView {
         self.showsBuildings = true
         self.showsPointsOfInterest = false
         self.showsTraffic = true
+        self.isScrollEnabled = false
+        self.isZoomEnabled = false
         self.delegate = self
     }
     
