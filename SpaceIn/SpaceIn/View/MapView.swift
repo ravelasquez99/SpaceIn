@@ -252,13 +252,14 @@ extension MapView: MKMapViewDelegate {
             //print("satellite")
         }
         
-        print("map camera heading is \(self.camera.heading)")
+        print("latitude delta is \(self.region.span.latitudeDelta)")
         
         if self.didFinishLoadingMap && self.shouldRemoveUserPinOnMovement {
             self.removeUserPin()
         }
   
         self.coordinate = self.centerCoordinate
+        
     }
     
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {

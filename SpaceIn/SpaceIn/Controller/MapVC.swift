@@ -52,6 +52,7 @@ class MapViewController: UIViewController {
         self.mapView.mapViewDelagate = self
         self.addViews()
         self.joystickProcessor.mapView = self.mapView
+        self.joystickProcessor.viewForMapView = self.view
     }
     
     override func viewWillAppear(_ animated: Bool) {
