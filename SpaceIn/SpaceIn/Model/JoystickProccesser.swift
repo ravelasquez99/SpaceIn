@@ -115,8 +115,8 @@ extension JoystickProccesser {
         let xForConversionToCoordinate = centerPointInView.x + radius * CGFloat(cos(Double(theta)))
         let yForConversionToCoordinate = centerPointInView.y - radius * CGFloat(sin(Double(theta)))
         
-        let pointOnScreenToConvertIntoCoordinate = CGPoint(x: xForConversionToCoordinate, y: yForConversionToCoordinate)
         
+        let pointOnScreenToConvertIntoCoordinate = CGPoint(x: xForConversionToCoordinate, y: yForConversionToCoordinate)        
         return self.mapView.convert(pointOnScreenToConvertIntoCoordinate, toCoordinateFrom: self.viewForMapView)
         
     }
