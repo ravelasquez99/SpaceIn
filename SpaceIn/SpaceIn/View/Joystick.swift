@@ -17,10 +17,6 @@ public struct CDJoystickData: CustomStringConvertible {
     /// (-1.0, -1.0) at bottom left to (1.0, 1.0) at top right
     public var velocity: CGPoint = .zero
     
-    //top = pie
-    //bottom = 0
-    //left = 3/4 pie * 2
-    //right pie / 2
     public var angle: CGFloat = 0.0
     
     public var description: String {

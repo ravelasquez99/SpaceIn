@@ -252,7 +252,7 @@ extension MapView: MKMapViewDelegate {
             //print("satellite")
         }
         
-        print("latitude delta is \(self.region.span.latitudeDelta)")
+        print("\(self.centerCoordinate)")
         
         if self.didFinishLoadingMap && self.shouldRemoveUserPinOnMovement {
             self.removeUserPin()
