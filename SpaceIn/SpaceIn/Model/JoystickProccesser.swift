@@ -132,13 +132,12 @@ extension JoystickProccesser {
         let dy = amountToMoveInDegrees * cos(angleFromTrueNorthInRadiansClockwise)
         
         let dLat = dy
-        let dLon = dx * CGFloat(cos(self.mapView.centerCoordinate.latitude))
+        let dLon = dx / CGFloat(cos(self.mapView.centerCoordinate.latitude))
         
         let newLong = self.mapView.centerCoordinate.longitude +  Double(dLon)
         let newLat = self.mapView.centerCoordinate.latitude + Double(dLat)
         
         let finalCoordinate = CLLocationCoordinate2D(latitude: self.valid(latitude: newLat), longitude: self.valid(longitude: newLong))
-        
         
         self.mapView.setCenter(finalCoordinate, animated: false)
     }
