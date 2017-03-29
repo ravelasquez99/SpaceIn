@@ -13,7 +13,7 @@ class JoystickProccesser: NSObject, JoystickDelegate {
     open weak var mapView: MKMapView!
     open weak var viewForMapView: UIView!
     
-    static fileprivate let joystickMovementPercentage = CGFloat(0.05)
+    static fileprivate let joystickMovementPercentage = CGFloat(0.04)
     
     static fileprivate let topRightRange = Range(uncheckedBounds: (CGFloat(0), CGFloat(M_PI * 0.25)))
     static fileprivate let topLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.25), CGFloat(0)))
@@ -102,7 +102,7 @@ extension JoystickProccesser {
                 }
             }
             
-            theta += 0.01
+            theta += 0.1
         }
         
         let value = CGFloat(upperCoordinate!.latitude - lowerCoordinate!.latitude)
@@ -111,6 +111,31 @@ extension JoystickProccesser {
         
 
         //A point at angle theta on the circle whose centre is (x0,y0) and whose radius is r is (x0 + r cos theta, y0 + r sin theta). Now choose theta values evenly spaced between 0 and 2pi.
+    }
+    
+    fileprivate func lattitudeRange2() -> CGFloat {
+        let centerPointInMapContainerView = self.viewForMapView.center
+        let radiusOfCircle = self.viewForMapView.frame.width / 2
+        
+        var theta = CGFloat(0.0)
+        
+        var upperCoordinate: CLLocationCoordinate2D?
+        var lowerCoordinate: CLLocationCoordinate2D?
+        
+        var quadrent1LowerTheta = CGFloat(0.0)
+        
+        var quadrent1UpperTheta = CGFloat(M_PI / 2)
+        
+        
+        let middleTheta = (quadrent1LowerTheta + quadrent1UpperTheta) / 2
+        
+        let leftSideCoordinate = self.newCoordinateForCircle(withTheta: quadrent1LowerTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+        
+        let middleCoordinate = self.newCoordinateForCircle(withTheta: middleTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+        
+        let rightCoordinate = self.newCoordinateForCircle(withTheta: quadrent1UpperTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+        
+        return 32
     }
     
     private func newCoordinateForCircle(withTheta theta: CGFloat, radius: CGFloat, centerPointInView: CGPoint) -> CLLocationCoordinate2D {
