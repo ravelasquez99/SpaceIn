@@ -251,9 +251,7 @@ extension MapView: MKMapViewDelegate {
         } else if mapView.mapType == .satellite {
             //print("satellite")
         }
-        
-        print("\(self.centerCoordinate)")
-        
+                
         if self.didFinishLoadingMap && self.shouldRemoveUserPinOnMovement {
             self.removeUserPin()
         }

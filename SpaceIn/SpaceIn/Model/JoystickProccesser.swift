@@ -82,23 +82,32 @@ extension JoystickProccesser {
         while theta <= CGFloat(M_PI * 2) {
             let coordinate = self.newCoordinateForCircle(withTheta: theta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
             
-            if lowerCoordinate == nil {
-                lowerCoordinate = coordinate
-            } else if lowerCoordinate!.latitude > coordinate.latitude {
-                lowerCoordinate = coordinate
+            var coordinateIsValid = true
+            if coordinate.latitude == -180.0 && coordinate.longitude == -180.0 {
+                coordinateIsValid = false
+                
             }
             
-            if upperCoordinate == nil {
-                upperCoordinate = coordinate
-            } else if upperCoordinate!.latitude < coordinate.latitude {
-                upperCoordinate = coordinate
+            if coordinateIsValid {
+                if lowerCoordinate == nil {
+                    lowerCoordinate = coordinate
+                } else if lowerCoordinate!.latitude > coordinate.latitude {
+                    lowerCoordinate = coordinate
+                }
+                
+                if upperCoordinate == nil {
+                    upperCoordinate = coordinate
+                } else if upperCoordinate!.latitude < coordinate.latitude {
+                    upperCoordinate = coordinate
+                }
             }
-
-
+            
             theta += 0.01
         }
         
-        return CGFloat(upperCoordinate!.latitude - lowerCoordinate!.latitude)
+        let value = CGFloat(upperCoordinate!.latitude - lowerCoordinate!.latitude)
+
+        return value
         
 
         //A point at angle theta on the circle whose centre is (x0,y0) and whose radius is r is (x0 + r cos theta, y0 + r sin theta). Now choose theta values evenly spaced between 0 and 2pi.
@@ -134,8 +143,13 @@ extension JoystickProccesser {
         let dLat = dy
         let dLon = dx / CGFloat(cos(self.mapView.centerCoordinate.latitude))
         
+        if abs(dLat) > 1 || abs(dLon) > 1 {
+            print("problem")
+        }
+        
         let newLong = self.mapView.centerCoordinate.longitude +  Double(dLon)
         let newLat = self.mapView.centerCoordinate.latitude + Double(dLat)
+        
         
         let finalCoordinate = CLLocationCoordinate2D(latitude: self.valid(latitude: newLat), longitude: self.valid(longitude: newLong))
         
