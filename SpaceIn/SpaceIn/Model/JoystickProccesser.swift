@@ -24,7 +24,7 @@ class JoystickProccesser: NSObject, JoystickDelegate {
     
     static fileprivate let bottomLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI), -CGFloat(M_PI * 0.75)))
     
-     static fileprivate let rotateLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.75), -CGFloat(M_PI * 0.25)))
+    static fileprivate let rotateLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.75), -CGFloat(M_PI * 0.25)))
     
     func joystickDataChanged(ToData data: CDJoystickData) {
         let actionType = self.actionTypeFor(data: data)
@@ -36,6 +36,9 @@ class JoystickProccesser: NSObject, JoystickDelegate {
             print("We have an undetermined action type")
         }
     }
+    
+    fileprivate var cosThetas = [Double: CGFloat]()
+    fileprivate var sinThetas = [Double: CGFloat]()
 
 }
 
@@ -69,84 +72,8 @@ extension JoystickProccesser {
             return .error
         }
     }
-    
-    fileprivate func lattitudeRange() -> CGFloat {
-        let centerPointInMapContainerView = self.viewForMapView.center
-        let radiusOfCircle = self.viewForMapView.frame.width / 2
-
-        var theta = CGFloat(0.0)
-        
-        var upperCoordinate: CLLocationCoordinate2D?
-        var lowerCoordinate: CLLocationCoordinate2D?
-        
-        while theta <= CGFloat(M_PI * 2) {
-            let coordinate = self.newCoordinateForCircle(withTheta: theta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
-            
-            var coordinateIsValid = true
-            if coordinate.latitude == -180.0 && coordinate.longitude == -180.0 {
-                coordinateIsValid = false
-                
-            }
-            
-            if coordinateIsValid {
-                if lowerCoordinate == nil {
-                    lowerCoordinate = coordinate
-                } else if lowerCoordinate!.latitude > coordinate.latitude {
-                    lowerCoordinate = coordinate
-                }
-                
-                if upperCoordinate == nil {
-                    upperCoordinate = coordinate
-                } else if upperCoordinate!.latitude < coordinate.latitude {
-                    upperCoordinate = coordinate
-                }
-            }
-            
-            theta += 0.1
-        }
-        
-        let value = CGFloat(upperCoordinate!.latitude - lowerCoordinate!.latitude)
-
-        return value
-        
-
-        //A point at angle theta on the circle whose centre is (x0,y0) and whose radius is r is (x0 + r cos theta, y0 + r sin theta). Now choose theta values evenly spaced between 0 and 2pi.
-    }
-    
-    fileprivate func lattitudeRange2() -> CGFloat {
-        let centerPointInMapContainerView = self.viewForMapView.center
-        let radiusOfCircle = self.viewForMapView.frame.width / 2
-        
-        var theta = CGFloat(0.0)
-        
-        var upperCoordinate: CLLocationCoordinate2D?
-        var lowerCoordinate: CLLocationCoordinate2D?
-        
-        var quadrent1LowerTheta = CGFloat(0.0)
-        
-        var quadrent1UpperTheta = CGFloat(M_PI / 2)
-        
-        
-        let middleTheta = (quadrent1LowerTheta + quadrent1UpperTheta) / 2
-        
-        let leftSideCoordinate = self.newCoordinateForCircle(withTheta: quadrent1LowerTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
-        
-        let middleCoordinate = self.newCoordinateForCircle(withTheta: middleTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
-        
-        let rightCoordinate = self.newCoordinateForCircle(withTheta: quadrent1UpperTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
-        
-        return 32
-    }
-    
-    private func newCoordinateForCircle(withTheta theta: CGFloat, radius: CGFloat, centerPointInView: CGPoint) -> CLLocationCoordinate2D {
-        let xForConversionToCoordinate = centerPointInView.x + radius * CGFloat(cos(Double(theta)))
-        let yForConversionToCoordinate = centerPointInView.y - radius * CGFloat(sin(Double(theta)))
-        
-        
-        let pointOnScreenToConvertIntoCoordinate = CGPoint(x: xForConversionToCoordinate, y: yForConversionToCoordinate)
-        return self.mapView.convert(pointOnScreenToConvertIntoCoordinate, toCoordinateFrom: self.viewForMapView)
-    }
 }
+
 
 //MARK: - Movement
 extension JoystickProccesser {
@@ -181,6 +108,110 @@ extension JoystickProccesser {
         self.mapView.setCenter(finalCoordinate, animated: false)
     }
     
+    private func changeInDegreesLattitude() -> CGFloat {
+        let percentToMove = JoystickProccesser.joystickMovementPercentage
+        let lattitudeTotalDelta = self.lattitudeRange()
+        return percentToMove * lattitudeTotalDelta
+        
+    }
+    
+    private func lattitudeRange() -> CGFloat {
+        let centerPointInMapContainerView = self.viewForMapView.center
+        let radiusOfCircle = self.viewForMapView.frame.width / 2
+        
+        var theta = CGFloat(0.0)
+        
+        var upperCoordinate = newCoordinateForCircle(withTheta: theta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+        var lowerCoordinate = newCoordinateForCircle(withTheta: theta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+        
+        theta = 0.1
+        
+        while theta <= CGFloat(M_PI * 2) {
+            let coordinate = self.newCoordinateForCircle(withTheta: theta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+            
+            var coordinateIsValid = true
+            if coordinate.latitude == -180.0 && coordinate.longitude == -180.0 {
+                coordinateIsValid = false
+                
+            }
+            
+            if coordinateIsValid {
+                if lowerCoordinate.latitude > coordinate.latitude {
+                    lowerCoordinate = coordinate
+                }
+                
+                if upperCoordinate.latitude < coordinate.latitude {
+                    upperCoordinate = coordinate
+                }
+            }
+            
+            theta += 0.1
+        }
+        
+        let value = CGFloat(upperCoordinate.latitude - lowerCoordinate.latitude)
+        
+        return value
+        
+        
+        //A point at angle theta on the circle whose centre is (x0,y0) and whose radius is r is (x0 + r cos theta, y0 + r sin theta). Now choose theta values evenly spaced between 0 and 2pi.
+    }
+    
+    
+    private func newCoordinateForCircle(withTheta theta: CGFloat, radius: CGFloat, centerPointInView: CGPoint) -> CLLocationCoordinate2D {
+        let cosTheta = cosOfTheta(theta: Double(theta))
+        let sinTheta = sinOfTheta(theta: Double(theta))
+        let xForConversionToCoordinate = centerPointInView.x + radius * cosTheta
+        let yForConversionToCoordinate = centerPointInView.y - radius * sinTheta
+        
+        
+        let pointOnScreenToConvertIntoCoordinate = CGPoint(x: xForConversionToCoordinate, y: yForConversionToCoordinate)
+        return self.mapView.convert(pointOnScreenToConvertIntoCoordinate, toCoordinateFrom: self.viewForMapView)
+    }
+    
+    private func cosOfTheta(theta: Double) -> CGFloat {
+        if let value = cosThetas[theta] {
+            return value
+        } else {
+            let newValue = CGFloat(cos(theta))
+            cosThetas[theta] = newValue
+            return newValue
+        }
+    }
+    
+    private func sinOfTheta(theta: Double) -> CGFloat {
+        if let value = sinThetas[theta] {
+            return value
+        } else {
+            let newValue = CGFloat(cos(theta))
+            sinThetas[theta] = newValue
+            return newValue
+        }
+    }
+//    private func lattitudeRange2() -> CGFloat {
+//        let centerPointInMapContainerView = self.viewForMapView.center
+//        let radiusOfCircle = self.viewForMapView.frame.width / 2
+//        
+//        var theta = CGFloat(0.0)
+//        
+//        var upperCoordinate: CLLocationCoordinate2D?
+//        var lowerCoordinate: CLLocationCoordinate2D?
+//        
+//        var quadrent1LowerTheta = CGFloat(0.0)
+//        
+//        var quadrent1UpperTheta = CGFloat(M_PI / 2)
+//        
+//        
+//        let middleTheta = (quadrent1LowerTheta + quadrent1UpperTheta) / 2
+//        
+//        let leftSideCoordinate = self.newCoordinateForCircle(withTheta: quadrent1LowerTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+//        
+//        let middleCoordinate = self.newCoordinateForCircle(withTheta: middleTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+//        
+//        let rightCoordinate = self.newCoordinateForCircle(withTheta: quadrent1UpperTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
+//        
+//        return 32
+//    }
+    
     private func valid(longitude: Double) -> Double {
         //-180 - 180
         if longitude >= -180 && longitude <= 180 {
@@ -206,14 +237,7 @@ extension JoystickProccesser {
             return -90 + distanceFromNegative180
         }
     }
-    
-    
-    private func changeInDegreesLattitude() -> CGFloat {
-        let percentToMove = JoystickProccesser.joystickMovementPercentage
-        let lattitudeTotalDelta = self.lattitudeRange()
-        return percentToMove * lattitudeTotalDelta
-        
-    }
+
     
     fileprivate func convertAngleToDegrees(angle: CGFloat) -> CGFloat {
         let conversion = CGFloat(180) / CGFloat(M_PI)
