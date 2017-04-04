@@ -75,7 +75,7 @@ class MapView: MKMapView {
     }
     
     private func setup() {
-        self.mapType = .satellite
+        self.mapType = .satelliteFlyover
         self.showsBuildings = false
         self.showsPointsOfInterest = false
         self.showsTraffic = false
