@@ -75,11 +75,10 @@ class MapView: MKMapView {
     }
     
     private func setup() {
-        self.mapType = .hybridFlyover
+        self.mapType = .satelliteFlyover
         self.showsBuildings = true
         self.showsPointsOfInterest = false
         self.showsTraffic = false
-        self.showsPointsOfInterest = false
 //        self.isScrollEnabled = false
 //        self.isZoomEnabled = false
         self.delegate = self

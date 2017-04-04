@@ -45,8 +45,6 @@ class JoystickProccesser: NSObject, JoystickDelegate {
                 self.joystickDataChanged(ToData: self.latestJoystickData!)
             }
         }
-        
-
     }
     
     func joystickCentered() {
