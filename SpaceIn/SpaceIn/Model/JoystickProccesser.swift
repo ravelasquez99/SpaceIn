@@ -13,7 +13,7 @@ class JoystickProccesser: NSObject, JoystickDelegate {
     open weak var mapView: MKMapView!
     open weak var viewForMapView: UIView!
     
-    static fileprivate let joystickMovementPercentage = CGFloat(0.04)
+    static fileprivate let joystickMovementPercentage = CGFloat(0.02)
     
     static fileprivate let topRightRange = Range(uncheckedBounds: (CGFloat(0), CGFloat(M_PI * 0.25)))
     static fileprivate let topLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.25), CGFloat(0)))
@@ -27,6 +27,8 @@ class JoystickProccesser: NSObject, JoystickDelegate {
     static fileprivate let rotateLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.75), -CGFloat(M_PI * 0.25)))
     
     func joystickDataChanged(ToData data: CDJoystickData) {
+        shouldContinueOnLastPath = false
+        latestJoystickData = data
         let actionType = self.actionTypeFor(data: data)
         if actionType == .upward || actionType == .downward {
             self.processUpwardDownwardMoveMentWith(actionType: actionType, data: data)
@@ -35,10 +37,27 @@ class JoystickProccesser: NSObject, JoystickDelegate {
         } else if actionType == .error {
             print("We have an undetermined action type")
         }
+        
+        shouldContinueOnLastPath = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if self.shouldContinueOnLastPath == true {
+                self.joystickDataChanged(ToData: self.latestJoystickData!)
+            }
+        }
+        
+
+    }
+    
+    func joystickCentered() {
+        shouldContinueOnLastPath = false
     }
     
     fileprivate var cosThetas = [Double: CGFloat]()
     fileprivate var sinThetas = [Double: CGFloat]()
+    
+    fileprivate var latestJoystickData: CDJoystickData?
+    fileprivate var shouldContinueOnLastPath = false
 
 }
 
@@ -75,7 +94,7 @@ extension JoystickProccesser {
 }
 
 
-//MARK: - Movement
+//MARK: - Upward/Downward Movement
 extension JoystickProccesser {
     fileprivate func processUpwardDownwardMoveMentWith(actionType: JoystickActionType, data: CDJoystickData) {
         guard actionType == .downward || actionType == .upward else {
@@ -89,7 +108,7 @@ extension JoystickProccesser {
         
         let angleFromTrueNorthInRadiansClockwise = ((heading + joyStickAngleMeasuredInDegreesClockWise) / 180) * CGFloat(M_PI)
         
-        let dx = amountToMoveInDegrees * sin(angleFromTrueNorthInRadiansClockwise) // can handle more than 2 pie. pie and 3pie should be the same
+        let dx = amountToMoveInDegrees * sin(angleFromTrueNorthInRadiansClockwise)
         let dy = amountToMoveInDegrees * cos(angleFromTrueNorthInRadiansClockwise)
         
         let dLat = dy
@@ -103,19 +122,82 @@ extension JoystickProccesser {
         let newLat = self.mapView.centerCoordinate.latitude + Double(dLat)
         
         
-        let finalCoordinate = CLLocationCoordinate2D(latitude: self.valid(latitude: newLat), longitude: self.valid(longitude: newLong))
+        let finalCoordinate = CLLocationCoordinate2D(latitude: valid(latitude: newLat), longitude: valid(longitude: newLong))
         
         self.mapView.setCenter(finalCoordinate, animated: false)
     }
     
     private func changeInDegreesLattitude() -> CGFloat {
         let percentToMove = JoystickProccesser.joystickMovementPercentage
-        let lattitudeTotalDelta = self.lattitudeRange()
+        let lattitudeTotalDelta = lattitudeRange()
         return percentToMove * lattitudeTotalDelta
         
     }
     
-    private func lattitudeRange() -> CGFloat {
+    private func valid(longitude: Double) -> Double {
+        //-180 - 180
+        if longitude >= -180 && longitude <= 180 {
+            return longitude
+        } else if longitude < -180 {
+            let distanceFromPositive180 = 180 + longitude
+            return 180 + distanceFromPositive180
+        } else { // longitude is greater than 180
+            let distanceFromNegative180 = -180 + longitude
+            return -180 + distanceFromNegative180
+        }
+    }
+
+    private func valid(latitude: Double) -> Double {
+        //-90 - 90
+        if latitude >= -90 && latitude <= 90 {
+            return latitude
+        } else if latitude < -90 {
+            let distanceFromPositive90 = 90 + latitude
+            return 90 + distanceFromPositive90
+        } else { // latitude is greater than 90
+            let distanceFromNegative180 = -90 + latitude
+            return -90 + distanceFromNegative180
+        }
+    }
+    
+    private func fitOverSizedOrUndersizedAngleInDegreesToFitWithing360Degrees(angle: CGFloat) -> CGFloat {
+        if angle >= 0 && angle <= 360 {
+            return angle
+        }
+        
+        if angle < 0 {
+            return self.fitOverSizedOrUndersizedAngleInDegreesToFitWithing360Degrees(angle: angle + 360)
+        } else {
+            return self.fitOverSizedOrUndersizedAngleInDegreesToFitWithing360Degrees(angle: angle - 360)
+        }
+    }
+    
+    private func newHeadingFor(JoystickAngle angle: CGFloat, currentHeading: CGFloat) -> CGFloat {
+        
+        var newHeading = currentHeading + angle
+        if newHeading > 360 {
+            newHeading = newHeading - 360
+        }
+        
+        if newHeading > 360 {
+            print("we are in trouble")
+        }
+        
+        return newHeading
+    }
+    
+    private func convertAngleToDegrees(angle: CGFloat) -> CGFloat {
+        let conversion = CGFloat(180) / CGFloat(M_PI)
+        let convertedValue = angle * conversion
+        
+        return self.fitOverSizedOrUndersizedAngleInDegreesToFitWithing360Degrees(angle: convertedValue)
+    }
+}
+
+
+// MARK: - Circle Algorithm
+extension JoystickProccesser {
+    fileprivate func lattitudeRange() -> CGFloat {
         let centerPointInMapContainerView = self.viewForMapView.center
         let radiusOfCircle = self.viewForMapView.frame.width / 2
         
@@ -158,7 +240,7 @@ extension JoystickProccesser {
     
     
     private func newCoordinateForCircle(withTheta theta: CGFloat, radius: CGFloat, centerPointInView: CGPoint) -> CLLocationCoordinate2D {
-        let cosTheta = cosOfTheta(theta: Double(theta))
+        let cosTheta = cosOfTheta(theta: Double(theta)) //memoization
         let sinTheta = sinOfTheta(theta: Double(theta))
         let xForConversionToCoordinate = centerPointInView.x + radius * cosTheta
         let yForConversionToCoordinate = centerPointInView.y - radius * sinTheta
@@ -186,90 +268,6 @@ extension JoystickProccesser {
             sinThetas[theta] = newValue
             return newValue
         }
-    }
-//    private func lattitudeRange2() -> CGFloat {
-//        let centerPointInMapContainerView = self.viewForMapView.center
-//        let radiusOfCircle = self.viewForMapView.frame.width / 2
-//        
-//        var theta = CGFloat(0.0)
-//        
-//        var upperCoordinate: CLLocationCoordinate2D?
-//        var lowerCoordinate: CLLocationCoordinate2D?
-//        
-//        var quadrent1LowerTheta = CGFloat(0.0)
-//        
-//        var quadrent1UpperTheta = CGFloat(M_PI / 2)
-//        
-//        
-//        let middleTheta = (quadrent1LowerTheta + quadrent1UpperTheta) / 2
-//        
-//        let leftSideCoordinate = self.newCoordinateForCircle(withTheta: quadrent1LowerTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
-//        
-//        let middleCoordinate = self.newCoordinateForCircle(withTheta: middleTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
-//        
-//        let rightCoordinate = self.newCoordinateForCircle(withTheta: quadrent1UpperTheta, radius: radiusOfCircle, centerPointInView: centerPointInMapContainerView)
-//        
-//        return 32
-//    }
-    
-    private func valid(longitude: Double) -> Double {
-        //-180 - 180
-        if longitude >= -180 && longitude <= 180 {
-            return longitude
-        } else if longitude < -180 {
-            let distanceFromPositive180 = 180 + longitude
-            return 180 + distanceFromPositive180
-        } else { // longitude is greater than 180
-            let distanceFromNegative180 = -180 + longitude
-            return -180 + distanceFromNegative180
-        }
-    }
-
-    private func valid(latitude: Double) -> Double {
-        //-90 - 90
-        if latitude >= -90 && latitude <= 90 {
-            return latitude
-        } else if latitude < -90 {
-            let distanceFromPositive90 = 90 + latitude
-            return 90 + distanceFromPositive90
-        } else { // latitude is greater than 90
-            let distanceFromNegative180 = -90 + latitude
-            return -90 + distanceFromNegative180
-        }
-    }
-
-    
-    fileprivate func convertAngleToDegrees(angle: CGFloat) -> CGFloat {
-        let conversion = CGFloat(180) / CGFloat(M_PI)
-        let convertedValue = angle * conversion
-        
-        return self.fitOverSizedOrUndersizedAngleInDegreesToFitWithing360Degrees(angle: convertedValue)
-    }
-    
-    private func fitOverSizedOrUndersizedAngleInDegreesToFitWithing360Degrees(angle: CGFloat) -> CGFloat {
-        if angle >= 0 && angle <= 360 {
-            return angle
-        }
-        
-        if angle < 0 {
-            return self.fitOverSizedOrUndersizedAngleInDegreesToFitWithing360Degrees(angle: angle + 360)
-        } else {
-            return self.fitOverSizedOrUndersizedAngleInDegreesToFitWithing360Degrees(angle: angle - 360)
-        }
-    }
-    
-    private func newHeadingFor(JoystickAngle angle: CGFloat, currentHeading: CGFloat) -> CGFloat {
-        
-        var newHeading = currentHeading + angle
-        if newHeading > 360 {
-            newHeading = newHeading - 360
-        }
-        
-        if newHeading > 360 {
-            print("we are in trouble")
-        }
-        
-        return newHeading
     }
 }
 

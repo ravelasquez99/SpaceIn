@@ -10,6 +10,7 @@ import UIKit
 
 protocol JoystickDelegate : class{
     func joystickDataChanged(ToData data: CDJoystickData)
+    func joystickCentered()
 }
 
 public struct CDJoystickData: CustomStringConvertible {
@@ -141,7 +142,6 @@ public class CDJoystick: UIView {
     }
     
     fileprivate func setDataForPoint(point: CGPoint) {
-        //print("point is \(point)")
         let x = clamp(point.x, lower: -bounds.size.width / 2, upper: bounds.size.width / 2) / (bounds.size.width / 2)
         let y = clamp(point.y, lower: -bounds.size.height / 2, upper: bounds.size.height / 2) / (bounds.size.height / 2)
         
@@ -172,6 +172,7 @@ public class CDJoystick: UIView {
         UIView.animate(withDuration: 0.25) {
             self.stickView.center = CGPoint(x: self.bounds.width / 2, y: self.bounds.height / 2)
         }
+        self.delegate?.joystickCentered()
     }
     
     private func clamp<T: Comparable>(_ value: T, lower: T, upper: T) -> T {
