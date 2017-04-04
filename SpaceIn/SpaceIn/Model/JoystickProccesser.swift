@@ -13,7 +13,7 @@ class JoystickProccesser: NSObject, JoystickDelegate {
     open weak var mapView: MKMapView!
     open weak var viewForMapView: UIView!
     
-    static fileprivate let joystickMovementPercentage = CGFloat(0.0002)
+    static fileprivate let joystickMovementPercentage = CGFloat(0.004)
     
     static fileprivate let topRightRange = Range(uncheckedBounds: (CGFloat(0), CGFloat(M_PI * 0.25)))
     static fileprivate let topLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.25), CGFloat(0)))
@@ -27,8 +27,8 @@ class JoystickProccesser: NSObject, JoystickDelegate {
     static fileprivate let rotateLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.75), -CGFloat(M_PI * 0.25)))
     
     func joystickDataChanged(ToData data: CDJoystickData) {
-        shouldContinueOnLastPath = false
         latestJoystickData = data
+        timer?.invalidate()
         let actionType = self.actionTypeFor(data: data)
         if actionType == .upward || actionType == .downward {
             self.processUpwardDownwardMoveMentWith(actionType: actionType, data: data)
@@ -38,24 +38,32 @@ class JoystickProccesser: NSObject, JoystickDelegate {
             print("We have an undetermined action type")
         }
         
-        shouldContinueOnLastPath = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            if self.shouldContinueOnLastPath == true {
-                self.joystickDataChanged(ToData: self.latestJoystickData!)
+        let lastData = latestJoystickData
+        timer = Timer.init(timeInterval: 0.01, target: self, selector: #selector(timerFired), userInfo: lastData?.angle, repeats: false)
+        RunLoop.main.add(timer!, forMode: .commonModes)
+    }
+    
+    func timerFired(firedTimer: Timer) {
+        if let timerInfo = firedTimer.userInfo as? CGFloat {
+            if timerInfo == latestJoystickData?.angle {
+                joystickDataChanged(ToData: latestJoystickData!)
+                print("we moved with timer")
+            } else {
+                timer?.invalidate()
+                print("we invalidated timer")
             }
         }
     }
-    
     func joystickCentered() {
-        shouldContinueOnLastPath = false
+        timer?.invalidate()
+        latestJoystickData = nil
     }
     
     fileprivate var cosThetas = [Double: CGFloat]()
     fileprivate var sinThetas = [Double: CGFloat]()
     
     fileprivate var latestJoystickData: CDJoystickData?
-    fileprivate var shouldContinueOnLastPath = false
+    fileprivate var timer: Timer?
 
 }
 
@@ -85,7 +93,7 @@ extension JoystickProccesser {
             //print("left")
             return .left
         } else {
-            //print("error")
+            print(data.angle)
             return .error
         }
     }
