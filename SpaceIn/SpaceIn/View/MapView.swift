@@ -78,7 +78,8 @@ class MapView: MKMapView {
         self.mapType = .hybridFlyover
         self.showsBuildings = true
         self.showsPointsOfInterest = false
-        self.showsTraffic = true
+        self.showsTraffic = false
+        self.showsPointsOfInterest = false
 //        self.isScrollEnabled = false
 //        self.isZoomEnabled = false
         self.delegate = self
