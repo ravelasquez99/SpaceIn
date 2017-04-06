@@ -257,6 +257,7 @@ extension MapView: MKMapViewDelegate {
         }
   
         self.coordinate = self.centerCoordinate
+        print(self.camera.altitude)
         
     }
     
