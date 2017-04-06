@@ -257,12 +257,16 @@ extension MapView: MKMapViewDelegate {
         }
         
         self.coordinate = self.centerCoordinate
+        adjustMapTypeIfNeeded()
+        
+    }
+    
+    private func adjustMapTypeIfNeeded() {
         if camera.altitude < 1500 {
             self.mapType = .satellite
         } else {
             self.mapType = .satelliteFlyover
         }
-        
     }
     
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
