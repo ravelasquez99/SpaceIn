@@ -255,9 +255,13 @@ extension MapView: MKMapViewDelegate {
         if self.didFinishLoadingMap && self.shouldRemoveUserPinOnMovement {
             self.removeUserPin()
         }
-  
+        
         self.coordinate = self.centerCoordinate
-        print(self.camera.altitude)
+        if camera.altitude < 1500 {
+            self.mapType = .satellite
+        } else {
+            self.mapType = .satelliteFlyover
+        }
         
     }
     
