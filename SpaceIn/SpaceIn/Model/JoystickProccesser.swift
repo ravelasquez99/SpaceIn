@@ -13,7 +13,7 @@ class JoystickProccesser: NSObject, JoystickDelegate {
     open weak var mapView: MKMapView!
     open weak var viewForMapView: UIView!
     
-    static fileprivate let joystickMovementPercentage = CGFloat(0.015)
+    static fileprivate let joystickMovementPercentage = CGFloat(0.045)
     
     static fileprivate let topRightRange = Range(uncheckedBounds: (CGFloat(0), CGFloat(M_PI * 0.25)))
     static fileprivate let topLeftRange = Range(uncheckedBounds: (-CGFloat(M_PI * 0.25), CGFloat(0)))
