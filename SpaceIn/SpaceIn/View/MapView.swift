@@ -76,8 +76,7 @@ class MapView: MKMapView {
     
     private func setup() {
         self.mapType = .satelliteFlyover
-        self.showsBuildings = false
-        self.showsPointsOfInterest = false
+        self.showsPointsOfInterest = true
         self.showsTraffic = false
 //        self.isScrollEnabled = false
 //        self.isZoomEnabled = false
@@ -257,11 +256,11 @@ extension MapView: MKMapViewDelegate {
         }
         
         self.coordinate = self.centerCoordinate
-        adjustMapTypeIfNeeded()
+//        turnOffFlyoverIfWeAreZoomedInTooMuch()
         
     }
     
-    private func adjustMapTypeIfNeeded() {
+    private func turnOffFlyoverIfWeAreZoomedInTooMuch() {
         if camera.altitude < 1500 {
             self.mapType = .satellite
         } else {

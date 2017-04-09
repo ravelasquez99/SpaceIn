@@ -29,6 +29,7 @@ class JoystickProccesser: NSObject, JoystickDelegate {
     func joystickDataChanged(ToData data: CDJoystickData) {
         latestJoystickData = data
         timer?.invalidate()
+        
         let actionType = self.actionTypeFor(data: data)
         if actionType == .upward || actionType == .downward {
             self.processUpwardDownwardMoveMentWith(actionType: actionType, data: data)
@@ -47,13 +48,12 @@ class JoystickProccesser: NSObject, JoystickDelegate {
         if let timerInfo = firedTimer.userInfo as? CGFloat {
             if timerInfo == latestJoystickData?.angle {
                 joystickDataChanged(ToData: latestJoystickData!)
-                print("we moved with timer")
             } else {
                 timer?.invalidate()
-                print("we invalidated timer")
             }
         }
     }
+    
     func joystickCentered() {
         timer?.invalidate()
         latestJoystickData = nil
@@ -129,8 +129,15 @@ extension JoystickProccesser {
         
         
         let finalCoordinate = CLLocationCoordinate2D(latitude: valid(latitude: newLat), longitude: valid(longitude: newLong))
-        
-        self.mapView.setCenter(finalCoordinate, animated: false)
+        setMapviewCenterAnimatedToCoordinate(coordinate: finalCoordinate)
+    }
+    
+    private func setMapviewCenterAnimatedToCoordinate(coordinate: CLLocationCoordinate2D) {
+        MKMapView.animate(withDuration: 0.001, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 10, options: [.beginFromCurrentState, .curveEaseIn, .curveEaseOut], animations: {
+            self.mapView.centerCoordinate = coordinate
+        }) { (finished) in
+            print(finished)
+        }
     }
     
     private func changeInDegreesLattitude() -> CGFloat {
