@@ -133,7 +133,7 @@ extension JoystickProccesser {
     }
     
     private func setMapviewCenterAnimatedToCoordinate(coordinate: CLLocationCoordinate2D) {
-        MKMapView.animate(withDuration: 0.001, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 10, options: [.beginFromCurrentState, .curveEaseIn, .curveEaseOut], animations: {
+        MKMapView.animate(withDuration: 0.001, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 10, options: [.beginFromCurrentState, .curveEaseIn, .curveEaseOut], animations: {
             self.mapView.centerCoordinate = coordinate
         }) { (finished) in
             print(finished)
