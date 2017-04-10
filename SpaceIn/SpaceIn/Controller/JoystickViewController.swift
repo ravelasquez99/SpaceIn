@@ -40,6 +40,8 @@ class JoystickViewController: UIViewController {
         self.setup()
         
     }
+    
+    fileprivate static let animationDuration = 0.3
 }
 
 ///MARK:- User Interaction
@@ -53,25 +55,25 @@ extension JoystickViewController: JoystickViewDelegate {
         self.delegate?.tappedLocatedMe()
     }
     
-    fileprivate func showButtons(show: Bool) {
+    private func showButtons(show: Bool) {
         if self.didSetup { //so we don't call this in the initialization
             self.joyStickView.isUserInteractionEnabled = false
             
             if self.isShowingButtons {
-                UIView.animate(withDuration: 0.5, animations: {
+                UIView.animate(withDuration: JoystickViewController.animationDuration, animations: {
                     self.hideAndDisableButtons()
                 }, completion: { (done) in
-                    self.joyStickView.isUserInteractionEnabled = true
                     self.isShowingButtons = false
                 })
             } else {
-                UIView.animate(withDuration: 0.5, animations: {
+                UIView.animate(withDuration: JoystickViewController.animationDuration, animations: {
                     self.showAndEnableButtons()
                 }, completion: { (done) in
-                    self.joyStickView.isUserInteractionEnabled = true
                     self.isShowingButtons = true
                 })
             }
+            
+            self.joyStickView.isUserInteractionEnabled = true
         }
     }
 }
