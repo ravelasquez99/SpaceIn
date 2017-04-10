@@ -263,7 +263,6 @@ extension MapViewController: JoyStickVCDelegate {
         self.addChild(viewController: joystickVC)
         joystickVC.view.translatesAutoresizingMaskIntoConstraints = false
         self.joystickVC.delegate = self
-        self.joystickVC.joyStickView.joyStick.delegate = self.joystickProcessor
     }
     
     fileprivate func constrainJoystickView() {
