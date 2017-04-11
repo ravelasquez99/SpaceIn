@@ -31,6 +31,10 @@ extension MapView {
     func setToLocation(location: CLLocation, zoomType: MapViewZoomType, animated: Bool) {
         self._setToLocation(location: location, zoomType: zoomType, animated: animated)
     }
+    
+    func isIn3DMode() -> Bool {
+        return camera.pitch != 0
+    }
 }
 
 // MARK: - Map View Delegate

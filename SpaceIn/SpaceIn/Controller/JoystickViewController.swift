@@ -10,6 +10,7 @@ import UIKit
 
 protocol JoyStickVCDelegate: class {
     func tappedLocatedMe()
+    func joyStickVCTappedZoomButton(zoomIn: Bool)
 }
 
 
@@ -37,7 +38,7 @@ class JoystickViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setup()
+        setup()
         
     }
 }
@@ -45,31 +46,31 @@ class JoystickViewController: UIViewController {
 ///MARK:- User Interaction
 extension JoystickViewController: JoystickViewDelegate {
     func tappedJoyStick() {
-        self.showButtons(show: !self.isShowingButtons)
+        showButtons(show: !isShowingButtons)
         print("we tapped the joystick")
     }
     
     func tappedLocateMe() {
-        self.delegate?.tappedLocatedMe()
+        delegate?.tappedLocatedMe()
     }
     
     fileprivate func showButtons(show: Bool) {
-        if self.didSetup { //so we don't call this in the initialization
-            self.joyStickView.isUserInteractionEnabled = false
+        if didSetup { //so we don't call this in the initialization
+            joyStickView.isUserInteractionEnabled = false
             
-            if self.isShowingButtons {
+            if isShowingButtons {
                 UIView.animate(withDuration: 0.5, animations: {
                     self.hideAndDisableButtons()
-                }, completion: { (done) in
-                    self.joyStickView.isUserInteractionEnabled = true
-                    self.isShowingButtons = false
+                }, completion: { [weak self] done in
+                    self?.joyStickView.isUserInteractionEnabled = true
+                    self?.isShowingButtons = false
                 })
             } else {
                 UIView.animate(withDuration: 0.5, animations: {
                     self.showAndEnableButtons()
-                }, completion: { (done) in
-                    self.joyStickView.isUserInteractionEnabled = true
-                    self.isShowingButtons = true
+                }, completion: { [weak self] done in
+                    self?.joyStickView.isUserInteractionEnabled = true
+                    self?.isShowingButtons = true
                 })
             }
         }
@@ -80,139 +81,150 @@ extension JoystickViewController: JoystickViewDelegate {
 //MARK: - UI Setup
 extension JoystickViewController {
     fileprivate func setup() {
-        if self.didSetup == false {
-            self.didSetup = true
-            self.setupJoystick()
-            self.setupButtons()
-            self.didSetup = true
+        if didSetup == false {
+            didSetup = true
+            setupJoystick()
+            setupButtons()
+            didSetup = true
         }
     }
     
     private func setupJoystick() {
-        self.view.addSubview(joyStickView)
+        view.addSubview(joyStickView)
         joyStickView.constrainWidthAndHeightToValueAndActivate(value: 80)
-        joyStickView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        joyStickView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
-        self.joyStickView.delegate = self
+        joyStickView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        joyStickView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -15).isActive = true
+        joyStickView.delegate = self
     }
     
     private func setupButtons() {
         for button in buttons() {
             button.translatesAutoresizingMaskIntoConstraints = false
-            self.view.addSubview(button)
+            view.addSubview(button)
         }
         
-        self.layoutButtons()
+        layoutButtons()
     }
     
     private func layoutButtons() {
-        self.constrainThreeDButton()
-        self.setupProfileButton()
-        self.constrainNotificationsButton()
-        self.constrainPlusAndMinusButtons()
-        self.setupLocateMeButton()
-        self.hideAndDisableButtons()
+        constrainThreeDButton()
+        setupProfileButton()
+        constrainNotificationsButton()
+        setupPlusAndMinusButtons()
+        setupLocateMeButton()
+        hideAndDisableButtons()
     }
     
+
     fileprivate func hideAndDisableButtons() {
-        self.profileContainerButton.alpha = 0
-        self.profileButton.alpha = 0
-        self.minusButton.alpha = 0
-        self.plusButton.alpha = 0
-        self.notificationsButton.alpha = 0
-        self.threeDButton.alpha = 0
+        profileContainerButton.alpha = 0
+        profileButton.alpha = 0
+        minusButton.alpha = 0
+        plusButton.alpha = 0
+        notificationsButton.alpha = 0
+        threeDButton.alpha = 0
         
-        self.profileContainerButton.isUserInteractionEnabled = false
-        self.profileButton.isUserInteractionEnabled = false
-        self.minusButton.isUserInteractionEnabled = false
-        self.plusButton.isUserInteractionEnabled = false
-        self.notificationsButton.isUserInteractionEnabled = false
-        self.threeDButton.isUserInteractionEnabled = false
+        profileContainerButton.isUserInteractionEnabled = false
+        profileButton.isUserInteractionEnabled = false
+        minusButton.isUserInteractionEnabled = false
+        plusButton.isUserInteractionEnabled = false
+        notificationsButton.isUserInteractionEnabled = false
+        threeDButton.isUserInteractionEnabled = false
     }
     
     fileprivate func showAndEnableButtons() {
-        self.profileContainerButton.alpha = 1
-        self.profileButton.alpha = 1
-        self.minusButton.alpha = 1
-        self.plusButton.alpha = 1
-        self.notificationsButton.alpha = 1
-        self.threeDButton.alpha = 1
+        profileContainerButton.alpha = 1
+        profileButton.alpha = 1
+        minusButton.alpha = 1
+        plusButton.alpha = 1
+        notificationsButton.alpha = 1
+        threeDButton.alpha = 1
         
-        self.profileContainerButton.isUserInteractionEnabled = true
-        self.profileButton.isUserInteractionEnabled = true
-        self.minusButton.isUserInteractionEnabled = true
-        self.plusButton.isUserInteractionEnabled = true
-        self.notificationsButton.isUserInteractionEnabled = true
-        self.threeDButton.isUserInteractionEnabled = true
+        profileContainerButton.isUserInteractionEnabled = true
+        profileButton.isUserInteractionEnabled = true
+        minusButton.isUserInteractionEnabled = true
+        plusButton.isUserInteractionEnabled = true
+        notificationsButton.isUserInteractionEnabled = true
+        threeDButton.isUserInteractionEnabled = true
     }
     
     private func constrainNotificationsButton() {
         let notificationImage = UIImage(named: AssetName.notification.rawValue)
-        self.setupRounded(button: self.notificationsButton, withImage: notificationImage)
-        self.notificationsButton.centerYAnchor.constraint(equalTo: self.threeDButton.centerYAnchor).isActive = true
-        self.notificationsButton.leftAnchor.constraint(equalTo: self.joyStickView.rightAnchor, constant: JoystickViewController.paddingFromJoystick * 2).isActive = true
+        setupRounded(button: notificationsButton, withImage: notificationImage)
+        notificationsButton.centerYAnchor.constraint(equalTo: threeDButton.centerYAnchor).isActive = true
+        notificationsButton.leftAnchor.constraint(equalTo: joyStickView.rightAnchor, constant: JoystickViewController.paddingFromJoystick * 2).isActive = true
     }
     
-    private func constrainPlusAndMinusButtons() {
+    private func setupPlusAndMinusButtons() {
         let plusImage = UIImage(named: AssetName.zoomIn.rawValue)
         let minusImage = UIImage(named: AssetName.zoomOut.rawValue)
 
-        self.setupRounded(button: self.plusButton, withImage: plusImage)
-        self.setupRounded(button: self.minusButton, withImage: minusImage)
+        setupRounded(button: plusButton, withImage: plusImage)
+        setupRounded(button: minusButton, withImage: minusImage)
 
-        self.plusButton.centerYAnchor.constraint(equalTo: self.joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick / 2).isActive = true
-        self.minusButton.centerYAnchor.constraint(equalTo: self.joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick / 2).isActive = true
+        plusButton.centerYAnchor.constraint(equalTo: joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick / 2).isActive = true
+        minusButton.centerYAnchor.constraint(equalTo: joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick / 2).isActive = true
         
-        self.plusButton.rightAnchor.constraint(equalTo: self.notificationsButton.centerXAnchor, constant: -5).isActive = true
-        self.minusButton.leftAnchor.constraint(equalTo: self.threeDButton.centerXAnchor, constant: 5).isActive = true
+        plusButton.rightAnchor.constraint(equalTo: notificationsButton.centerXAnchor, constant: -5).isActive = true
+        minusButton.leftAnchor.constraint(equalTo: threeDButton.centerXAnchor, constant: 5).isActive = true
+        
+        let plusLongGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(plusPressedDown))
+        plusLongGestureRecognizer.allowableMovement = 15
+        plusLongGestureRecognizer.minimumPressDuration = 0.25
+        
+        let minusLongGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(minusPressedDown))
+        minusLongGestureRecognizer.allowableMovement = 15
+        minusLongGestureRecognizer.minimumPressDuration = 0.25
+        
+        plusButton.addGestureRecognizer(plusLongGestureRecognizer)
+        minusButton.addGestureRecognizer(minusLongGestureRecognizer)
     }
     
     private func setupLocateMeButton() {
-        self.locateMeButton.centerYAnchor.constraint(equalTo: self.notificationsButton.centerYAnchor).isActive = true
-        self.locateMeButton.widthAnchor.constraint(equalTo: self.plusButton.widthAnchor).isActive = true
-        self.locateMeButton.heightAnchor.constraint(equalTo: self.plusButton.heightAnchor).isActive = true
-        self.locateMeButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -15).isActive = true
+        locateMeButton.centerYAnchor.constraint(equalTo: notificationsButton.centerYAnchor).isActive = true
+        locateMeButton.widthAnchor.constraint(equalTo: plusButton.widthAnchor).isActive = true
+        locateMeButton.heightAnchor.constraint(equalTo: plusButton.heightAnchor).isActive = true
+        locateMeButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         
-        self.locateMeButton.setTitle("", for: .normal)
-        self.locateMeButton.setImage(UIImage(named: AssetName.locationIcon.rawValue), for: .normal)
-        self.locateMeButton.imageView?.contentMode = .scaleAspectFit
+        locateMeButton.setTitle("", for: .normal)
+        locateMeButton.setImage(UIImage(named: AssetName.locationIcon.rawValue), for: .normal)
+        locateMeButton.imageView?.contentMode = .scaleAspectFit
         
-        self.locateMeButton.addTarget(self, action: #selector(self.tappedLocateMe), for: .touchUpInside)
+        locateMeButton.addTarget(self, action: #selector(tappedLocateMe), for: .touchUpInside)
     }
     
     private func constrainThreeDButton() {
         //setup one button
         let threeDImage = UIImage(named: AssetName.threeDCircle.rawValue)
-        self.setupRounded(button: self.threeDButton, withImage: threeDImage)
-        self.threeDButton.rightAnchor.constraint(equalTo: self.joyStickView.leftAnchor, constant: -JoystickViewController.paddingFromJoystick * 2).isActive = true
-        self.threeDButton.centerYAnchor.constraint(equalTo: self.joyStickView.centerYAnchor, constant: 5).isActive = true
-        
+        setupRounded(button: threeDButton, withImage: threeDImage)
+        threeDButton.rightAnchor.constraint(equalTo: joyStickView.leftAnchor, constant: -JoystickViewController.paddingFromJoystick * 2).isActive = true
+        threeDButton.centerYAnchor.constraint(equalTo: joyStickView.centerYAnchor, constant: 5).isActive = true
     }
     
     private func setupProfileButton() {
-        self.profileContainerButton.isUserInteractionEnabled = false
-        self.profileContainerButton.translatesAutoresizingMaskIntoConstraints = false
-        self.profileContainerButton.titleLabel?.text = ""
-        self.profileContainerButton.backgroundColor = UIColor.clear
-        self.view.addSubview(self.profileContainerButton)
-        self.setupRounded(button: profileContainerButton, withImage: nil)
-        self.profileContainerButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.profileContainerButton.bottomAnchor.constraint(equalTo: self.joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick - 5).isActive = true
+        profileContainerButton.isUserInteractionEnabled = false
+        profileContainerButton.translatesAutoresizingMaskIntoConstraints = false
+        profileContainerButton.titleLabel?.text = ""
+        profileContainerButton.backgroundColor = UIColor.clear
+        view.addSubview(profileContainerButton)
+        setupRounded(button: profileContainerButton, withImage: nil)
+        profileContainerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        profileContainerButton.bottomAnchor.constraint(equalTo: joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick - 5).isActive = true
         
         
         let profileImage = UIImage(named: AssetName.rickyHeadshot.rawValue)
-        self.profileButton.setImage(profileImage, for: .normal)
-        self.profileButton.imageView?.contentMode = .scaleAspectFit
+        profileButton.setImage(profileImage, for: .normal)
+        profileButton.imageView?.contentMode = .scaleAspectFit
         
-        profileContainerButton.addSubview(self.profileButton)
+        profileContainerButton.addSubview(profileButton)
         
-        self.profileButton.translatesAutoresizingMaskIntoConstraints = false
-        self.profileButton.widthAnchor.constraint(equalTo: profileContainerButton.widthAnchor, constant: -5).isActive = true
-        self.profileButton.heightAnchor.constraint(equalTo: profileContainerButton.heightAnchor, constant: -5).isActive = true
-        self.profileButton.centerXAnchor.constraint(equalTo: profileContainerButton.centerXAnchor).isActive = true
-        self.profileButton.centerYAnchor.constraint(equalTo: profileContainerButton.centerYAnchor).isActive = true
+        profileButton.translatesAutoresizingMaskIntoConstraints = false
+        profileButton.widthAnchor.constraint(equalTo: profileContainerButton.widthAnchor, constant: -5).isActive = true
+        profileButton.heightAnchor.constraint(equalTo: profileContainerButton.heightAnchor, constant: -5).isActive = true
+        profileButton.centerXAnchor.constraint(equalTo: profileContainerButton.centerXAnchor).isActive = true
+        profileButton.centerYAnchor.constraint(equalTo: profileContainerButton.centerYAnchor).isActive = true
         
-        self.profileButton.layer.borderWidth = 0.0
+        profileButton.layer.borderWidth = 0.0
 
     }
     
@@ -222,15 +234,25 @@ extension JoystickViewController {
         
         button.borderWidth = 1.0
 
-        button.widthAnchor.constraint(equalTo: self.joyStickView.widthAnchor, multiplier: JoystickViewController.joystickMiniButtonMultiplier).isActive = true
-        button.heightAnchor.constraint(equalTo: self.joyStickView.heightAnchor, multiplier: JoystickViewController.joystickMiniButtonMultiplier).isActive = true
+        button.widthAnchor.constraint(equalTo: joyStickView.widthAnchor, multiplier: JoystickViewController.joystickMiniButtonMultiplier).isActive = true
+        button.heightAnchor.constraint(equalTo: joyStickView.heightAnchor, multiplier: JoystickViewController.joystickMiniButtonMultiplier).isActive = true
     }
     
     //convenience function
     private func buttons() -> [UIButton] {
-        return [self.threeDButton, self.minusButton, self.plusButton, self.notificationsButton, self.locateMeButton] //does not include profile button because it is setup a little differently
+        return [threeDButton, minusButton, plusButton, notificationsButton, locateMeButton] //does not include profile button because it is setup a little differently
+    }
+}
+
+
+//Mark: - Button Targets
+extension JoystickViewController {
+    @objc fileprivate func plusPressedDown() {
+        delegate?.joyStickVCTappedZoomButton(zoomIn: true)
     }
     
-
+    @objc fileprivate func minusPressedDown() {
+        delegate?.joyStickVCTappedZoomButton(zoomIn: false)
+    }
 }
 

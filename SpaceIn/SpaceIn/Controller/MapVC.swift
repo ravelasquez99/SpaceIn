@@ -257,23 +257,8 @@ extension MapViewController {
     }
 }
 
-//MARK: - Joystick
+//MARK: - Joystick Delegate
 extension MapViewController: JoyStickVCDelegate {
-    fileprivate func setupJoystickVC() {
-        self.addChild(viewController: joystickVC)
-        joystickVC.view.translatesAutoresizingMaskIntoConstraints = false
-        self.joystickVC.delegate = self
-    }
-    
-    fileprivate func constrainJoystickView() {
-        let joyStickView = joystickVC.view
-        
-        joyStickView?.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
-        joyStickView?.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.25).isActive = true
-        joyStickView?.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        joyStickView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
-    }
-    
     func tappedLocatedMe() {
         
         self.addObserversForLocationManager()
@@ -293,8 +278,57 @@ extension MapViewController: JoyStickVCDelegate {
             break
             
         }
-        
     }
+    
+    func joyStickVCTappedZoomButton(zoomIn: Bool) {
+       processZoomAction(zoomIn: zoomIn)
+    }
+}
+
+
+//Mark:- Zoom
+extension MapViewController {
+    fileprivate func processZoomAction(zoomIn: Bool) {
+        if mapView.isIn3DMode() {
+            print("3d")
+        } else {
+            let change = 0.15
+            let delta = zoomIn ? 1 - change : 1 + change
+            
+            var region = mapView.region
+            var span = region.span
+            
+            print("before \(span.longitudeDelta)")
+            span.latitudeDelta *= delta
+            span.longitudeDelta *= delta
+            
+            region.span = span
+            print("after \(region.span.longitudeDelta)")
+            mapView.region = region
+        }
+
+    }
+}
+
+
+//MARK: - Joystick setup 
+extension MapViewController {
+    fileprivate func setupJoystickVC() {
+        self.addChild(viewController: joystickVC)
+        joystickVC.view.translatesAutoresizingMaskIntoConstraints = false
+        self.joystickVC.delegate = self
+    }
+    
+    fileprivate func constrainJoystickView() {
+        let joyStickView = joystickVC.view
+        
+        joyStickView?.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
+        joyStickView?.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.25).isActive = true
+        joyStickView?.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        joyStickView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
+    }
+    
+    
     
     fileprivate func tellUserToUpdateLocationSettings() {
         let alertMessage = AlertMessage(title: AlertMessages.locationPermissionResetTitle.rawValue, subtitle: AlertMessages.locationPermissionResetSubTitle.rawValue, actionButtontitle: AlertMessages.okayButtonTitle.rawValue, secondButtonTitle: nil)
