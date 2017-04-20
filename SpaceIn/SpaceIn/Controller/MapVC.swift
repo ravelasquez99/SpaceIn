@@ -35,7 +35,7 @@ class MapViewController: UIViewController {
     fileprivate var didSetupInitialMap = false
     fileprivate var didConstrain = false
     var viewHasAppeared = false
-    
+    var count = 0
 
 
     
@@ -292,21 +292,42 @@ extension MapViewController {
         if mapView.isIn3DMode() {
             print("3d")
         } else {
-            let change = 0.15
-            let delta = zoomIn ? 1 - change : 1 + change
             
-            var region = mapView.region
-            var span = region.span
-            
-            print("before \(span.longitudeDelta)")
-            span.latitudeDelta *= delta
-            span.longitudeDelta *= delta
-            
-            region.span = span
-            print("after \(region.span.longitudeDelta)")
-            mapView.region = region
-        }
+//            //  until the altitude reaches 36185300.1305086 use the camera to zoom since changing the region looks like crap
+//            
+//            if mapView.camera.altitude > 4_000_000.0 {
+//                MKMapView.animate(withDuration: 0.3, animations: {
+//                    let change = 0.03
+//                    let delta = zoomIn ? 1 - change : 1 + change
+//                    let newAltitude = self.mapView.camera.altitude * delta
+//
+//                    self.mapView.camera.altitude = newAltitude
+//                    print("camera")
+//                })
+//               
+//            } else {
+            print(mapView.camera.altitude)
 
+            if mapView.camera.altitude > 10_700_000 && mapView .camera.altitude < 28_700_000 {
+                let change = 0.03
+                let delta = zoomIn ? 1 - change : 1 + change
+                let newAltitude = self.mapView.camera.altitude * delta
+                
+                self.mapView.camera.altitude = newAltitude
+                print("camera")
+            } else {
+                let change = 0.55
+                let delta = zoomIn ? 1 - change : 1 + change
+                var span = mapView.region.span
+                print("region")
+                span.latitudeDelta *= delta
+                span.longitudeDelta *= delta
+                
+                let newRegion = MKCoordinateRegion(center: mapView.centerCoordinate, span: span)
+                mapView.setRegion(newRegion, animated: true)
+            }
+            
+        }
     }
 }
 

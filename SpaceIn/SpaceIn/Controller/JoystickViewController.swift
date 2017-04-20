@@ -168,7 +168,7 @@ extension JoystickViewController {
         plusButton.rightAnchor.constraint(equalTo: notificationsButton.centerXAnchor, constant: -5).isActive = true
         minusButton.leftAnchor.constraint(equalTo: threeDButton.centerXAnchor, constant: 5).isActive = true
         
-        let plusLongGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(plusPressedDown))
+        let plusLongGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(plusPressedDown(withSender:)))
         plusLongGestureRecognizer.allowableMovement = 15
         plusLongGestureRecognizer.minimumPressDuration = 0.25
         
@@ -178,6 +178,7 @@ extension JoystickViewController {
         
         plusButton.addGestureRecognizer(plusLongGestureRecognizer)
         minusButton.addGestureRecognizer(minusLongGestureRecognizer)
+        
     }
     
     private func setupLocateMeButton() {
@@ -247,8 +248,13 @@ extension JoystickViewController {
 
 //Mark: - Button Targets
 extension JoystickViewController {
-    @objc fileprivate func plusPressedDown() {
-        delegate?.joyStickVCTappedZoomButton(zoomIn: true)
+    @objc fileprivate func plusPressedDown(withSender sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .began, .changed:
+           delegate?.joyStickVCTappedZoomButton(zoomIn: true)            
+        default:
+            break
+        }
     }
     
     @objc fileprivate func minusPressedDown() {
