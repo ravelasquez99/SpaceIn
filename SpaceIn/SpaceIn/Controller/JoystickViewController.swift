@@ -41,6 +41,8 @@ class JoystickViewController: UIViewController {
         setup()
         
     }
+    
+    fileprivate static let animationDuration = 0.3
 }
 
 ///MARK:- User Interaction
@@ -66,13 +68,15 @@ extension JoystickViewController: JoystickViewDelegate {
                     self?.isShowingButtons = false
                 })
             } else {
-                UIView.animate(withDuration: 0.5, animations: {
+                UIView.animate(withDuration: JoystickViewController.animationDuration, animations: {
                     self.showAndEnableButtons()
                 }, completion: { [weak self] done in
                     self?.joyStickView.isUserInteractionEnabled = true
                     self?.isShowingButtons = true
                 })
             }
+            
+            self.joyStickView.isUserInteractionEnabled = true
         }
     }
 }
