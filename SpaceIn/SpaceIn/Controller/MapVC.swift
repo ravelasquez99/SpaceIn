@@ -26,7 +26,7 @@ class MapViewController: UIViewController {
     static let spaceinViewPadding: CGFloat = 40
     static let buttonwidthHeights: CGFloat = 55
     static let buttonBottomPadding:CGFloat = 45
-    static let buttonPadding:CGFloat = 10
+    static let buttonPadding:CGFloat = 20
     
     //Views
     fileprivate let logoView = UILabel(asConstrainable: true, frame: CGRect.zero)
