@@ -17,31 +17,37 @@ import Shimmer
 
 //MARK: - Lifecycle
 class MapViewController: UIViewController {
+    //Public
+    let mapView = MapView(frame: CGRect.zero)
+
+    //Class level variables
     static let defaultLocation =  CLLocation(latitude: 41.8902,longitude:  12.4922)
     static let zoomLevelForShowingSpaceinView: CLLocationDistance =  MapView.zoomedOutAltitiude - 15000000
     static let spaceinViewPadding: CGFloat = 40
+    static let buttonwidthHeights: CGFloat = 55
+    static let buttonBottomPadding:CGFloat = 45
+    static let buttonPadding:CGFloat = 10
     
-    let mapView = MapView(frame: CGRect.zero)
-    let logoView = UILabel(asConstrainable: true, frame: CGRect.zero)
-    let logoContainerView = FBShimmeringView(frame: CGRect.zero)
-    var loginRegisterVC: LoginRegisterVC?
-    let joystickVC = JoystickViewController()
-    let joystickProcessor = JoystickProccesser()
+    //Views
+    fileprivate let logoView = UILabel(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let notificationsButton = RoundedButton(filledIn: false, color: UIColor.white)
+    fileprivate let profileContainerButton = RoundedButton(filledIn: false, color: UIColor.white)
+    fileprivate let profileButton = RoundedButton(filledIn: false, color: UIColor.clear) //for profile pictures the padding between the border and the image isn't happening so we have to wrap it in a circular view
+    fileprivate let locateMeButton = UIButton(type: .custom)
+    fileprivate let logoContainerView = FBShimmeringView(frame: CGRect.zero)
+    fileprivate var loginRegisterVC: LoginRegisterVC?
 
-    
-    
+    //Vars
     fileprivate var currentLocation : CLLocation? = MapViewController.defaultLocation
     fileprivate var zoomType: MapViewZoomType?
     fileprivate var didSetupInitialMap = false
     fileprivate var didConstrain = false
-    var viewHasAppeared = false
-    var count = 0
+    fileprivate var viewHasAppeared = false
 
-
-    
+    //Lifecycle
     convenience init(startingLocation: CLLocation, zoomType: MapViewZoomType) {
         self.init(nibName: nil, bundle: nil)
-        self.currentLocation = startingLocation
+        currentLocation = startingLocation
         self.zoomType = zoomType
 
     }
@@ -49,34 +55,24 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         UIApplication.shared.statusBarStyle = .lightContent
-        self.mapView.mapViewDelagate = self
-        self.addViews()
-        self.joystickProcessor.mapView = self.mapView
-        self.joystickProcessor.viewForMapView = self.view
+        mapView.mapViewDelagate = self
+        addViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.constrain()
-        self.setupInitialMapViewStateIfNeccessary()
+        constrain()
+        setupInitialMapViewStateIfNeccessary()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.loginRegisterVC = nil
-        self.viewHasAppeared = true
+        loginRegisterVC = nil
+        viewHasAppeared = true
     }
     
     func isZoomedOut() -> Bool {
-        return  self.mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
-    }
-    
-    
-    @IBAction func animate(_ sender: UIButton) {
-        FirebaseHelper.signOut()
-        if SpaceInUser.current == nil {
-            presentLoginRegister()
-        }
+        return  mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
     }
 }
 
@@ -85,10 +81,10 @@ class MapViewController: UIViewController {
 extension MapViewController {
     
     fileprivate func presentLoginRegister() {
-        if self.loginRegisterVC == nil {
-            self.loginRegisterVC = LoginRegisterVC()
+        if loginRegisterVC == nil {
+            loginRegisterVC = LoginRegisterVC()
         }
-        self.present(loginRegisterVC!, animated: true, completion: nil)
+        present(loginRegisterVC!, animated: true, completion: nil)
     }
 }
 
@@ -97,9 +93,9 @@ extension MapViewController {
     
     fileprivate func addObserversForLocationManager() {
         let nc = NotificationCenter.default
-        nc.addObserver(self, selector: #selector(self.userLocationSet), name: .didSetUserLocation, object: nil)
-        nc.addObserver(self, selector: #selector(self.userLocationDeniedOrRestricted), name: .deniedLocationPermission, object: nil)
-        nc.addObserver(self, selector: #selector(self.userLocationDeniedOrRestricted), name: .restrictedLocationPermission, object: nil)
+        nc.addObserver(self, selector: #selector(userLocationSet), name: .didSetUserLocation, object: nil)
+        nc.addObserver(self, selector: #selector(userLocationDeniedOrRestricted), name: .deniedLocationPermission, object: nil)
+        nc.addObserver(self, selector: #selector(userLocationDeniedOrRestricted), name: .restrictedLocationPermission, object: nil)
     }
     
     fileprivate func removeSelfAsObserver() {
@@ -108,29 +104,29 @@ extension MapViewController {
     }
     
     func userLocationSet() {
-        self.removeSelfAsObserver()
+        removeSelfAsObserver()
         
         guard let location = LocationManager.sharedInstance.userLocation else { return }
         guard let currentUser = SpaceInUser.current else { return }
         
-        if self.isZoomedOut() {
-            self.mapView.shouldRemoveUserPinOnMovement = false
-            self.mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
+        if isZoomedOut() {
+            mapView.shouldRemoveUserPinOnMovement = false
+            mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
         
             currentUser.movedToCoordinate(coordinate: location.coordinate)
-            self.mapView.addUserPin(withCoordinate: currentUser.getCoordinate()!)
+            mapView.addUserPin(withCoordinate: currentUser.getCoordinate()!)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 //we add a second of lag. otherwise the region did change will cause issues
                 self.mapView.shouldRemoveUserPinOnMovement = true
             })
         } else {
-            self.mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
+            mapView.setToLocation(location: location, zoomType: .leaveAlone, animated: true)
         }
     }
     
     func userLocationDeniedOrRestricted() {
-        self.removeSelfAsObserver()
+        removeSelfAsObserver()
     }
     
     
@@ -154,34 +150,34 @@ extension MapViewController {
 extension MapViewController: MapViewDelegate {
     
     fileprivate func setupInitialMapViewStateIfNeccessary() {
-        if self.didSetupInitialMap {
+        if didSetupInitialMap {
             return
         }
         
-        if self.weCanSetupMapView() {
-            self.mapView.setToLocation(location: self.currentLocation!, zoomType: self.zoomType!, animated: false)
+        if weCanSetupMapView() {
+            mapView.setToLocation(location: currentLocation!, zoomType: zoomType!, animated: false)
         } else {
-            self.mapView.setToLocation(location: self.currentLocation!, zoomType: .defaultType, animated: false)
+            mapView.setToLocation(location: currentLocation!, zoomType: .defaultType, animated: false)
         }
         
-        self.didSetupInitialMap = true
+        didSetupInitialMap = true
     }
     
     fileprivate func weCanSetupMapView() -> Bool {
-        return self.currentLocation != nil && self.zoomType != nil
+        return currentLocation != nil && zoomType != nil
     }
     
     func centerChangedToCoordinate(coordinate: CLLocationCoordinate2D) {
         
-        let weAreZoomedOut = self.isZoomedOut()
-        self.logoView.isHidden = !weAreZoomedOut
-        self.showStatusBar(show: weAreZoomedOut)
+        let weAreZoomedOut = isZoomedOut()
+        logoView.isHidden = !weAreZoomedOut
+        showStatusBar(show: weAreZoomedOut)
         
         //we are not saving the state if we are zoomed out
         if !isZoomedOut() {
-            self.currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
             SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
-            self.saveState()
+            saveState()
         }
     }
     
@@ -193,75 +189,148 @@ extension MapViewController: MapViewDelegate {
 
 //MARK:- UI calls
 extension MapViewController {
-    
     fileprivate func addViews() {
-        self.mapView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(self.mapView)
-        self.logoContainerView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(self.logoContainerView)
-        self.logoContainerView.addSubview(self.logoView)
-        self.setupLogoView()
-        self.setupJoystickVC()
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mapView)
+        logoContainerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(logoContainerView)
+        logoContainerView.addSubview(logoView)
+        setupButtons()
+        setupLogoView()
 
     }
     
     fileprivate func constrain() {
-        if self.didConstrain == false {
-            self.constrainMapView()
-            self.constrainLogoView()
-            self.constrainJoystickView()
+        if didConstrain == false {
+            constrainMapView()
+            constrainLogoView()
+            constrainButtons()
         }
     }
     
     
     fileprivate func constrainMapView() {
-        self.mapView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.mapView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        self.mapView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.mapView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+        mapView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        mapView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        mapView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        mapView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
     }
     
     fileprivate func constrainLogoView() {
-        self.logoContainerView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.logoContainerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: MapViewController.spaceinViewPadding).isActive = true
-        self.logoContainerView.heightAnchor.constraint(equalToConstant: 90).isActive = true
-        self.logoContainerView.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        logoContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        logoContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: MapViewController.spaceinViewPadding).isActive = true
+        logoContainerView.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        logoContainerView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         
-        self.logoView.centerXAnchor.constraint(equalTo: self.logoContainerView.centerXAnchor).isActive = true
-        self.logoView.topAnchor.constraint(equalTo: self.logoContainerView.topAnchor).isActive = true
-        self.logoView.heightAnchor.constraint(equalToConstant: 90).isActive = true
-        self.logoView.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        logoView.centerXAnchor.constraint(equalTo: logoContainerView.centerXAnchor).isActive = true
+        logoView.topAnchor.constraint(equalTo: logoContainerView.topAnchor).isActive = true
+        logoView.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        logoView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         
     }
     
-    func setupLogoView() {
-        self.logoView.text = SpaceinCopy.spaceInFloatingLabelText.rawValue
-        self.logoView.textColor =  StyleGuideManager.floatingSpaceinLabelColor
-        self.logoView.font = StyleGuideManager.floatingSpaceinLabelFont
-        self.logoView.textAlignment = .center
+    fileprivate func constrainButtons() {
+        constrainProfileButton()
+        constrainLocateMeButton()
+        constrainNotificationsButton()
+    }
+    
+    private func constrainProfileButton() {
+        profileContainerButton.constrainWidthAndHeightToValueAndActivate(value: MapViewController.buttonwidthHeights)
+        profileContainerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        profileContainerButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -MapViewController.buttonBottomPadding).isActive = true
+    }
+    
+    private func constrainLocateMeButton() {
+        locateMeButton.constrainWidthAndHeightToValueAndActivate(value: MapViewController.buttonwidthHeights * 0.75)
+        locateMeButton.centerYAnchor.constraint(equalTo: profileContainerButton.centerYAnchor).isActive = true
+         locateMeButton.leftAnchor.constraint(equalTo: profileContainerButton.rightAnchor, constant: MapViewController.buttonPadding).isActive = true
+    }
+    
+    private func constrainNotificationsButton() {
+        notificationsButton.constrainWidthAndHeightToValueAndActivate(value: MapViewController.buttonwidthHeights)
+        notificationsButton.centerYAnchor.constraint(equalTo: profileContainerButton.centerYAnchor).isActive = true
+        notificationsButton.rightAnchor.constraint(equalTo: profileContainerButton.leftAnchor, constant: -MapViewController.buttonPadding).isActive = true
+    }
+    
+    private func setupLogoView() {
+        logoView.text = SpaceinCopy.spaceInFloatingLabelText.rawValue
+        logoView.textColor =  StyleGuideManager.floatingSpaceinLabelColor
+        logoView.font = StyleGuideManager.floatingSpaceinLabelFont
+        logoView.textAlignment = .center
         
-        self.logoView.layer.shadowColor = StyleGuideManager.floatingSpaceinNeonBackground.cgColor
-        self.logoView.layer.shadowRadius = 25
-        self.logoView.layer.shadowOpacity = 0.9
-        self.logoView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        self.logoView.layer.masksToBounds = false
+        logoView.layer.shadowColor = StyleGuideManager.floatingSpaceinNeonBackground.cgColor
+        logoView.layer.shadowRadius = 25
+        logoView.layer.shadowOpacity = 0.9
+        logoView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        logoView.layer.masksToBounds = false
         
-        self.logoContainerView.contentView = self.logoView
-        self.logoContainerView.isShimmering = true
-        self.logoContainerView.shimmeringAnimationOpacity = 0.6
-        //self.logoContainerView.shimmeringOpacity = 0.1
+        logoContainerView.contentView = logoView
+        logoContainerView.isShimmering = true
+        logoContainerView.shimmeringAnimationOpacity = 0.6
+        //logoContainerView.shimmeringOpacity = 0.1
+    }
+    
+    private func setupButtons() {
+        
+        let buttons = [profileContainerButton, notificationsButton, locateMeButton]
+        
+        for button in buttons {
+            view.addSubview(button)
+            button.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        setupLocateMeButton()
+        setupNotificationButton()
+        setupProfileButton()
+    }
+    
+    private func setupNotificationButton() {
+        let notificationImage = UIImage(named: AssetName.notification.rawValue)
+        setupRounded(button: notificationsButton, withImage: notificationImage)
+    }
+    
+    private func setupLocateMeButton() {
+        locateMeButton.setTitle("", for: .normal)
+        locateMeButton.setImage(UIImage(named: AssetName.locationIcon.rawValue), for: .normal)
+        locateMeButton.imageView?.contentMode = .scaleAspectFit
+        locateMeButton.addTarget(self, action: #selector(tappedLocatedMe), for: .touchUpInside)
+    }
+    
+    private func setupProfileButton() {
+        profileContainerButton.titleLabel?.text = ""
+        profileContainerButton.backgroundColor = UIColor.clear
+        setupRounded(button: profileContainerButton, withImage: nil)
+        
+        let profileImage = UIImage(named: AssetName.rickyHeadshot.rawValue)
+        profileButton.setImage(profileImage, for: .normal)
+        profileButton.imageView?.contentMode = .scaleAspectFit
+        
+        profileContainerButton.addSubview(profileButton)
+        
+        profileButton.translatesAutoresizingMaskIntoConstraints = false
+        profileButton.widthAnchor.constraint(equalTo: profileContainerButton.widthAnchor, constant: -5).isActive = true
+        profileButton.heightAnchor.constraint(equalTo: profileContainerButton.heightAnchor, constant: -5).isActive = true
+        profileButton.centerXAnchor.constraint(equalTo: profileContainerButton.centerXAnchor).isActive = true
+        profileButton.centerYAnchor.constraint(equalTo: profileContainerButton.centerYAnchor).isActive = true
+        
+        profileButton.layer.borderWidth = 0.0
+    }
 
-        //shimmeringOpacity
+    
+    private func setupRounded(button: RoundedButton, withImage image: UIImage?) {
+        button.setImage(image, for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
         
-        
+        button.borderWidth = 1.0
     }
 }
 
 //MARK: - Joystick Delegate
-extension MapViewController: JoyStickVCDelegate {
+extension MapViewController {
     func tappedLocatedMe() {
         
-        self.addObserversForLocationManager()
+        addObserversForLocationManager()
         let status = LocationManager.sharedInstance.userLocationStatus()
         switch status {
         case .authorized:
@@ -271,7 +340,7 @@ extension MapViewController: JoyStickVCDelegate {
             LocationManager.sharedInstance.requestUserLocation()
             break
         case .denied:
-            self.tellUserToUpdateLocationSettings()
+            tellUserToUpdateLocationSettings()
             break
         default:
             print("we don't know the location status")
@@ -299,9 +368,9 @@ extension MapViewController {
 //                MKMapView.animate(withDuration: 0.3, animations: {
 //                    let change = 0.03
 //                    let delta = zoomIn ? 1 - change : 1 + change
-//                    let newAltitude = self.mapView.camera.altitude * delta
+//                    let newAltitude = mapView.camera.altitude * delta
 //
-//                    self.mapView.camera.altitude = newAltitude
+//                    mapView.camera.altitude = newAltitude
 //                    print("camera")
 //                })
 //               
@@ -311,9 +380,9 @@ extension MapViewController {
             if mapView.camera.altitude > 10_700_000 && mapView .camera.altitude < 28_700_000 {
                 let change = 0.03
                 let delta = zoomIn ? 1 - change : 1 + change
-                let newAltitude = self.mapView.camera.altitude * delta
+                let newAltitude = mapView.camera.altitude * delta
                 
-                self.mapView.camera.altitude = newAltitude
+                mapView.camera.altitude = newAltitude
                 print("camera")
             } else {
                 let change = 0.55
@@ -334,29 +403,12 @@ extension MapViewController {
 
 //MARK: - Joystick setup 
 extension MapViewController {
-    fileprivate func setupJoystickVC() {
-        self.addChild(viewController: joystickVC)
-        joystickVC.view.translatesAutoresizingMaskIntoConstraints = false
-        self.joystickVC.delegate = self
-    }
-    
-    fileprivate func constrainJoystickView() {
-        let joyStickView = joystickVC.view
-        
-        joyStickView?.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
-        joyStickView?.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.25).isActive = true
-        joyStickView?.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        joyStickView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -15).isActive = true
-    }
-    
-    
-    
     fileprivate func tellUserToUpdateLocationSettings() {
         let alertMessage = AlertMessage(title: AlertMessages.locationPermissionResetTitle.rawValue, subtitle: AlertMessages.locationPermissionResetSubTitle.rawValue, actionButtontitle: AlertMessages.okayButtonTitle.rawValue, secondButtonTitle: nil)
         let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle, preferredStyle: .alert)
         let okAction = UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil)
         alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -365,25 +417,25 @@ extension MapViewController {
 extension MapViewController {
     func saveState() {
         let defaults = UserDefaults.standard
-        self.saveMapStatewithDefaults(defaults: defaults)
+        saveMapStatewithDefaults(defaults: defaults)
         defaults.synchronize()
     }
     
     func appEntetedBackground() {
-        if self.mapView.didFinishLoadingMap == true {
-            self.mapView.didFinishLoadingMap = false
+        if mapView.didFinishLoadingMap == true {
+            mapView.didFinishLoadingMap = false
         }
     }
     
     func appEnteredForeground() {
-        if self.mapView.didFinishLoadingMap == false && viewHasAppeared {
-            self.mapView.didFinishLoadingMap = true
+        if mapView.didFinishLoadingMap == false && viewHasAppeared {
+            mapView.didFinishLoadingMap = true
         }
     }
     
     fileprivate func saveMapStatewithDefaults(defaults: UserDefaults) {
-        let lastKnownLat = CGFloat(self.currentLocation!.coordinate.latitude)
-        let lastKnownLong = CGFloat(self.currentLocation!.coordinate.longitude)
+        let lastKnownLat = CGFloat(currentLocation!.coordinate.latitude)
+        let lastKnownLong = CGFloat(currentLocation!.coordinate.longitude)
 
         defaults.set(lastKnownLat, forKey: UserDefaultKeys.lastKnownSpaceInLattitude.rawValue)
         defaults.set(lastKnownLong, forKey: UserDefaultKeys.lastKnownSpaceInLongitude.rawValue)
