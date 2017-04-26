@@ -83,12 +83,7 @@ class MapView: MKMapView {
         showsPointsOfInterest = true
         showsTraffic = true
         showsCompass = false
-        
-        
-        
-//        self.isScrollEnabled = false
-//        self.isZoomEnabled = false
-        self.delegate = self
+        delegate = self
     }
     
     private func setUserInteraction() {
@@ -253,18 +248,11 @@ extension MapView: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        if mapView.mapType == .hybridFlyover {
-            //print("hybrid")
-        } else if mapView.mapType == .satellite {
-            //print("satellite")
-        }
-                
         if self.didFinishLoadingMap && self.shouldRemoveUserPinOnMovement {
             self.removeUserPin()
+            self.coordinate = self.centerCoordinate
         }
         
-        self.coordinate = self.centerCoordinate
-//        turnOffFlyoverIfWeAreZoomedInTooMuch()
         
     }
     

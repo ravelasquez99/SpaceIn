@@ -72,7 +72,12 @@ class MapViewController: UIViewController {
     }
     
     func isZoomedOut() -> Bool {
-        return  mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
+        if mapView.didFinishLoadingMap {
+            return mapView.camera.altitude >= MapViewController.zoomLevelForShowingSpaceinView
+        } else {
+            return true
+        }
+        
     }
 }
 
@@ -148,11 +153,8 @@ extension MapViewController: MapViewDelegate {
             return
         }
         
-        if weCanSetupMapView() {
-            mapView.setToLocation(location: currentLocation!, zoomType: zoomType!, animated: false)
-        } else {
-            mapView.setToLocation(location: currentLocation!, zoomType: .defaultType, animated: false)
-        }
+        let zoomTypeToUse = weCanSetupMapView() ? zoomType! : MapViewZoomType.defaultType
+        mapView.setToLocation(location: currentLocation!, zoomType: zoomTypeToUse, animated: false)
         
         didSetupInitialMap = true
     }
@@ -168,7 +170,7 @@ extension MapViewController: MapViewDelegate {
         showStatusBar(show: weAreZoomedOut)
         
         //we are not saving the state if we are zoomed out
-        if !isZoomedOut() {
+        if !weAreZoomedOut && didSetupInitialMap {
             currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
             SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
             saveState()
