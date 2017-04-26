@@ -79,10 +79,11 @@ class MapView: MKMapView {
     }
     
     private func setup() {
-        self.mapType = .satelliteFlyover
-        self.showsPointsOfInterest = true
-        self.showsTraffic = true
+        mapType = .hybridFlyover
+        showsPointsOfInterest = true
+        showsTraffic = true
         showsCompass = false
+        
         
         
 //        self.isScrollEnabled = false
