@@ -129,12 +129,6 @@ extension MapViewController {
         removeSelfAsObserver()
     }
     
-    
-    
-    fileprivate func shouldUseUsersLocation() -> Bool {
-        return true
-    }
-    
     fileprivate func savedLocation() -> CLLocation {
         return CLLocation()
     }
