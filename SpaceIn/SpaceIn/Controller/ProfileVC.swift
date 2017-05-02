@@ -16,11 +16,12 @@ class ProfileVC: UIViewController {
     //MARK: - Layout Values
     fileprivate static let containerViewWidthMultiplier: CGFloat = 0.75
     fileprivate static let containerViewheightMultiplier: CGFloat = 0.65
-    fileprivate static let closeButtonTopPadding: CGFloat = -20.0
-    fileprivate static let closeButtonRightPadding: CGFloat = 5.0
+    fileprivate static let closeButtonTopPadding: CGFloat = 5.0
+    fileprivate static let closeButtonRightPadding: CGFloat = 30.0
+    fileprivate static let closeButtonHeight: CGFloat = 40.0
     
     //MARK: - Properties
-    var isUserProfile = false
+    var isUserProfile = true
     var isExpanded = false
     
     override func viewDidLoad() {
@@ -67,6 +68,7 @@ extension ProfileVC {
         containerView.clipsToBounds = true
         
         setupCloseButton()
+        setupSettingsButton()
         //round corners
         //constrain
         //add subviews
@@ -81,17 +83,44 @@ extension ProfileVC {
         let closeButtonImage = UIImage(named: AssetName.dismissButton.rawValue)
         closeButton.setImage(closeButtonImage, for: .normal)
         closeButton.imageView?.contentMode = .scaleAspectFit
+        closeButton.contentVerticalAlignment = .fill
+        closeButton.contentHorizontalAlignment = .fill
         
         containerView.addSubview(closeButton)
         
         closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ProfileVC.closeButtonTopPadding).isActive = true
         closeButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -ProfileVC.closeButtonRightPadding).isActive = true
         
-        let height: CGFloat = 80
+        let height: CGFloat = ProfileVC.closeButtonHeight
         closeButton.heightAnchor.constraint(equalToConstant: height).isActive = true
         closeButton.widthAnchor.constraint(equalToConstant: height * 0.75).isActive = true
 
         closeButton.addTarget(self, action: #selector(closePressed), for: .touchUpInside)
+    }
+    
+    private func setupSettingsButton() {
+        guard isUserProfile else {
+            print("No need to set up settings button")
+            return
+        }
+        
+        let settingsButton = UIButton(asConstrainable: true, frame: CGRect.zero)
+        let settingsImage = UIImage(named: AssetName.settingsButton.rawValue)
+        settingsButton.setImage(settingsImage, for: .normal)
+        settingsButton.imageView?.contentMode = .scaleAspectFit
+        
+        containerView.addSubview(settingsButton)
+        
+        let widthHeight: CGFloat = ProfileVC.closeButtonHeight
+        let leftSidePadding: CGFloat = ProfileVC.closeButtonRightPadding / 2
+        let topPadding: CGFloat = ProfileVC.closeButtonRightPadding / 2
+        
+        settingsButton.widthAnchor.constraint(equalToConstant: widthHeight).isActive = true
+        settingsButton.heightAnchor.constraint(equalToConstant: widthHeight).isActive = true
+        settingsButton.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: leftSidePadding).isActive = true
+        settingsButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topPadding).isActive = true
+        
+        settingsButton.addTarget(self, action: #selector(settingsPressed), for: .touchUpInside)
     }
 }
 
@@ -100,5 +129,9 @@ extension ProfileVC {
 extension ProfileVC {
     @objc fileprivate func closePressed() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc fileprivate func settingsPressed() {
+        print("settings pressed")
     }
 }

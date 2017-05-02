@@ -26,6 +26,7 @@ enum AssetName: String {
     case zoomOut = "zooomOut"
     case profilePlaceholder = "profilePlaceHolder"
     case dismissButton = "dismissButton"
+    case settingsButton = "settingsButton"
     
 }
 
