@@ -20,6 +20,7 @@ class UserAnnotationView: MKAnnotationView {
     }
     
     private func setup() {
+        
         addSubviews()
         setupLayout()
     }
@@ -45,15 +46,17 @@ class UserAnnotationView: MKAnnotationView {
         let diameter = pinView.frame.size.height * 0.9 - circleBorderWidth
         
         pictureView.frame = CGRect(x: sidePadding+circleBorderWidth, y: circleBorderWidth / 2, width: diameter, height: diameter)
-        let image = UIImage(named: AssetName.rickyHeadshot.rawValue)
+        let image = UIImage(named: AssetName.profilePlaceholder.rawValue)
         pictureView.image = image
         pictureView.contentMode = .scaleAspectFit
         
         pictureView.layer.cornerRadius = pictureView.frame.size.width / 2
         pictureView.clipsToBounds = true
+        pictureView.backgroundColor = .white
     }
     
     private func setupPinView() {
+        
         pinView.frame = bounds
         pinView.image = UIImage(named: AssetName.transparentPin.rawValue)
         pinView.contentMode = .scaleAspectFit

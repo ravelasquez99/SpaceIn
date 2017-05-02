@@ -28,6 +28,7 @@
 		D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */; };
 		D8CA4C1C1DFA5879004665F0 /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */; };
 		D8CB6A411E38E41D00F7D070 /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CB6A401E38E41D00F7D070 /* TutorialVC.swift */; };
+		D8CEEA641EB835A000E0E90E /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CEEA631EB835A000E0E90E /* ProfileVC.swift */; };
 		D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D7465E1DF1228700A1EE70 /* MapView.swift */; };
 		D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D746601DF122C100A1EE70 /* MapVC.swift */; };
 		D8D746631DF122D700A1EE70 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D746621DF122D700A1EE70 /* Main.storyboard */; };
@@ -68,6 +69,7 @@
 		D8CA4C191DFA57A3004665F0 /* StyleGuideManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyleGuideManager.swift; sourceTree = "<group>"; };
 		D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		D8CB6A401E38E41D00F7D070 /* TutorialVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialVC.swift; path = Controller/TutorialVC.swift; sourceTree = "<group>"; };
+		D8CEEA631EB835A000E0E90E /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileVC.swift; path = Controller/ProfileVC.swift; sourceTree = "<group>"; };
 		D8D7465E1DF1228700A1EE70 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapView.swift; path = View/MapView.swift; sourceTree = "<group>"; };
 		D8D746601DF122C100A1EE70 /* MapVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapVC.swift; path = Controller/MapVC.swift; sourceTree = "<group>"; };
 		D8D746621DF122D700A1EE70 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = View/Main.storyboard; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				D832FD961E25E19F00FDE311 /* ForgotPasswordVC.swift */,
 				D849EB281E06011800A49B5C /* LoginRegisterVC+UI.swift */,
 				D8D746601DF122C100A1EE70 /* MapVC.swift */,
+				D8CEEA631EB835A000E0E90E /* ProfileVC.swift */,
 				D8CB6A401E38E41D00F7D070 /* TutorialVC.swift */,
 				D8DBDF541E56BB4C001908DE /* AskLocationVC.swift */,
 				D88E70741E5EA10100714EE5 /* JoystickViewController.swift */,
@@ -364,6 +367,7 @@
 				D832FD971E25E19F00FDE311 /* ForgotPasswordVC.swift in Sources */,
 				D849EB291E06011800A49B5C /* LoginRegisterVC+UI.swift in Sources */,
 				D8CA4C1C1DFA5879004665F0 /* AssetManager.swift in Sources */,
+				D8CEEA641EB835A000E0E90E /* ProfileVC.swift in Sources */,
 				D894EECB1DDC26170039D92A /* AppDelegate.swift in Sources */,
 				D849EB2B1E08E5B400A49B5C /* Constants.swift in Sources */,
 				D8083D5F1E3D8C5600F5309C /* FloatingSpaceinView.swift in Sources */,

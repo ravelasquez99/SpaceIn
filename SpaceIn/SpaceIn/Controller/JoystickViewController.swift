@@ -217,7 +217,7 @@ extension JoystickViewController {
         profileContainerButton.bottomAnchor.constraint(equalTo: joyStickView.topAnchor, constant: -JoystickViewController.paddingFromJoystick - 5).isActive = true
         
         
-        let profileImage = UIImage(named: AssetName.rickyHeadshot.rawValue)
+        let profileImage = UIImage(named: AssetName.profilePlaceholder.rawValue)
         profileButton.setImage(profileImage, for: .normal)
         profileButton.imageView?.contentMode = .scaleAspectFit
         

@@ -48,7 +48,7 @@ public extension UIView {
     
     public func makeConstrainable() {
         if self.translatesAutoresizingMaskIntoConstraints == true {
-            fatalError("You are trying to constrain a view that is not constrainable \(self)")
+            print("You are trying to constrain a view that is not constrainable \(self)")
         }
     }
     

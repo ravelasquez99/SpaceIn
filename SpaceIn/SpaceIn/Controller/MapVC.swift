@@ -298,9 +298,11 @@ extension MapViewController {
         profileContainerButton.backgroundColor = UIColor.clear
         setupRounded(button: profileContainerButton, withImage: nil)
         
-        let profileImage = UIImage(named: AssetName.rickyHeadshot.rawValue)
+        let profileImage = profileButtonImage()
         profileButton.setImage(profileImage, for: .normal)
         profileButton.imageView?.contentMode = .scaleAspectFit
+        
+        profileButton.addTarget(self, action: #selector(profileButtonPressed), for: .touchUpInside)
         
         profileContainerButton.addSubview(profileButton)
         
@@ -312,6 +314,10 @@ extension MapViewController {
         
         profileButton.layer.borderWidth = 0.0
     }
+    
+    private func profileButtonImage() -> UIImage {
+        return UIImage(named: AssetName.profilePlaceholder.rawValue)!
+    }
 
     
     private func setupRounded(button: RoundedButton, withImage image: UIImage?) {
@@ -322,7 +328,7 @@ extension MapViewController {
     }
 }
 
-//MARK: - Joystick Delegate
+//MARK: - Locate me
 extension MapViewController {
     func tappedLocatedMe() {
         
@@ -341,56 +347,6 @@ extension MapViewController {
         default:
             print("we don't know the location status")
             break
-            
-        }
-    }
-    
-    func joyStickVCTappedZoomButton(zoomIn: Bool) {
-       processZoomAction(zoomIn: zoomIn)
-    }
-}
-
-
-//Mark:- Zoom
-extension MapViewController {
-    fileprivate func processZoomAction(zoomIn: Bool) {
-        if mapView.isIn3DMode() {
-            print("3d")
-        } else {
-            
-//            //  until the altitude reaches 36185300.1305086 use the camera to zoom since changing the region looks like crap
-//            
-//            if mapView.camera.altitude > 4_000_000.0 {
-//                MKMapView.animate(withDuration: 0.3, animations: {
-//                    let change = 0.03
-//                    let delta = zoomIn ? 1 - change : 1 + change
-//                    let newAltitude = mapView.camera.altitude * delta
-//
-//                    mapView.camera.altitude = newAltitude
-//                    print("camera")
-//                })
-//               
-//            } else {
-            print(mapView.camera.altitude)
-
-            if mapView.camera.altitude > 10_700_000 && mapView .camera.altitude < 28_700_000 {
-                let change = 0.03
-                let delta = zoomIn ? 1 - change : 1 + change
-                let newAltitude = mapView.camera.altitude * delta
-                
-                mapView.camera.altitude = newAltitude
-                print("camera")
-            } else {
-                let change = 0.55
-                let delta = zoomIn ? 1 - change : 1 + change
-                var span = mapView.region.span
-                print("region")
-                span.latitudeDelta *= delta
-                span.longitudeDelta *= delta
-                
-                let newRegion = MKCoordinateRegion(center: mapView.centerCoordinate, span: span)
-                mapView.setRegion(newRegion, animated: true)
-            }
             
         }
     }
@@ -437,3 +393,69 @@ extension MapViewController {
         defaults.set(lastKnownLong, forKey: UserDefaultKeys.lastKnownSpaceInLongitude.rawValue)
     }
 }
+
+
+//MARK: - Button Targets
+extension MapViewController {
+    @objc fileprivate func profileButtonPressed() {
+        presentProfileVC()
+    }
+    
+    private func presentProfileVC() {
+        let profileVC = ProfileVC()
+        profileVC.modalPresentationStyle = .overCurrentContext
+        
+        self.present(profileVC, animated: true, completion: nil)
+    }
+}
+
+
+
+
+
+////Mark:- Zoom
+//extension MapViewController {
+//    fileprivate func processZoomAction(zoomIn: Bool) {
+//        if mapView.isIn3DMode() {
+//            print("3d")
+//        } else {
+//
+////            //  until the altitude reaches 36185300.1305086 use the camera to zoom since changing the region looks like crap
+////
+////            if mapView.camera.altitude > 4_000_000.0 {
+////                MKMapView.animate(withDuration: 0.3, animations: {
+////                    let change = 0.03
+////                    let delta = zoomIn ? 1 - change : 1 + change
+////                    let newAltitude = mapView.camera.altitude * delta
+////
+////                    mapView.camera.altitude = newAltitude
+////                    print("camera")
+////                })
+////
+////            } else {
+//            print(mapView.camera.altitude)
+//
+//            if mapView.camera.altitude > 10_700_000 && mapView .camera.altitude < 28_700_000 {
+//                let change = 0.03
+//                let delta = zoomIn ? 1 - change : 1 + change
+//                let newAltitude = mapView.camera.altitude * delta
+//
+//                mapView.camera.altitude = newAltitude
+//                print("camera")
+//            } else {
+//                let change = 0.55
+//                let delta = zoomIn ? 1 - change : 1 + change
+//                var span = mapView.region.span
+//                print("region")
+//                span.latitudeDelta *= delta
+//                span.longitudeDelta *= delta
+//
+//                let newRegion = MKCoordinateRegion(center: mapView.centerCoordinate, span: span)
+//                mapView.setRegion(newRegion, animated: true)
+//            }
+//
+//        }
+//    }
+//}
+
+

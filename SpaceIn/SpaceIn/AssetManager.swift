@@ -15,7 +15,6 @@ enum AssetName: String {
     case loginBackground = "loginBackground"
     case backButton = "SpaceinBack"
     case signUpButtonGradient = "gradientGreen"
-    case rickyHeadshot = "rickySquare"
     case transparentPin = "mapProfile"
     case spaceinGradient = "gradient"
     case brokenPin = "brokenGPS"
@@ -25,6 +24,8 @@ enum AssetName: String {
     case notification = "notification"
     case zoomIn = "zoomIn"
     case zoomOut = "zooomOut"
+    case profilePlaceholder = "profilePlaceHolder"
+    case dismissButton = "dismissButton"
     
 }
 
