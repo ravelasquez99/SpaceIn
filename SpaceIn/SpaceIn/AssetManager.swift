@@ -27,6 +27,7 @@ enum AssetName: String {
     case profilePlaceholder = "profilePlaceHolder"
     case dismissButton = "dismissButton"
     case settingsButton = "settingsButton"
+    case rickySquare = "rickySquare"
     
 }
 

@@ -11,7 +11,19 @@ import UIKit
 class ProfileVC: UIViewController {
     
     //MARK: - UI
-    let containerView = UIView(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let containerView = UIView(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let imageContainerView = UIView(frame: CGRect.zero)
+    fileprivate let imageView = UIImageView(frame: CGRect.zero)
+    fileprivate let nameLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let ageLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let locationView = UIView(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let locationIconImageView = UIImageView(frame: CGRect.zero)
+    fileprivate let jobView = UIView(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let jobIconImageView = UIImageView(frame: CGRect.zero)
+    fileprivate let jobLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let bioView = UITextView(frame: CGRect.zero)
+    fileprivate let startConvoLogOutButon = RoundedButton(filledIn: true, color: StyleGuideManager.floatingSpaceinLabelColor)
+    fileprivate let toggleView = UIView(asConstrainable: true, frame: CGRect.zero)
     
     //MARK: - Layout Values
     fileprivate static let containerViewWidthMultiplier: CGFloat = 0.75
@@ -19,14 +31,26 @@ class ProfileVC: UIViewController {
     fileprivate static let closeButtonTopPadding: CGFloat = 5.0
     fileprivate static let closeButtonRightPadding: CGFloat = 30.0
     fileprivate static let closeButtonHeight: CGFloat = 40.0
+    fileprivate static let imageViewHeight: CGFloat = 78.0
+    fileprivate static let nameLabelTopPadding: CGFloat = 5.0
+    fileprivate static let nameLabelHeight: CGFloat = 25.0
+    fileprivate static let ageLabelTopPadding: CGFloat = 1.0
+    fileprivate static let ageLabelHeight: CGFloat = 25.0
+    fileprivate static let locationAndJobViewHeight: CGFloat = 40
     
     //MARK: - Properties
     var isUserProfile = true
     var isExpanded = false
+    fileprivate var viewAppeared = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupBackground()
     }
     
 }
@@ -35,24 +59,26 @@ class ProfileVC: UIViewController {
 //MARK: - Setup View
 extension ProfileVC {
     fileprivate func setup() {
-        setupBackground()
         setupContainerView()
     }
     
-    private func setupBackground() {
+   fileprivate func setupBackground() {
+    guard viewAppeared == false else { return }
+    
         if !UIAccessibilityIsReduceTransparencyEnabled() {
-            self.view.backgroundColor = UIColor.clear
+            view.backgroundColor = UIColor.clear
             
             let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
             //always fill the view
             blurEffectView.frame = self.view.bounds
             blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            
-            self.view.addSubview(blurEffectView) //if you have more UIViews, use an insertSubview API to place it where needed
+            view.insertSubview(blurEffectView, at: 0)
         } else {
             view.backgroundColor = .clear
         }
+    
+        viewAppeared = true
         
     }
     
@@ -62,17 +88,21 @@ extension ProfileVC {
         view.addSubview(containerView)
         containerView.constrainCenterInside(view: view)
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: ProfileVC.containerViewWidthMultiplier).isActive = true
-        containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: ProfileVC.containerViewheightMultiplier).isActive = true
+        //height is inferred by subview heights
         
         containerView.layer.cornerRadius = 8.0
         containerView.clipsToBounds = true
         
         setupCloseButton()
         setupSettingsButton()
-        //round corners
-        //constrain
-        //add subviews
-        
+        setupProfileImage()
+        setupNameLabel()
+        setupAgeLabel()
+        setupLocationView()
+        setupjobView()
+        setupBioView()
+        setupLogOutStartConversationButton()
+        setupToggleView()
     }
     
     private func setupCloseButton() {
@@ -121,6 +151,145 @@ extension ProfileVC {
         settingsButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topPadding).isActive = true
         
         settingsButton.addTarget(self, action: #selector(settingsPressed), for: .touchUpInside)
+    }
+    
+    private func setupProfileImage() {
+        guard let profileImage = UIImage(named: AssetName.rickySquare.rawValue) else {
+            print("the profile image is not there")
+            return
+        }
+        
+        imageView.image = profileImage
+        
+        // we add a clear view to hold the imageview that way we can keep the height for the contraints. we then add the imageview with a frame based layout
+        
+
+        imageContainerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(imageContainerView)
+        
+        imageContainerView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        imageContainerView.widthAnchor.constraint(equalToConstant: ProfileVC.imageViewHeight).isActive = true
+        imageContainerView.heightAnchor.constraint(equalToConstant: ProfileVC.imageViewHeight).isActive = true
+        imageContainerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ProfileVC.imageViewHeight).isActive = true
+        
+        imageContainerView.addSubview(imageView)
+        
+        imageView.frame = CGRect(x: 0, y: 0, width: ProfileVC.imageViewHeight, height: ProfileVC.imageViewHeight)
+        
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.borderWidth = 1
+        imageView.layer.masksToBounds = false
+        imageView.layer.borderColor = UIColor.clear.cgColor
+        imageView.layer.cornerRadius = imageView.frame.height/2
+        imageView.clipsToBounds = true
+    }
+    
+    private func setupNameLabel() {
+        nameLabel.text = "Ricky Velasquez"
+        nameLabel.font = StyleGuideManager.sharedInstance.profileNameLabelFont()
+        nameLabel.textAlignment = .center
+        nameLabel.textColor = .black
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.5
+        
+        containerView.addSubview(nameLabel)
+        nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: ProfileVC.nameLabelTopPadding).isActive = true
+        nameLabel.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.9, constant: 0).isActive = true
+        nameLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        nameLabel.heightAnchor.constraint(equalToConstant: ProfileVC.nameLabelHeight).isActive = true
+
+    }
+    
+    private func setupAgeLabel() {
+        ageLabel.text = "26"
+        ageLabel.font = StyleGuideManager.sharedInstance.profileSublabelFont()
+        ageLabel.textAlignment = .center
+        ageLabel.textColor = .lightGray
+        ageLabel.adjustsFontSizeToFitWidth = true
+        ageLabel.minimumScaleFactor = 0.5
+
+        containerView.addSubview(ageLabel)
+        
+        ageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: ProfileVC.ageLabelTopPadding).isActive = true
+        ageLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        ageLabel.heightAnchor.constraint(equalToConstant: ProfileVC.ageLabelHeight).isActive = true
+        ageLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
+    }
+    
+    private func setupLocationView() {
+        locationView.backgroundColor = UIColor.orange
+        
+        containerView.addSubview(locationView)
+        locationView.topAnchor.constraint(equalTo: ageLabel.bottomAnchor, constant: ProfileVC.ageLabelTopPadding).isActive = true
+        locationView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        locationView.heightAnchor.constraint(equalToConstant: ProfileVC.locationAndJobViewHeight).isActive = true
+        locationView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.65).isActive = true
+        
+        setupLocationViewSubviews()
+        
+    }
+    
+    private func setupLocationViewSubviews() {
+        
+    }
+    
+    private func setupjobView() {
+        jobView.backgroundColor = UIColor.blue
+        
+        containerView.addSubview(jobView)
+        jobView.topAnchor.constraint(equalTo: locationView.bottomAnchor, constant: ProfileVC.ageLabelTopPadding).isActive = true
+        jobView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        jobView.heightAnchor.constraint(equalToConstant: ProfileVC.locationAndJobViewHeight).isActive = true
+        jobView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.65).isActive = true
+        
+        setupJobViewSubviews()
+    }
+    
+    private func setupJobViewSubviews() {
+    }
+    
+    private func setupBioView() {
+        bioView.isEditable = false
+        let text = "Hi, I'm ricky. This is my bio. I am typing words to make a typical bio. So I have one sentence here. Then I have another sentence here. This seems long enough."
+        bioView.font = StyleGuideManager.sharedInstance.profileSublabelFont()
+        bioView.text = text
+        
+        bioView.textColor = .lightGray
+        bioView.textAlignment = .center
+        
+        bioView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(bioView)
+        
+        bioView.topAnchor.constraint(equalTo: jobView.topAnchor, constant: 40).isActive = true
+        bioView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        bioView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        bioView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
+        
+
+    }
+    
+    private func setupLogOutStartConversationButton() {
+        startConvoLogOutButon.translatesAutoresizingMaskIntoConstraints = false
+        startConvoLogOutButon.setTitle("button title", for: .normal)
+        
+        containerView.addSubview(startConvoLogOutButon)
+        startConvoLogOutButon.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        startConvoLogOutButon.topAnchor.constraint(equalTo: bioView.bottomAnchor, constant: 20).isActive = true
+        startConvoLogOutButon.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        startConvoLogOutButon.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
+
+    }
+    
+    private func setupToggleView() {
+        containerView.addSubview(toggleView)
+        toggleView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        toggleView.topAnchor.constraint(equalTo: startConvoLogOutButon.bottomAnchor, constant: 30).isActive = true
+        toggleView.widthAnchor.constraint(equalTo: startConvoLogOutButon.widthAnchor, multiplier: 0.5).isActive = true
+        toggleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        toggleView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -50).isActive = true
+        
+        toggleView.backgroundColor = .yellow
     }
 }
 

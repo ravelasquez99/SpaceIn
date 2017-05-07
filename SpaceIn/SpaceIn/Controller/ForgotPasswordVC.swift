@@ -85,7 +85,7 @@ extension ForgotPasswordVC {
         self.closeButton.addTarget(self, action: #selector(self.closeButtonPressed), for: .touchUpInside)
     }
     
-    fileprivate func constrainCloseButton() {
+    private func constrainCloseButton() {
         self.closeButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: LoginRegisterVC.closeButtonSidePadding).isActive = true
         self.closeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: LoginRegisterVC.closeButtonWidthHeight).isActive = true
         self.closeButton.constrainWidthAndHeightToValueAndActivate(value: LoginRegisterVC.closeButtonWidthHeight)

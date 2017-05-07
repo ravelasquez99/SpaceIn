@@ -68,6 +68,15 @@ public class StyleGuideManager {
     func forgotPasswordPageFont() -> UIFont {
         return UIFont(name: "Helvetica Light", size: 17)!
     }
+    
+    //MARK: - Profile
+    func profileNameLabelFont() -> UIFont {
+        return UIFont(name: "Helvetica", size: 20)!
+    }
+    
+    func profileSublabelFont() -> UIFont {
+        return UIFont(name: "Helvetica Light", size: 16)!
+    }
 }
 
 
