@@ -284,6 +284,8 @@ extension MapViewController {
     private func setupNotificationButton() {
         let notificationImage = UIImage(named: AssetName.notification.rawValue)
         setupRounded(button: notificationsButton, withImage: notificationImage)
+        
+        notificationsButton.addTarget(self, action: #selector(notificationsButtonPressed), for: .touchUpInside)
     }
     
     private func setupLocateMeButton() {
@@ -395,19 +397,38 @@ extension MapViewController {
 }
 
 
-//MARK: - Button Targets
+//MARK: - Profile
 extension MapViewController {
     @objc fileprivate func profileButtonPressed() {
         presentProfileVC()
     }
     
     private func presentProfileVC() {
-        let profileVC = ProfileVC()
+        let profileVC = ProfileVC(ShouldLayoutAsUserProfile: true)
         profileVC.modalPresentationStyle = .overCurrentContext
         
         self.present(profileVC, animated: true, completion: nil)
     }
 }
+
+
+
+//MARK: - Profile
+extension MapViewController {
+    @objc fileprivate func notificationsButtonPressed() {
+        presentNotificationsVC()
+    }
+    
+    private func presentNotificationsVC() {
+        let profileVC = ProfileVC(ShouldLayoutAsUserProfile: false)
+        profileVC.modalPresentationStyle = .overCurrentContext
+        
+        self.present(profileVC, animated: true, completion: nil)
+    }
+}
+
+
+
 
 
 

@@ -54,12 +54,19 @@ class ProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupBackground()
+        animateBlurEffectView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        animateBlurEffectView()
         viewAppeared = true
+    }
+    
+    
+    public convenience init(ShouldLayoutAsUserProfile: Bool) {
+        self.init()
+        self.isUserProfile = ShouldLayoutAsUserProfile
+        
     }
     
 }
@@ -285,7 +292,9 @@ extension ProfileVC {
     
     private func setupLogOutStartConversationButton() {
         startConvoLogOutButton.translatesAutoresizingMaskIntoConstraints = false
-        startConvoLogOutButton.setTitle("button title", for: .normal)
+        
+        let buttonTitle = isUserProfile ? "Log Out" : "Start Conversation"
+        startConvoLogOutButton.setTitle(buttonTitle, for: .normal)
         
         containerView.addSubview(startConvoLogOutButton)
         startConvoLogOutButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
