@@ -16,13 +16,15 @@ class ProfileVC: UIViewController {
     fileprivate let imageView = UIImageView(frame: CGRect.zero)
     fileprivate let nameLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
     fileprivate let ageLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
-    fileprivate let locationView = UIView(asConstrainable: true, frame: CGRect.zero)
-    fileprivate let locationIconImageView = UIImageView(frame: CGRect.zero)
-    fileprivate let jobView = UIView(asConstrainable: true, frame: CGRect.zero)
     fileprivate let jobIconImageView = UIImageView(frame: CGRect.zero)
-    fileprivate let jobLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
     fileprivate let bioView = UITextView(frame: CGRect.zero)
     fileprivate let startConvoLogOutButton = RoundedButton(filledIn: true, color: StyleGuideManager.floatingSpaceinLabelColor)
+    
+    fileprivate let locationIcon = UIImageView(image: UIImage(named: AssetName.profileLocation.rawValue), asConstrainable: true)
+    fileprivate let locationLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
+    
+    fileprivate let jobIcon = UIImageView(image: UIImage(named: AssetName.jobIcon.rawValue), asConstrainable: true)
+    fileprivate let jobLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
     
     //MARK: - Layout Values
     fileprivate static let containerViewWidthMultiplier: CGFloat = 0.75
@@ -34,8 +36,9 @@ class ProfileVC: UIViewController {
     fileprivate static let nameLabelTopPadding: CGFloat = 5.0
     fileprivate static let nameLabelHeight: CGFloat = 25.0
     fileprivate static let ageLabelTopPadding: CGFloat = 1.0
+    fileprivate static let locationLabelBottomPadding: CGFloat = 6.0
     fileprivate static let ageLabelHeight: CGFloat = 25.0
-    fileprivate static let locationAndJobViewHeight: CGFloat = 40
+    fileprivate static let locationAndJobViewHeight: CGFloat = 20
     
     //MARK: - Properties
     var isUserProfile = true
@@ -59,10 +62,11 @@ class ProfileVC: UIViewController {
 extension ProfileVC {
     fileprivate func setup() {
         setupContainerView()
+        setupBackground()
     }
     
    fileprivate func setupBackground() {
-    guard viewAppeared == false else { return }
+    //guard viewAppeared == false else { return }
     
         if !UIAccessibilityIsReduceTransparencyEnabled() {
             view.backgroundColor = UIColor.clear
@@ -77,7 +81,7 @@ extension ProfileVC {
             view.backgroundColor = .clear
         }
     
-        viewAppeared = true
+        // viewAppeared = true
         
     }
     
@@ -97,8 +101,7 @@ extension ProfileVC {
         setupProfileImage()
         setupNameLabel()
         setupAgeLabel()
-        setupLocationView()
-        setupjobView()
+        setupLoatonAndJobView()
         setupBioView()
         setupLogOutStartConversationButton()
         setupToggleView()
@@ -215,36 +218,37 @@ extension ProfileVC {
         ageLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
-    private func setupLocationView() {
-        locationView.backgroundColor = UIColor.orange
+    private func setupLoatonAndJobView() {
+        setupIconWithLabel(icon: locationIcon, label: locationLabel, constrainBelow: ageLabel, amount: ProfileVC.ageLabelTopPadding)
+        setupIconWithLabel(icon: jobIcon, label: jobLabel, constrainBelow: locationLabel, amount: ProfileVC.locationLabelBottomPadding)
         
-        containerView.addSubview(locationView)
-        locationView.topAnchor.constraint(equalTo: ageLabel.bottomAnchor, constant: ProfileVC.ageLabelTopPadding).isActive = true
-        locationView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
-        locationView.heightAnchor.constraint(equalToConstant: ProfileVC.locationAndJobViewHeight).isActive = true
-        locationView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.65).isActive = true
-        
-        setupLocationViewSubviews()
+        locationLabel.text = "San Francisco, CA"
+        jobLabel.text = "Engineeer - Spacein"
         
     }
     
-    private func setupLocationViewSubviews() {
+    private func setupIconWithLabel(icon: UIImageView, label: UILabel, constrainBelow: UIView, amount: CGFloat) {
+        containerView.addSubview(label)
+        containerView.addSubview(icon)
+
         
-    }
-    
-    private func setupjobView() {
-        jobView.backgroundColor = UIColor.blue
+        label.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        label.topAnchor.constraint(equalTo: constrainBelow.bottomAnchor, constant: amount).isActive = true
+        label.heightAnchor.constraint(equalToConstant: ProfileVC.locationAndJobViewHeight).isActive = true
+        label.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.45).isActive = true
         
-        containerView.addSubview(jobView)
-        jobView.topAnchor.constraint(equalTo: locationView.bottomAnchor, constant: ProfileVC.ageLabelTopPadding).isActive = true
-        jobView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
-        jobView.heightAnchor.constraint(equalToConstant: ProfileVC.locationAndJobViewHeight).isActive = true
-        jobView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.65).isActive = true
+        icon.centerYAnchor.constraint(equalTo: label.centerYAnchor).isActive = true
+        icon.widthAnchor.constraint(equalToConstant: ProfileVC.locationAndJobViewHeight).isActive = true
+        icon.heightAnchor.constraint(equalToConstant: ProfileVC.locationAndJobViewHeight).isActive = true
+        icon.rightAnchor.constraint(equalTo: label.leftAnchor, constant: -5).isActive = true
         
-        setupJobViewSubviews()
-    }
-    
-    private func setupJobViewSubviews() {
+        icon.contentMode = .scaleAspectFit
+
+        label.textAlignment = .center
+        label.font = StyleGuideManager.sharedInstance.profileSublabelFont()
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.textColor = .lightGray
     }
     
     private func setupBioView() {
@@ -259,7 +263,7 @@ extension ProfileVC {
         bioView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(bioView)
         
-        bioView.topAnchor.constraint(equalTo: jobView.topAnchor, constant: 40).isActive = true
+        bioView.topAnchor.constraint(equalTo: jobLabel.topAnchor, constant: 40).isActive = true
         bioView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
         bioView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         bioView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
@@ -291,9 +295,6 @@ extension ProfileVC {
         toggle.heightAnchor.constraint(equalTo: startConvoLogOutButton.heightAnchor, multiplier: 0.75).isActive = true
         toggle.backgroundColor = .green
 
-        
-      
-        
         
         let notificationsText = "Notifications: ON"
         let notifciationsLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
