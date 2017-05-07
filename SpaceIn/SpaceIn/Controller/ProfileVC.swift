@@ -11,6 +11,7 @@ import UIKit
 class ProfileVC: UIViewController {
     
     //MARK: - UI
+    fileprivate let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light))
     fileprivate let containerView = UIView(asConstrainable: true, frame: CGRect.zero)
     fileprivate let imageContainerView = UIView(frame: CGRect.zero)
     fileprivate let imageView = UIImageView(frame: CGRect.zero)
@@ -50,9 +51,15 @@ class ProfileVC: UIViewController {
         setup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupBackground()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupBackground()
+        animateBlurEffectView()
+        viewAppeared = true
     }
     
 }
@@ -62,27 +69,32 @@ class ProfileVC: UIViewController {
 extension ProfileVC {
     fileprivate func setup() {
         setupContainerView()
-        setupBackground()
+        //setupBackground()
     }
     
    fileprivate func setupBackground() {
-    //guard viewAppeared == false else { return }
+    guard viewAppeared == false else { return }
     
         if !UIAccessibilityIsReduceTransparencyEnabled() {
             view.backgroundColor = UIColor.clear
-            
-            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+
             //always fill the view
-            blurEffectView.frame = self.view.bounds
+            
             blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             view.insertSubview(blurEffectView, at: 0)
+            blurEffectView.frame = CGRect(x: view.frame.width / 2, y: view.frame.height / 2, width: 0, height: 0)
+
         } else {
             view.backgroundColor = .clear
         }
+    }
     
-        // viewAppeared = true
-        
+    fileprivate func animateBlurEffectView() {
+        guard viewAppeared == false else { return }
+
+        UIView.animate(withDuration: 0.5) {
+            self.blurEffectView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        }
     }
     
     private func setupContainerView() {
@@ -291,10 +303,11 @@ extension ProfileVC {
         
         toggle.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         toggle.topAnchor.constraint(equalTo: startConvoLogOutButton.bottomAnchor, constant: 20).isActive = true
-        toggle.widthAnchor.constraint(equalTo: startConvoLogOutButton.widthAnchor, multiplier: 0.3).isActive = true
+        toggle.widthAnchor.constraint(equalToConstant: 40).isActive = true
         toggle.heightAnchor.constraint(equalTo: startConvoLogOutButton.heightAnchor, multiplier: 0.75).isActive = true
-        toggle.backgroundColor = .green
 
+        toggle.onTintColor = StyleGuideManager.floatingSpaceinLabelColor
+        toggle.isOn = true
         
         let notificationsText = "Notifications: ON"
         let notifciationsLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
