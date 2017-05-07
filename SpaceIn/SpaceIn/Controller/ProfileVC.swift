@@ -21,6 +21,9 @@ class ProfileVC: UIViewController {
     fileprivate let bioView = UITextView(frame: CGRect.zero)
     fileprivate let startConvoLogOutButton = RoundedButton(filledIn: true, color: StyleGuideManager.floatingSpaceinLabelColor)
     
+    fileprivate let notifciationsLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
+
+    
     fileprivate let locationIcon = UIImageView(image: UIImage(named: AssetName.profileLocation.rawValue), asConstrainable: true)
     fileprivate let locationLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
     
@@ -316,11 +319,7 @@ extension ProfileVC {
         toggle.heightAnchor.constraint(equalTo: startConvoLogOutButton.heightAnchor, multiplier: 0.75).isActive = true
 
         toggle.onTintColor = StyleGuideManager.floatingSpaceinLabelColor
-        toggle.isOn = true
-        
-        let notificationsText = "Notifications: ON"
-        let notifciationsLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
-        notifciationsLabel.text = notificationsText
+        toggle.isOn = toggleShouldBeOn()
         
         containerView.addSubview(notifciationsLabel)
         notifciationsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -333,6 +332,8 @@ extension ProfileVC {
         
         notifciationsLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -50).isActive = true
         notifciationsLabel.textAlignment = .center
+        
+        setNotificationsText(on: toggle.isOn)
     }
 }
 
@@ -347,3 +348,28 @@ extension ProfileVC {
         print("settings pressed")
     }
 }
+
+//MARK: - Notification
+extension ProfileVC {
+    fileprivate func toggleShouldBeOn() -> Bool {
+        return true
+    }
+    
+    
+    fileprivate func setNotificationsText(on: Bool) {
+        let labelFont = StyleGuideManager.sharedInstance.profileNotificationsFont()
+        let attributes = [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: UIColor.lightGray]
+        
+        let notificationsText = NSString(string: "Notifications: ON")
+        let attributedText = NSMutableAttributedString(string: notificationsText as String, attributes: attributes)
+        
+        let rangeForDifferentText = notificationsText.range(of: "ON")
+        
+        attributedText.addAttributes([NSForegroundColorAttributeName: StyleGuideManager.floatingSpaceinLabelColor], range: rangeForDifferentText)
+        
+        notifciationsLabel.attributedText = attributedText
+
+    }
+}
+
+

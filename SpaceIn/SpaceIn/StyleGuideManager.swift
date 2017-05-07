@@ -77,6 +77,10 @@ public class StyleGuideManager {
     func profileSublabelFont() -> UIFont {
         return UIFont(name: "Helvetica Light", size: 16)!
     }
+    
+    func profileNotificationsFont() -> UIFont {
+        return UIFont(name: "Helvetica Light", size: 10)!
+    }
 }
 
 
