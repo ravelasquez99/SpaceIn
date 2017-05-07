@@ -22,8 +22,7 @@ class ProfileVC: UIViewController {
     fileprivate let jobIconImageView = UIImageView(frame: CGRect.zero)
     fileprivate let jobLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
     fileprivate let bioView = UITextView(frame: CGRect.zero)
-    fileprivate let startConvoLogOutButon = RoundedButton(filledIn: true, color: StyleGuideManager.floatingSpaceinLabelColor)
-    fileprivate let toggleView = UIView(asConstrainable: true, frame: CGRect.zero)
+    fileprivate let startConvoLogOutButton = RoundedButton(filledIn: true, color: StyleGuideManager.floatingSpaceinLabelColor)
     
     //MARK: - Layout Values
     fileprivate static let containerViewWidthMultiplier: CGFloat = 0.75
@@ -269,27 +268,48 @@ extension ProfileVC {
     }
     
     private func setupLogOutStartConversationButton() {
-        startConvoLogOutButon.translatesAutoresizingMaskIntoConstraints = false
-        startConvoLogOutButon.setTitle("button title", for: .normal)
+        startConvoLogOutButton.translatesAutoresizingMaskIntoConstraints = false
+        startConvoLogOutButton.setTitle("button title", for: .normal)
         
-        containerView.addSubview(startConvoLogOutButon)
-        startConvoLogOutButon.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
-        startConvoLogOutButon.topAnchor.constraint(equalTo: bioView.bottomAnchor, constant: 20).isActive = true
-        startConvoLogOutButon.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        startConvoLogOutButon.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
+        containerView.addSubview(startConvoLogOutButton)
+        startConvoLogOutButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
+        startConvoLogOutButton.topAnchor.constraint(equalTo: bioView.bottomAnchor, constant: 20).isActive = true
+        startConvoLogOutButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        startConvoLogOutButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
 
     }
     
     private func setupToggleView() {
-        containerView.addSubview(toggleView)
-        toggleView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
-        toggleView.topAnchor.constraint(equalTo: startConvoLogOutButon.bottomAnchor, constant: 30).isActive = true
-        toggleView.widthAnchor.constraint(equalTo: startConvoLogOutButon.widthAnchor, multiplier: 0.5).isActive = true
-        toggleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        let toggle = UISwitch(frame: CGRect.zero)
+        containerView.addSubview(toggle)
         
-        toggleView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -50).isActive = true
+        toggle.translatesAutoresizingMaskIntoConstraints = false
         
-        toggleView.backgroundColor = .yellow
+        toggle.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        toggle.topAnchor.constraint(equalTo: startConvoLogOutButton.bottomAnchor, constant: 20).isActive = true
+        toggle.widthAnchor.constraint(equalTo: startConvoLogOutButton.widthAnchor, multiplier: 0.3).isActive = true
+        toggle.heightAnchor.constraint(equalTo: startConvoLogOutButton.heightAnchor, multiplier: 0.75).isActive = true
+        toggle.backgroundColor = .green
+
+        
+      
+        
+        
+        let notificationsText = "Notifications: ON"
+        let notifciationsLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
+        notifciationsLabel.text = notificationsText
+        
+        containerView.addSubview(notifciationsLabel)
+        notifciationsLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        notifciationsLabel.topAnchor.constraint(equalTo: toggle.bottomAnchor, constant: 5).isActive = true
+        notifciationsLabel.centerXAnchor.constraint(equalTo: toggle.centerXAnchor).isActive = true
+        
+        notifciationsLabel.heightAnchor.constraint(equalTo: toggle.heightAnchor, multiplier: 0.5).isActive = true
+        notifciationsLabel.widthAnchor.constraint(equalTo: startConvoLogOutButton.widthAnchor, constant: 0.45).isActive = true
+        
+        notifciationsLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -50).isActive = true
+        notifciationsLabel.textAlignment = .center
     }
 }
 
