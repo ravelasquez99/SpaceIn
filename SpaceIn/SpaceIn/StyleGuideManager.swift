@@ -78,6 +78,10 @@ public class StyleGuideManager {
         return UIFont(name: "Helvetica Light", size: 16)!
     }
     
+    func profileBioFont() -> UIFont {
+        return UIFont(name: "Helvetica Light", size: 14)!
+    }
+    
     func profileNotificationsFont() -> UIFont {
         return UIFont(name: "Helvetica Light", size: 10)!
     }

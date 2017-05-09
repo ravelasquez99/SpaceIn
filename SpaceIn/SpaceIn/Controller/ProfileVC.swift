@@ -44,9 +44,10 @@ class ProfileVC: UIViewController {
     //MARK: - Layout Values
     fileprivate static let containerViewWidthMultiplier: CGFloat = 0.75
     fileprivate static let containerViewheightMultiplier: CGFloat = 0.65
-    fileprivate static let closeButtonTopPadding: CGFloat = 5.0
+    fileprivate static let closeButtonTopPadding: CGFloat = 0.0
     fileprivate static let closeButtonRightPadding: CGFloat = 30.0
     fileprivate static let closeButtonHeight: CGFloat = 40.0
+    fileprivate static let imageViewTopPadding: CGFloat = 70.0
     fileprivate static let imageViewHeight: CGFloat = 78.0
     fileprivate static let nameLabelTopPadding: CGFloat = 5.0
     fileprivate static let nameLabelHeight: CGFloat = 25.0
@@ -54,6 +55,7 @@ class ProfileVC: UIViewController {
     fileprivate static let locationLabelBottomPadding: CGFloat = 6.0
     fileprivate static let ageLabelHeight: CGFloat = 25.0
     fileprivate static let locationAndJobViewHeight: CGFloat = 20
+    fileprivate static let bioViewHeight: CGFloat = 80
     fileprivate static let defaultButtonHeight: CGFloat = 40
     fileprivate static let switchHeightMultiplier: CGFloat = 0.75
     fileprivate static let notificationLabelHeightMultiplier: CGFloat = 0.5
@@ -210,7 +212,7 @@ extension ProfileVC {
         imageContainerView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
         imageContainerView.widthAnchor.constraint(equalToConstant: ProfileVC.imageViewHeight).isActive = true
         imageContainerView.heightAnchor.constraint(equalToConstant: ProfileVC.imageViewHeight).isActive = true
-        imageContainerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ProfileVC.imageViewHeight).isActive = true
+        imageContainerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ProfileVC.imageViewTopPadding).isActive = true
         
         imageContainerView.addSubview(imageView)
         
@@ -291,8 +293,8 @@ extension ProfileVC {
     
     private func setupBioView() {
         bioView.isEditable = false
-        let text = "Hi, I'm ricky. This is my bio. I am typing words to make a typical bio. So I have one sentence here. Then I have another sentence here. This seems long enough."
-        bioView.font = StyleGuideManager.sharedInstance.profileSublabelFont()
+        let text = "Hi, I'm ricky. This is my bio. I am typing words to make a typical bio. So I have one sentence here. Then I have another sentence here."
+        bioView.font = StyleGuideManager.sharedInstance.profileBioFont()
         bioView.text = text
         
         bioView.textColor = .lightGray
@@ -303,10 +305,8 @@ extension ProfileVC {
         
         bioView.topAnchor.constraint(equalTo: jobLabel.topAnchor, constant: 40).isActive = true
         bioView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
-        bioView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        bioView.heightAnchor.constraint(equalToConstant: ProfileVC.bioViewHeight).isActive = true
         bioView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
-        
-
     }
     
     private func setupLogOutStartConversationButton() {
@@ -451,7 +451,6 @@ extension ProfileVC {
     fileprivate func toggleShouldBeOn() -> Bool {
         return true
     }
-    
     
     fileprivate func setNotificationsText(on: Bool) {
         let labelFont = StyleGuideManager.sharedInstance.profileNotificationsFont()
