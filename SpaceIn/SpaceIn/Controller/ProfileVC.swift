@@ -76,7 +76,7 @@ class ProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupBackground()
-        animateBlurEffectView()
+        addBlurEffectViewFrame()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -117,12 +117,11 @@ extension ProfileVC {
         }
     }
     
-    fileprivate func animateBlurEffectView() {
+    fileprivate func addBlurEffectViewFrame() {
         guard viewAppeared == false else { return }
 
-        UIView.animate(withDuration: 0.5) {
-            self.blurEffectView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-        }
+        self.blurEffectView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        
     }
     
     private func setupContainerView() {
