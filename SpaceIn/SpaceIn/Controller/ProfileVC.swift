@@ -30,6 +30,17 @@ class ProfileVC: UIViewController {
     fileprivate let jobIcon = UIImageView(image: UIImage(named: AssetName.jobIcon.rawValue), asConstrainable: true)
     fileprivate let jobLabel = UILabel(asConstrainable: true, frame: CGRect.zero)
     
+    fileprivate let toggle = UISwitch(frame: CGRect.zero)
+    
+    
+    //MARK: - Constraints
+    fileprivate var buttonHeightConstraint: NSLayoutConstraint?
+    fileprivate var switchHeightConstraint: NSLayoutConstraint?
+    fileprivate var switchToLabelConstraint: NSLayoutConstraint?
+    fileprivate var notificationHeightConstraint: NSLayoutConstraint?
+    fileprivate var labelToBottomConstraint: NSLayoutConstraint?
+    
+    
     //MARK: - Layout Values
     fileprivate static let containerViewWidthMultiplier: CGFloat = 0.75
     fileprivate static let containerViewheightMultiplier: CGFloat = 0.65
@@ -43,6 +54,12 @@ class ProfileVC: UIViewController {
     fileprivate static let locationLabelBottomPadding: CGFloat = 6.0
     fileprivate static let ageLabelHeight: CGFloat = 25.0
     fileprivate static let locationAndJobViewHeight: CGFloat = 20
+    fileprivate static let defaultButtonHeight: CGFloat = 40
+    fileprivate static let switchHeightMultiplier: CGFloat = 0.75
+    fileprivate static let notificationLabelHeightMultiplier: CGFloat = 0.5
+    fileprivate static let notificationsLabelTopPadding: CGFloat = 5
+    fileprivate static let bottomPadding: CGFloat = -50
+    fileprivate static let animationDuration: TimeInterval = 0.5
     
     //MARK: - Properties
     var isUserProfile = true
@@ -69,7 +86,6 @@ class ProfileVC: UIViewController {
     public convenience init(ShouldLayoutAsUserProfile: Bool) {
         self.init()
         self.isUserProfile = ShouldLayoutAsUserProfile
-        
     }
     
 }
@@ -302,13 +318,22 @@ extension ProfileVC {
         containerView.addSubview(startConvoLogOutButton)
         startConvoLogOutButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
         startConvoLogOutButton.topAnchor.constraint(equalTo: bioView.bottomAnchor, constant: 20).isActive = true
-        startConvoLogOutButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        var height: CGFloat = ProfileVC.defaultButtonHeight
+        
+        if isUserProfile && isExpanded == false {
+            height = 0
+            startConvoLogOutButton.alpha = 0.0
+        }
+        
+        buttonHeightConstraint = startConvoLogOutButton.heightAnchor.constraint(equalToConstant: height)
+            
+        buttonHeightConstraint?.isActive = true
         startConvoLogOutButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
 
     }
     
     private func setupToggleView() {
-        let toggle = UISwitch(frame: CGRect.zero)
         containerView.addSubview(toggle)
         
         toggle.translatesAutoresizingMaskIntoConstraints = false
@@ -316,7 +341,9 @@ extension ProfileVC {
         toggle.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         toggle.topAnchor.constraint(equalTo: startConvoLogOutButton.bottomAnchor, constant: 20).isActive = true
         toggle.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        toggle.heightAnchor.constraint(equalTo: startConvoLogOutButton.heightAnchor, multiplier: 0.75).isActive = true
+        
+        setSwitchHeightConstraint(forExpandedState: isExpanded)
+        toggle.alpha = 0.0
 
         toggle.onTintColor = StyleGuideManager.floatingSpaceinLabelColor
         toggle.isOn = toggleShouldBeOn()
@@ -324,14 +351,27 @@ extension ProfileVC {
         containerView.addSubview(notifciationsLabel)
         notifciationsLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        notifciationsLabel.topAnchor.constraint(equalTo: toggle.bottomAnchor, constant: 5).isActive = true
+        var topPaddingForLabel = isUserProfile ? ProfileVC.notificationsLabelTopPadding : 0
+        
+        if isUserProfile && !isExpanded {
+            topPaddingForLabel = 0
+        }
+        
+        switchToLabelConstraint = notifciationsLabel.topAnchor.constraint(equalTo: toggle.bottomAnchor, constant: topPaddingForLabel)
+        switchToLabelConstraint?.isActive = true
+        
         notifciationsLabel.centerXAnchor.constraint(equalTo: toggle.centerXAnchor).isActive = true
         
-        notifciationsLabel.heightAnchor.constraint(equalTo: toggle.heightAnchor, multiplier: 0.5).isActive = true
+        setNotificationLabelHeightConstraint(forExapndedState: isExpanded)
+        
         notifciationsLabel.widthAnchor.constraint(equalTo: startConvoLogOutButton.widthAnchor, constant: 0.45).isActive = true
         
-        notifciationsLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -50).isActive = true
+        labelToBottomConstraint =  notifciationsLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: ProfileVC.bottomPadding)
+        
+        labelToBottomConstraint?.isActive = true
+       
         notifciationsLabel.textAlignment = .center
+        notifciationsLabel.alpha = 0.0
         
         setNotificationsText(on: toggle.isOn)
     }
@@ -343,9 +383,66 @@ extension ProfileVC {
     @objc fileprivate func closePressed() {
         self.dismiss(animated: true, completion: nil)
     }
-    
+}
+
+
+//MARK: - Settings 
+extension ProfileVC {
     @objc fileprivate func settingsPressed() {
-        print("settings pressed")
+        guard isUserProfile else { return }
+        
+        let isExpanding = !isExpanded
+        
+        buttonHeightConstraint?.constant = isExpanding ? ProfileVC.defaultButtonHeight : 0
+        switchToLabelConstraint?.constant = isExpanding ? ProfileVC.notificationsLabelTopPadding : 0
+        
+        setNotificationLabelHeightConstraint(forExapndedState: isExpanding)
+        setSwitchHeightConstraint(forExpandedState: isExpanding)
+        
+        UIView.animate(withDuration: ProfileVC.animationDuration) { 
+            self.view.layoutIfNeeded()
+            self.toggle.alpha = isExpanding ? 1.0 : 0.0
+            self.notifciationsLabel.alpha = isExpanding ? 1.0 : 0.0
+            self.startConvoLogOutButton.alpha = isExpanding ? 1.0 : 0.0
+        }
+        
+        isExpanded = isExpanding
+    }
+    
+    fileprivate func setNotificationLabelHeightConstraint(forExapndedState: Bool) {
+        if notificationHeightConstraint != nil {
+            notifciationsLabel.removeConstraint(notificationHeightConstraint!)
+            notificationHeightConstraint = nil
+        }
+        
+        var notificationLabelHeightMultiplier = ProfileVC.notificationLabelHeightMultiplier
+        
+        if !isUserProfile || !forExapndedState {
+            notificationLabelHeightMultiplier = 0
+        }
+        
+        notificationHeightConstraint = notifciationsLabel.heightAnchor.constraint(equalTo: toggle.heightAnchor, multiplier: notificationLabelHeightMultiplier)
+        notificationHeightConstraint?.isActive = true
+    }
+    
+    fileprivate func setSwitchHeightConstraint(forExpandedState: Bool) {
+        if switchHeightConstraint != nil {
+            toggle.removeConstraint(switchHeightConstraint!)
+            switchHeightConstraint = nil
+        }
+        
+        var multiplierForSwitchHeight = CGFloat(0)
+        
+        if isUserProfile {
+            if forExpandedState {
+                multiplierForSwitchHeight = ProfileVC.switchHeightMultiplier
+            } else {
+                multiplierForSwitchHeight = 0
+            }
+        }
+        
+        switchHeightConstraint = toggle.heightAnchor.constraint(equalTo: startConvoLogOutButton.heightAnchor, multiplier: multiplierForSwitchHeight)
+        switchHeightConstraint?.isActive = true
     }
 }
 
@@ -368,7 +465,6 @@ extension ProfileVC {
         attributedText.addAttributes([NSForegroundColorAttributeName: StyleGuideManager.floatingSpaceinLabelColor], range: rangeForDifferentText)
         
         notifciationsLabel.attributedText = attributedText
-
     }
 }
 
