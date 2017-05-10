@@ -223,6 +223,10 @@ extension ProfileVC {
         imageView.layer.borderColor = UIColor.clear.cgColor
         imageView.layer.cornerRadius = imageView.frame.height/2
         imageView.clipsToBounds = true
+    
+        imageView.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
+        imageView.addGestureRecognizer(gestureRecognizer)
     }
     
     private func setupNameLabel() {
@@ -238,6 +242,11 @@ extension ProfileVC {
         nameLabel.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.9, constant: 0).isActive = true
         nameLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: ProfileVC.nameLabelHeight).isActive = true
+        
+        nameLabel.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
+        nameLabel.addGestureRecognizer(gestureRecognizer)
+        
 
     }
     
@@ -255,6 +264,10 @@ extension ProfileVC {
         ageLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
         ageLabel.heightAnchor.constraint(equalToConstant: ProfileVC.ageLabelHeight).isActive = true
         ageLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        ageLabel.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
+        ageLabel.addGestureRecognizer(gestureRecognizer)
     }
     
     private func setupLoatonAndJobView() {
@@ -263,6 +276,14 @@ extension ProfileVC {
         
         locationLabel.text = "San Francisco, CA"
         jobLabel.text = "Engineeer - Spacein"
+        
+        locationLabel.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
+        locationLabel.addGestureRecognizer(gestureRecognizer)
+        
+        jobLabel.isUserInteractionEnabled = true
+        let gestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
+        jobLabel.addGestureRecognizer(gestureRecognizer2)
         
     }
     
@@ -306,6 +327,11 @@ extension ProfileVC {
         bioView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
         bioView.heightAnchor.constraint(equalToConstant: ProfileVC.bioViewHeight).isActive = true
         bioView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
+        
+        bioView.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
+        bioView.addGestureRecognizer(gestureRecognizer)
+        
     }
     
     private func setupLogOutStartConversationButton() {
@@ -386,6 +412,7 @@ extension ProfileVC {
 
 
 //MARK: - Settings 
+
 extension ProfileVC {
     @objc fileprivate func settingsPressed() {
         guard isUserProfile else { return }
@@ -446,6 +473,7 @@ extension ProfileVC {
 }
 
 //MARK: - Notification
+
 extension ProfileVC {
     fileprivate func toggleShouldBeOn() -> Bool {
         return true
@@ -463,6 +491,32 @@ extension ProfileVC {
         attributedText.addAttributes([NSForegroundColorAttributeName: StyleGuideManager.floatingSpaceinLabelColor], range: rangeForDifferentText)
         
         notifciationsLabel.attributedText = attributedText
+    }
+}
+
+
+
+//MARK: - Editing
+
+extension ProfileVC {
+    @objc fileprivate func tappedEditableView(gesture: UITapGestureRecognizer) {
+        print("tapped")
+        
+        guard isExpanded == true && isUserProfile == true else {
+            print("failed 1")
+            return
+        }
+        
+        guard let viewForGesture = gesture.view else {
+            print("There is no view for the gesture")
+            return
+        }
+        
+        editView(view: viewForGesture)
+    }
+    
+    private func editView(view: UIView) {
+        print("editing view: \(view)")
     }
 }
 
