@@ -133,7 +133,6 @@ extension MapView {
             self.userAnnotation = SpaceinUserAnnotation(withUser: SpaceInUser.current!, coordinate: coordinate)
         }
         
-        
         self.userAnnotation!.coordinate = coordinate
         self.addPin(pin: self.userAnnotation!)
         

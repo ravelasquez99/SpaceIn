@@ -14,6 +14,7 @@ class SpaceInUser: NSObject {
     public static var current : SpaceInUser? {
         didSet {
             SpaceInUser.didSetCurrentUser()
+            SpaceInUser.saveSettingsToUserDefaults()
         }
     }
     
@@ -26,6 +27,9 @@ class SpaceInUser: NSObject {
         self.name = name
         self.email = email
         self.uid = uid
+        super.init()
+        
+        
     }
     
     convenience init (fireBaseUser: FIRUser, coordinate: CLLocationCoordinate2D?) {
@@ -34,10 +38,17 @@ class SpaceInUser: NSObject {
         let uid = fireBaseUser.uid
         
         self.init(name: name, email: email, uid: uid)
-        
+                
         guard let coordinate = coordinate else { return }
-        self.movedToCoordinate(coordinate: coordinate)
+        
+        movedToCoordinate(coordinate: coordinate)
     }
+    
+    
+    static let userIsLoggedInUserDefaultString = "UserIsLoggedIn"
+    static let loggedInUserNameString = "UserName"
+    static let loggedInUserEmailString = "UserEmail"
+    static let loggedInUserUIDString = "UserUID"
 }
 
 
@@ -67,5 +78,19 @@ extension SpaceInUser {
         if SpaceInUser.current != nil {
             NotificationCenter.default.post(name: .DidSetCurrentUser, object: nil)
         }
+    }
+    
+    fileprivate static func saveSettingsToUserDefaults() {
+        guard SpaceInUser.current != nil else {
+            return // we only save the current user to userDefaults
+        }
+        
+        let defaults = UserDefaults.standard
+        
+        defaults.set(SpaceInUser.userIsLoggedIn(), forKey: SpaceInUser.userIsLoggedInUserDefaultString)
+        defaults.set(SpaceInUser.current!.uid, forKey: SpaceInUser.loggedInUserUIDString)
+        defaults.set(SpaceInUser.current!.name, forKey: SpaceInUser.loggedInUserNameString)
+        defaults.set(SpaceInUser.current!.uid, forKey: SpaceInUser.loggedInUserEmailString)
+        defaults.synchronize()
     }
 }
