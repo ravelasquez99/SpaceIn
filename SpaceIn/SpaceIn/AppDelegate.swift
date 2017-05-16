@@ -140,7 +140,9 @@ extension AppDelegate: TutorialVCDelegate {
     private func setupUserSettingsAndLaunchMapVC() {
         let location: CLLocation
         
-        //We check for location in this order 1. the spaceinuserlocation has been set 2. The location manager has a location (which means we can from tutorial most likely 3. We have a saved locations which means we didn't come from the tutorial 4. default location
+        SpaceInUser.setCurrentUserFromUserDefaults()
+        
+        //We check for location in this order 1. the spaceinuserlocation has been set 2. The location manager has a location (which means we can from tutorial most likely 3. default location
         
         if let spaceinUserCoordinate = SpaceInUser.current?.getCoordinate() {
             location = CLLocation(latitude: spaceinUserCoordinate.latitude, longitude: spaceinUserCoordinate.longitude)
@@ -148,11 +150,7 @@ extension AppDelegate: TutorialVCDelegate {
         } else if let locationManagerLocation = LocationManager.sharedInstance.latestLocation() {
             location = locationManagerLocation
             self.setupUserSettingsWithLocation(location: locationManagerLocation)
-            
-        } else if let userDefaultsLocation = self.savedCoordinateFromDefualts(defaults: UserDefaults.standard) {
-            self.setupUserSettingsWithLocation(location: userDefaultsLocation)
-            location = CLLocation(latitude: userDefaultsLocation.coordinate.latitude, longitude: userDefaultsLocation.coordinate.longitude)
-        }  else {
+        } else {
             location = MapViewController.defaultLocation
             self.setupUserSettingsWithLocation(location: location)
         }
@@ -189,26 +187,10 @@ extension AppDelegate: TutorialVCDelegate {
         self.window?.makeKeyAndVisible()
     }
     
-    private func savedCoordinateFromDefualts(defaults: UserDefaults) -> CLLocation? {
-        guard let lat = (defaults.value(forKey: UserDefaultKeys.lastKnownSpaceInLattitude.rawValue) as? CGFloat) else {
-            return nil
-        }
-        
-        guard let long = (defaults.value(forKey: UserDefaultKeys.lastKnownSpaceInLongitude.rawValue) as? CGFloat) else {
-            return nil
-        }
-        
-        let lattitude = Double(lat)
-        let longitude = Double(long)
-        
-        return CLLocation(latitude: lattitude, longitude: longitude)
-    }
-    
-    
     private func setupUserSettingsWithLocation(location: CLLocation) {
-        if let loggedInUser = FirebaseHelper.loggedInUser() {
-            SpaceInUser.current = SpaceInUser(fireBaseUser: loggedInUser, coordinate: location.coordinate)
-        } else if SpaceInUser.current == nil {
+        if SpaceInUser.current != nil{
+            SpaceInUser.current!.movedToCoordinate(coordinate: location.coordinate)
+        } else {
             SpaceInUser.current = SpaceInUser(name: "", email: "", uid: "")
             SpaceInUser.current?.movedToCoordinate(coordinate: location.coordinate)
         }
