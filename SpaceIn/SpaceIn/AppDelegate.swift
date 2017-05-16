@@ -209,7 +209,7 @@ extension AppDelegate: TutorialVCDelegate {
         if let loggedInUser = FirebaseHelper.loggedInUser() {
             SpaceInUser.current = SpaceInUser(fireBaseUser: loggedInUser, coordinate: location.coordinate)
         } else if SpaceInUser.current == nil {
-            SpaceInUser.current = SpaceInUser(name: "Ricky", email: "ravelasquez99@gmail.com", uid: "12345678")
+            SpaceInUser.current = SpaceInUser(name: "", email: "", uid: "")
             SpaceInUser.current?.movedToCoordinate(coordinate: location.coordinate)
         }
     }

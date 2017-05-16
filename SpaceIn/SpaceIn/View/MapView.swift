@@ -125,6 +125,10 @@ extension MapView {
 //MARK: - User Location
 extension MapView {
     public func addUserPin(withCoordinate coordinate: CLLocationCoordinate2D) {
+        guard SpaceInUser.current != nil else {
+            return
+        }
+        
         if self.userAnnotation == nil {
             self.userAnnotation = SpaceinUserAnnotation(withUser: SpaceInUser.current!, coordinate: coordinate)
         }

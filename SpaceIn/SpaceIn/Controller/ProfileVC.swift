@@ -85,9 +85,9 @@ class ProfileVC: UIViewController {
     }
     
     
-    public convenience init(ShouldLayoutAsUserProfile: Bool) {
+    public convenience init(user: SpaceInUser, isCurrentUser: Bool) {
         self.init()
-        self.isUserProfile = ShouldLayoutAsUserProfile
+        self.isUserProfile = isCurrentUser
     }
     
 }

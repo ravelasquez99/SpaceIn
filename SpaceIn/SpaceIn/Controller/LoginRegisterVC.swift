@@ -162,12 +162,19 @@ class LoginRegisterVC : UIViewController {
         }
         
         self.addSpinner()
+        
         FirebaseHelper.loginUser(email: email, password: password, completion: { fbUser, returntype in
             self.stopSpinner()
             if returntype != .Success {
                 self.handleFireBaseReturnTypre(returnType: returntype)
             } else {
-                self.goAway() //breadcrumb - we need to get the users info
+                if fbUser != nil {
+                    SpaceInUser.current = SpaceInUser(fireBaseUser: fbUser!, coordinate: nil)
+                } else {
+                    print("if there is no error there must be a fb user. SOMETHING WENT WRONG")
+                }
+                
+                self.goAway()
             }
         })
         

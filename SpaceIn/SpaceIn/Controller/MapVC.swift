@@ -400,11 +400,15 @@ extension MapViewController {
 //MARK: - Profile
 extension MapViewController {
     @objc fileprivate func profileButtonPressed() {
-        presentProfileVC()
+        if SpaceInUser.userIsLoggedIn() {
+            presentProfileVC(user: SpaceInUser.current!)
+        } else {
+            presentLoginRegister()
+        }
     }
     
-    private func presentProfileVC() {
-        let profileVC = ProfileVC(ShouldLayoutAsUserProfile: true)
+    private func presentProfileVC(user: SpaceInUser) {
+        let profileVC = ProfileVC(user: user, isCurrentUser: user == SpaceInUser.current)
         profileVC.modalPresentationStyle = .overCurrentContext
         
         self.present(profileVC, animated: true, completion: nil)
@@ -420,10 +424,8 @@ extension MapViewController {
     }
     
     private func presentNotificationsVC() {
-        let profileVC = ProfileVC(ShouldLayoutAsUserProfile: false)
-        profileVC.modalPresentationStyle = .overCurrentContext
         
-        self.present(profileVC, animated: true, completion: nil)
+        
     }
 }
 
