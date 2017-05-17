@@ -32,6 +32,13 @@ class ProfileVC: UIViewController {
     
     fileprivate let toggle = UISwitch(frame: CGRect.zero)
     
+    //Textfields
+    fileprivate let nameTextField = UITextField(frame: CGRect.zero)
+    fileprivate let ageTextField = UITextField(frame: CGRect.zero)
+    fileprivate let locationTextField = UITextField(frame: CGRect.zero)
+    fileprivate let jobTextField = UITextField(frame: CGRect.zero)
+    
+
     
     //MARK: - Constraints
     fileprivate var buttonHeightConstraint: NSLayoutConstraint?
@@ -83,7 +90,6 @@ class ProfileVC: UIViewController {
         super.viewDidAppear(animated)
         viewAppeared = true
     }
-    
     
     public convenience init(user: SpaceInUser, isCurrentUser: Bool) {
         self.init()
@@ -516,8 +522,91 @@ extension ProfileVC {
     }
     
     private func editView(view: UIView) {
-        print("editing view: \(view)")
+        if view == imageView || view == imageContainerView {
+            editProfileImage()
+        } else if view == ageLabel{
+            editAge()
+        } else if view == nameLabel {
+            editName()
+        } else if view == locationIcon || view == locationLabel {
+            editLocation()
+        } else if view == jobIcon || view == jobLabel {
+            editJob()
+        } else if view == bioView {
+            editBio()
+        }
+    }
+    
+    private func editProfileImage() {
+        
+    }
+    
+    private func editName() {
+        
+    }
+    
+    private func editAge() {
+        ageTextField.keyboardType = .numberPad
+        ageTextField.text = ageLabel.text
+        ageTextField.font = ageLabel.font
+        ageTextField.textAlignment = ageLabel.textAlignment
+        
+        ageLabel.isHidden = true
+        view.addSubview(ageTextField)
+        ensureViewIsVisibleAfterKeyboardPresentation(view: ageTextField)
+        ageTextField.becomeFirstResponder()
+        ageTextField.delegate = self
+    }
+    
+
+    
+    private func editLocation() {
+        
+    }
+    
+    private func editJob() {
+        
+    }
+    
+    private func editBio() {
+        
     }
 }
+
+
+//MARK: - TextEntry
+
+extension ProfileVC: UITextFieldDelegate {
+    fileprivate func ensureViewIsVisibleAfterKeyboardPresentation(view:UIView) {
+        
+    }
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentCharacterCount = textField.text?.characters.count ?? 0
+        if (range.length + range.location > currentCharacterCount){
+            return false
+        }
+        
+        let allowableRange = characterLimitForView(view: textField)
+        let newLength = currentCharacterCount + string.characters.count - range.length
+        
+        return newLength <= allowableRange
+        
+    }
+    
+    private func characterLimitForView(view: UIView) -> Int {
+        if view == ageTextField {
+            return 3
+        } else {
+            return 0
+        }
+    }
+}
+
 
 

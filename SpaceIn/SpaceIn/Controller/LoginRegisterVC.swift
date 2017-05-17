@@ -204,7 +204,6 @@ class LoginRegisterVC : UIViewController {
                 self.loginIfWeCan()
             }
         })
-        
     }
     
     
