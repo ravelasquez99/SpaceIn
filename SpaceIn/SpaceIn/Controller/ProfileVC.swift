@@ -546,16 +546,19 @@ extension ProfileVC {
     }
     
     private func editAge() {
+        ageTextField.frame = ageLabel.frame
         ageTextField.keyboardType = .numberPad
         ageTextField.text = ageLabel.text
         ageTextField.font = ageLabel.font
         ageTextField.textAlignment = ageLabel.textAlignment
         
         ageLabel.isHidden = true
-        view.addSubview(ageTextField)
+        containerView.addSubview(ageTextField)
         ensureViewIsVisibleAfterKeyboardPresentation(view: ageTextField)
         ageTextField.becomeFirstResponder()
         ageTextField.delegate = self
+        ageTextField.layer.borderColor = UIColor.green.cgColor
+        ageTextField.layer.borderWidth = 2.0
     }
     
 
