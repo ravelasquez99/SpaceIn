@@ -69,11 +69,14 @@ class ProfileVC: UIViewController {
     fileprivate static let notificationsLabelTopPadding: CGFloat = 5
     fileprivate static let bottomPadding: CGFloat = -50
     fileprivate static let animationDuration: TimeInterval = 0.5
+    fileprivate static let doneButtonHeight: CGFloat = 44
     
     //MARK: - Properties
-    var isUserProfile = true
-    var isExpanded = false
+    fileprivate var isUserProfile = true
+    fileprivate var isExpanded = false
     fileprivate var viewAppeared = false
+    fileprivate var editingView: UIView? = nil
+    fileprivate var hiddenView: UIView? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -521,6 +524,7 @@ extension ProfileVC {
         editView(view: viewForGesture)
     }
     
+    
     private func editView(view: UIView) {
         if view == imageView || view == imageContainerView {
             editProfileImage()
@@ -542,29 +546,40 @@ extension ProfileVC {
     }
     
     private func editName() {
+        willEdit(label: nameLabel, with: nameTextField)
+        ensureViewIsVisibleAfterKeyboardPresentation(view: nameTextField)
         
+        nameTextField.returnKeyType = .done
+        nameTextField.becomeFirstResponder()
     }
     
     private func editAge() {
-        ageTextField.frame = ageLabel.frame
-        ageTextField.keyboardType = .numberPad
-        ageTextField.text = ageLabel.text
-        ageTextField.font = ageLabel.font
-        ageTextField.textAlignment = ageLabel.textAlignment
+        willEdit(label: ageLabel, with: ageTextField)
         
-        ageLabel.isHidden = true
-        containerView.addSubview(ageTextField)
+        ageTextField.keyboardType = .numberPad
+        
         ensureViewIsVisibleAfterKeyboardPresentation(view: ageTextField)
+        ageTextField.inputAccessoryView = doneButton()
         ageTextField.becomeFirstResponder()
-        ageTextField.delegate = self
-        ageTextField.layer.borderColor = UIColor.green.cgColor
-        ageTextField.layer.borderWidth = 2.0
     }
     
 
     
     private func editLocation() {
+        willEdit(label: locationLabel, with: locationTextField)
+        ensureViewIsVisibleAfterKeyboardPresentation(view: locationTextField)
         
+        locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        locationTextField.centerXAnchor.constraint(equalTo: locationLabel.centerXAnchor).isActive = true
+        locationTextField.centerYAnchor.constraint(equalTo: locationLabel.centerYAnchor).isActive = true
+        locationTextField.heightAnchor.constraint(equalTo: locationLabel.heightAnchor).isActive = true
+        locationTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
+        
+        locationTextField.backgroundColor = UIColor.blue
+        
+        locationIcon.isHidden = true
+        locationTextField.returnKeyType = .done
+        locationTextField.becomeFirstResponder()
     }
     
     private func editJob() {
@@ -573,6 +588,37 @@ extension ProfileVC {
     
     private func editBio() {
         
+    }
+    
+    
+    private func willEdit(label: UILabel, with textField: UITextField) {
+        endEditing() // added here in case we are switching text fields.
+        
+        textField.frame = label.frame
+        textField.text = label.text
+        textField.textColor = label.textColor
+        textField.font = label.font
+        textField.textAlignment = label.textAlignment
+        textField.delegate = self
+        
+        label.isHidden = true
+        editingView = textField
+        hiddenView = label
+        
+        containerView.addSubview(textField)
+    }
+    
+    private func doneButton() -> UIButton {
+        let button = UIButton(asConstrainable: false, frame: CGRect.zero)
+        button.setTitle("Done", for: .normal)
+        button.titleLabel?.font = StyleGuideManager.sharedInstance.profileNameLabelFont()
+        button.titleLabel?.textColor = .white
+        button.backgroundColor = StyleGuideManager.floatingSpaceinLabelColor
+        
+        button.addTarget(self, action: #selector(endEditing), for: .touchUpInside)
+        button.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileVC.doneButtonHeight)
+        
+        return button
     }
 }
 
@@ -584,12 +630,26 @@ extension ProfileVC: UITextFieldDelegate {
         
     }
     
+    @objc fileprivate func endEditing() {
+        view.endEditing(true)
+        editingView?.removeFromSuperview()
+        editingView = nil
+        hiddenView?.isHidden = false
+        hiddenView = nil
+        
+        // the editing field is too wide so we have to hide these when editing
+        locationIcon.isHidden = false
+        jobIcon.isHidden = false
+    }
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        endEditing()
         return true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
         let currentCharacterCount = textField.text?.characters.count ?? 0
         if (range.length + range.location > currentCharacterCount){
             return false
@@ -598,13 +658,20 @@ extension ProfileVC: UITextFieldDelegate {
         let allowableRange = characterLimitForView(view: textField)
         let newLength = currentCharacterCount + string.characters.count - range.length
         
-        return newLength <= allowableRange
-        
+        return newLength <= allowableRange && newLength > 1
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("textfield text : \(textField.text)")
     }
     
     private func characterLimitForView(view: UIView) -> Int {
         if view == ageTextField {
             return 3
+        } else if view == nameTextField {
+            return 30
+        } else if view == locationTextField {
+          return 30
         } else {
             return 0
         }
