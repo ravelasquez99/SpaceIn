@@ -22,6 +22,10 @@ class SpaceInUser: NSObject {
     let email: String
     let uid: String
     
+    var bio: String?
+    var job: String?
+    var location: String?
+    
     fileprivate var coordinate: CLLocationCoordinate2D? {
         didSet {
             SpaceInUser.saveLocationToUserDefaults(shouldSynchronize: true)

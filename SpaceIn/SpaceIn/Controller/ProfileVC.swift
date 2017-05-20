@@ -74,10 +74,15 @@ class ProfileVC: UIViewController {
     fileprivate static let animateKeyboardDuration:TimeInterval = 0.3
     
     //MARK: - Properties
+    fileprivate var userForProfile: SpaceInUser?
     fileprivate var isUserProfile = true
     fileprivate var isExpanded = false {
         didSet {
             listenForNotifications(isExpanded)
+            
+            if !isExpanded {
+                endEditing()
+            }
         }
     }
     
@@ -85,6 +90,7 @@ class ProfileVC: UIViewController {
     fileprivate var editingView: UIView? = nil
     fileprivate var hiddenView: UIView? = nil
     fileprivate var didMakeEdits = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,6 +114,7 @@ class ProfileVC: UIViewController {
     
     public convenience init(user: SpaceInUser, isCurrentUser: Bool) {
         self.init()
+        userForProfile = user
         self.isUserProfile = isCurrentUser
     }
     
@@ -430,6 +437,7 @@ extension ProfileVC {
 //MARK: - Button targets
 extension ProfileVC {
     @objc fileprivate func closePressed() {
+        endEditing()
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -557,7 +565,7 @@ extension ProfileVC {
     }
     
     private func editProfileImage() {
-        
+        endEditing()
     }
     
     private func editName() {
