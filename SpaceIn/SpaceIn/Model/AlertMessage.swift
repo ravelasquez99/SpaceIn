@@ -149,8 +149,4 @@ class AlertMessage {
     }
 }
 
-extension String {
-    func isValidString() -> Bool {
-        return self.characters.count > 0
-    }
-}
+

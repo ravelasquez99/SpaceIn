@@ -22,10 +22,10 @@ class SpaceInUser: NSObject {
     let email: String
     let uid: String
     
-    var bio: String?
-    var job: String?
-    var age: Int = 0
-    var location: String?
+    var bio: String? = "This is me and I am awesome. The issue is I cannot go over 140 characters. So stop me when it is full. Iguess not yet. How about now? sweet"
+    var job: String? = "Engineer - Spacein"
+    var age: Int? = 26
+    var location: String? = "San Francisco, CA"
     
     fileprivate var coordinate: CLLocationCoordinate2D? {
         didSet {
@@ -41,7 +41,7 @@ class SpaceInUser: NSObject {
     }
     
     convenience init (fireBaseUser: FIRUser, coordinate: CLLocationCoordinate2D?) {
-        let name = fireBaseUser.displayName ?? ""
+        let name = fireBaseUser.displayName ?? "The Fakers"
         let email = fireBaseUser.email ?? ""
         let uid = fireBaseUser.uid
         

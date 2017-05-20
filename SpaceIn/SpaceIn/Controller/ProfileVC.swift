@@ -1,3 +1,4 @@
+
 //
 //  ProfileVC.swift
 //  SpaceIn
@@ -73,6 +74,9 @@ class ProfileVC: UIViewController {
     fileprivate static let doneButtonHeight: CGFloat = 44
     fileprivate static let animateKeyboardDuration:TimeInterval = 0.3
     
+    //MARK: - Copy
+    fileprivate let defaultText = "Not Provided"
+    
     //MARK: - Properties
     fileprivate var userForProfile: SpaceInUser?
     fileprivate var isUserProfile = true
@@ -117,7 +121,6 @@ class ProfileVC: UIViewController {
         userForProfile = user
         self.isUserProfile = isCurrentUser
     }
-    
 }
 
 
@@ -125,6 +128,7 @@ class ProfileVC: UIViewController {
 extension ProfileVC {
     fileprivate func setup() {
         setupContainerView()
+        setupText()
     }
     
    fileprivate func setupBackground() {
@@ -260,7 +264,6 @@ extension ProfileVC {
     }
     
     private func setupNameLabel() {
-        nameLabel.text = "Ricky Velasquez"
         nameLabel.font = StyleGuideManager.sharedInstance.profileNameLabelFont()
         nameLabel.textAlignment = .center
         nameLabel.textColor = .black
@@ -281,7 +284,6 @@ extension ProfileVC {
     }
     
     private func setupAgeLabel() {
-        ageLabel.text = "26"
         ageLabel.font = StyleGuideManager.sharedInstance.profileSublabelFont()
         ageLabel.textAlignment = .center
         ageLabel.textColor = .lightGray
@@ -303,9 +305,6 @@ extension ProfileVC {
     private func setupLoatonAndJobView() {
         setupIconWithLabel(icon: locationIcon, label: locationLabel, constrainBelow: ageLabel, amount: ProfileVC.ageLabelTopPadding)
         setupIconWithLabel(icon: jobIcon, label: jobLabel, constrainBelow: locationLabel, amount: ProfileVC.locationLabelBottomPadding)
-        
-        locationLabel.text = "San Francisco, CA"
-        jobLabel.text = "Engineeer - Spacein"
         
         locationLabel.isUserInteractionEnabled = true
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
@@ -342,11 +341,10 @@ extension ProfileVC {
     }
     
     private func setupBioView() {
+        bioView.text = (userForProfile?.bio?.characters.count ?? 0) > 0 ? userForProfile!.bio! : defaultTextForState(with: "Bio")
         bioView.delegate = self
         bioView.isEditable = false
-        let text = "Hi, I'm ricky. This is my bio. I am typing words to make a typical bio. So I have one sentence here. Then I have another sentence here."
         bioView.font = StyleGuideManager.sharedInstance.profileBioFont()
-        bioView.text = text
         
         bioView.textColor = .lightGray
         bioView.textAlignment = .center
@@ -813,9 +811,54 @@ extension ProfileVC {
             self.view.layoutIfNeeded()
         }
     }
-    
-    
+}
 
+
+//MARK: - Text setup
+
+extension ProfileVC {
+    fileprivate func setupText() {
+        guard let profile = userForProfile else {
+            print("there is no user!!!")
+            return
+        }
+        
+        nameLabel.text =  textFieldStringForView(view: nameLabel) ?? (profile.name.characters.count > 0 ? profile.name : defaultTextForState(with: "Name"))
+        
+        ageLabel.text = textFieldStringForView(view: ageLabel) ?? (profile.age != nil ? String(profile.age!) : defaultTextForState(with: "Age"))
+        
+        jobLabel.text = textFieldStringForView(view: jobLabel) ?? ((profile.job?.characters.count ?? 0) > 0 ? profile.job! : defaultTextForState(with: "Job"))
+        locationLabel.text = textFieldStringForView(view: locationLabel) ?? (profile.location?.characters.count ?? 0 > 0 ? profile.location! : defaultTextForState(with: "Location"))
+    }
+    
+    private func textFieldStringForView(view: UIView) -> String? {
+        if view == nameLabel {
+            return nameTextField.text?.validString()
+        } else if view == ageLabel {
+            return ageTextField.text?.validString()
+        } else if view == locationLabel {
+            return locationTextField.text?.validString()
+        } else if view == jobLabel {
+            return jobTextField.text?.validString()
+        } else {
+            return nil
+        }
+    }
+    
+    fileprivate func defaultTextForState(with labelName: String) -> String {
+        if !isUserProfile {
+            return labelName + " " + defaultText
+        } else if !isExpanded {
+            return "Tap Settings to add your \(labelName)"
+        } else {
+            // we are expanded and we are the user profile
+            return "Tap to add your \(labelName)"
+        }
+        
+    }
+    
+    
+    
 }
 
 

@@ -101,3 +101,14 @@ extension UIViewController {
         self.view.addSubview(viewController.view)
     }
 }
+
+
+extension String {
+    func isValidString() -> Bool {
+        return self.characters.count > 0
+    }
+    
+    func validString() -> String? {
+        return self.isValidString() ? self : nil
+    }
+}
