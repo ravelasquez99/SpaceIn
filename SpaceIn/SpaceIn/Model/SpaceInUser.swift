@@ -24,6 +24,7 @@ class SpaceInUser: NSObject {
     
     var bio: String?
     var job: String?
+    var age: Int = 0
     var location: String?
     
     fileprivate var coordinate: CLLocationCoordinate2D? {

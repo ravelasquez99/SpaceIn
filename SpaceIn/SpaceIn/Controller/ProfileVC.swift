@@ -724,10 +724,10 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
     
     private func characterLimitForView(view: UIView) -> Int {
         if view == ageTextField {
-            return 3
+            return 2
         } else if view == nameTextField {
             return 30
-        } else if view == locationTextField {
+        } else if view == locationTextField || view == jobTextField {
           return 30
         } else if view == bioView {
           return 140
