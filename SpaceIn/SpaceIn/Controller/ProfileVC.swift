@@ -71,6 +71,7 @@ class ProfileVC: UIViewController {
     fileprivate static let bottomPadding: CGFloat = -50
     fileprivate static let animationDuration: TimeInterval = 0.5
     fileprivate static let doneButtonHeight: CGFloat = 44
+    fileprivate static let animateKeyboardDuration:TimeInterval = 0.3
     
     //MARK: - Properties
     fileprivate var isUserProfile = true
@@ -79,6 +80,7 @@ class ProfileVC: UIViewController {
             listenForNotifications(isExpanded)
         }
     }
+    
     fileprivate var viewAppeared = false
     fileprivate var editingView: UIView? = nil
     fileprivate var hiddenView: UIView? = nil
@@ -745,12 +747,67 @@ extension ProfileVC {
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else {
+            return
+        }
         
+        guard let keyboardFrame =  userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+        
+        let keyboardHeight = keyboardFrame.cgRectValue.height
+        
+        keyboardIsPresentingWithHeight(height: keyboardHeight)
     }
     
     @objc private func keyboardWillHide(notification: NSNotification) {
+        moveToDefaultHeights()
+    }
+}
+
+
+//MARK: - Keyboard handling and animating up and down
+
+extension ProfileVC {
+    fileprivate func keyboardIsPresentingWithHeight(height: CGFloat) {
+        if bioView.isEditable {
+            bioViewWillEditWithKeyboardHeight(height: height)
+        } else {
+            moveToDefaultHeights()
+        }
         
     }
+    
+    fileprivate func moveToDefaultHeights() {
+        guard containerYConstraint?.constant != 0 else {
+            return // it is already down
+        }
+        
+        containerYConstraint?.constant = 0
+        
+        UIView.animate(withDuration: ProfileVC.animateKeyboardDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    private func bioViewWillEditWithKeyboardHeight(height: CGFloat) {
+        guard containerYConstraint?.constant == 0 else {
+            return // it is already up
+        }
+        
+        guard height < bioView.frame.maxY + 10 else {
+            return // no need to go up there is space
+        }
+        
+        containerYConstraint?.constant = -20
+        
+        UIView.animate(withDuration: ProfileVC.animateKeyboardDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    
+
 }
 
 
