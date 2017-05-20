@@ -41,6 +41,7 @@ class ProfileVC: UIViewController {
 
     
     //MARK: - Constraints
+    fileprivate var containerYConstraint: NSLayoutConstraint?
     fileprivate var buttonHeightConstraint: NSLayoutConstraint?
     fileprivate var switchHeightConstraint: NSLayoutConstraint?
     fileprivate var switchToLabelConstraint: NSLayoutConstraint?
@@ -73,10 +74,15 @@ class ProfileVC: UIViewController {
     
     //MARK: - Properties
     fileprivate var isUserProfile = true
-    fileprivate var isExpanded = false
+    fileprivate var isExpanded = false {
+        didSet {
+            listenForNotifications(isExpanded)
+        }
+    }
     fileprivate var viewAppeared = false
     fileprivate var editingView: UIView? = nil
     fileprivate var hiddenView: UIView? = nil
+    fileprivate var didMakeEdits = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,6 +100,10 @@ class ProfileVC: UIViewController {
         viewAppeared = true
     }
     
+    deinit {
+        removeNotifications()
+    }
+    
     public convenience init(user: SpaceInUser, isCurrentUser: Bool) {
         self.init()
         self.isUserProfile = isCurrentUser
@@ -106,7 +116,6 @@ class ProfileVC: UIViewController {
 extension ProfileVC {
     fileprivate func setup() {
         setupContainerView()
-        //setupBackground()
     }
     
    fileprivate func setupBackground() {
@@ -137,7 +146,10 @@ extension ProfileVC {
         containerView.backgroundColor = UIColor.white
         
         view.addSubview(containerView)
-        containerView.constrainCenterInside(view: view)
+        containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        containerYConstraint = containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0)
+        containerYConstraint?.isActive = true
+        
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: ProfileVC.containerViewWidthMultiplier).isActive = true
         //height is inferred by subview heights
         
@@ -321,6 +333,7 @@ extension ProfileVC {
     }
     
     private func setupBioView() {
+        bioView.delegate = self
         bioView.isEditable = false
         let text = "Hi, I'm ricky. This is my bio. I am typing words to make a typical bio. So I have one sentence here. Then I have another sentence here."
         bioView.font = StyleGuideManager.sharedInstance.profileBioFont()
@@ -547,7 +560,6 @@ extension ProfileVC {
     
     private func editName() {
         willEdit(label: nameLabel, with: nameTextField)
-        ensureViewIsVisibleAfterKeyboardPresentation(view: nameTextField)
         
         nameTextField.returnKeyType = .done
         nameTextField.becomeFirstResponder()
@@ -558,7 +570,6 @@ extension ProfileVC {
         
         ageTextField.keyboardType = .numberPad
         
-        ensureViewIsVisibleAfterKeyboardPresentation(view: ageTextField)
         ageTextField.inputAccessoryView = doneButton()
         ageTextField.becomeFirstResponder()
     }
@@ -567,7 +578,6 @@ extension ProfileVC {
     
     private func editLocation() {
         willEdit(label: locationLabel, with: locationTextField)
-        ensureViewIsVisibleAfterKeyboardPresentation(view: locationTextField)
         
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.centerXAnchor.constraint(equalTo: locationLabel.centerXAnchor).isActive = true
@@ -575,7 +585,6 @@ extension ProfileVC {
         locationTextField.heightAnchor.constraint(equalTo: locationLabel.heightAnchor).isActive = true
         locationTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
         
-        locationTextField.backgroundColor = UIColor.blue
         
         locationIcon.isHidden = true
         locationTextField.returnKeyType = .done
@@ -583,11 +592,20 @@ extension ProfileVC {
     }
     
     private func editJob() {
+        willEdit(label: jobLabel, with: jobTextField)
         
+        jobIcon.isHidden = true
+        jobTextField.returnKeyType = .done
+        jobTextField.becomeFirstResponder()
     }
     
     private func editBio() {
+        endEditing()
         
+        bioView.isEditable = true
+        bioView.isUserInteractionEnabled = true
+        bioView.returnKeyType = .done
+        bioView.becomeFirstResponder()
     }
     
     
@@ -598,6 +616,7 @@ extension ProfileVC {
         textField.text = label.text
         textField.textColor = label.textColor
         textField.font = label.font
+        textField.adjustsFontSizeToFitWidth = true
         textField.textAlignment = label.textAlignment
         textField.delegate = self
         
@@ -625,11 +644,7 @@ extension ProfileVC {
 
 //MARK: - TextEntry
 
-extension ProfileVC: UITextFieldDelegate {
-    fileprivate func ensureViewIsVisibleAfterKeyboardPresentation(view:UIView) {
-        
-    }
-    
+extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
     @objc fileprivate func endEditing() {
         view.endEditing(true)
         editingView?.removeFromSuperview()
@@ -642,6 +657,7 @@ extension ProfileVC: UITextFieldDelegate {
         jobIcon.isHidden = false
     }
     
+    //Textfield
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         endEditing()
@@ -665,6 +681,37 @@ extension ProfileVC: UITextFieldDelegate {
         print("textfield text : \(textField.text)")
     }
     
+    
+    // TextView
+    
+    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if textView == bioView && (text == "\n") {
+            let _ = textViewShouldEndEditing(textView) // called so the text view dismissal proccess if completed
+            return false
+        }
+        
+        let currentCharacterCount = textView.text?.characters.count ?? 0
+        if (range.length + range.location > currentCharacterCount){
+            return false
+        }
+        
+        let allowableRange = characterLimitForView(view: textView)
+        let newLength = currentCharacterCount + text.characters.count - range.length
+        
+        let shouldChange = newLength <= allowableRange && newLength > 1
+        return shouldChange
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        guard textView == bioView else { return }
+        bioView.isEditable = false
+    }
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        endEditing()
+        return true
+    }
+    
     private func characterLimitForView(view: UIView) -> Int {
         if view == ageTextField {
             return 3
@@ -672,9 +719,37 @@ extension ProfileVC: UITextFieldDelegate {
             return 30
         } else if view == locationTextField {
           return 30
+        } else if view == bioView {
+          return 140
         } else {
             return 0
         }
+    }
+}
+
+//MARK: - Notiications
+
+extension ProfileVC {
+    fileprivate func listenForNotifications(_ shouldListen: Bool) {
+        if shouldListen {
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        } else {
+            removeNotifications()
+        }
+        
+    }
+    
+    fileprivate func removeNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        
     }
 }
 
