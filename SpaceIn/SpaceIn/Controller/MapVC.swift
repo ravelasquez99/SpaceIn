@@ -407,7 +407,7 @@ extension MapViewController {
         }
     }
     
-    private func presentProfileVC(user: SpaceInUser) {
+    fileprivate func presentProfileVC(user: SpaceInUser) {
         let profileVC = ProfileVC(user: user, isCurrentUser: user == SpaceInUser.current)
         profileVC.modalPresentationStyle = .overCurrentContext
         

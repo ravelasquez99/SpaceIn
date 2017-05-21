@@ -93,7 +93,9 @@ class ProfileVC: UIViewController {
     fileprivate var viewAppeared = false
     fileprivate var editingView: UIView? = nil
     fileprivate var hiddenView: UIView? = nil
+    fileprivate var bioViewTextIsValid = false // need this var to determine if the bioviewtext should be edited programatically
     fileprivate var didMakeEdits = false
+    
     
     
     override func viewDidLoad() {
@@ -295,7 +297,7 @@ extension ProfileVC {
         ageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: ProfileVC.ageLabelTopPadding).isActive = true
         ageLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 0).isActive = true
         ageLabel.heightAnchor.constraint(equalToConstant: ProfileVC.ageLabelHeight).isActive = true
-        ageLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        ageLabel.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
         
         ageLabel.isUserInteractionEnabled = true
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
@@ -341,7 +343,15 @@ extension ProfileVC {
     }
     
     private func setupBioView() {
-        bioView.text = (userForProfile?.bio?.characters.count ?? 0) > 0 ? userForProfile!.bio! : defaultTextForState(with: "Bio")
+        let profileHasValidBio = (userForProfile?.bio?.characters.count ?? 0) > 0
+        
+        if profileHasValidBio {
+            bioView.text = userForProfile?.bio
+            bioViewTextIsValid = true
+        } else {
+            bioView.text = defaultTextForState(with: "Bio")
+        }
+
         bioView.delegate = self
         bioView.isEditable = false
         bioView.font = StyleGuideManager.sharedInstance.profileBioFont()
@@ -463,6 +473,7 @@ extension ProfileVC {
         }
         
         isExpanded = isExpanding
+        setupText()
     }
     
     fileprivate func setNotificationLabelHeightConstraint(forExapndedState: Bool) {
@@ -707,6 +718,10 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
         let newLength = currentCharacterCount + text.characters.count - range.length
         
         let shouldChange = newLength <= allowableRange && newLength > 1
+        
+        if shouldChange {
+            bioViewTextIsValid = true
+        }
         return shouldChange
     }
     
@@ -829,6 +844,10 @@ extension ProfileVC {
         
         jobLabel.text = textFieldStringForView(view: jobLabel) ?? ((profile.job?.characters.count ?? 0) > 0 ? profile.job! : defaultTextForState(with: "Job"))
         locationLabel.text = textFieldStringForView(view: locationLabel) ?? (profile.location?.characters.count ?? 0 > 0 ? profile.location! : defaultTextForState(with: "Location"))
+        
+        if !bioViewTextIsValid {
+            bioView.text = defaultTextForState(with: "Bio")
+        }
     }
     
     private func textFieldStringForView(view: UIView) -> String? {
