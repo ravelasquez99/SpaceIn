@@ -416,7 +416,6 @@ extension MapViewController {
 }
 
 
-
 //MARK: - Profile
 extension MapViewController {
     @objc fileprivate func notificationsButtonPressed() {

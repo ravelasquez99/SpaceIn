@@ -76,6 +76,9 @@ class ProfileVC: UIViewController {
     
     //MARK: - Copy
     fileprivate let defaultText = "Not Provided"
+    fileprivate let nonExpandedPrefixText = "Tap Settings to add your "
+    fileprivate let expandedPrefixText = "Tap to add your "
+
     
     //MARK: - Properties
     fileprivate var userForProfile: SpaceInUser?
@@ -90,6 +93,7 @@ class ProfileVC: UIViewController {
         }
     }
     
+    fileprivate var doneButton: UIButton?
     fileprivate var viewAppeared = false
     fileprivate var editingView: UIView? = nil
     fileprivate var hiddenView: UIView? = nil
@@ -587,9 +591,12 @@ extension ProfileVC {
     private func editAge() {
         willEdit(label: ageLabel, with: ageTextField)
         
-        ageTextField.keyboardType = .numberPad
+        if textIsPlaceholderText(text: ageTextField.text!) {
+            ageTextField.text = "18"
+        }
         
-        ageTextField.inputAccessoryView = doneButton()
+        ageTextField.keyboardType = .numberPad
+        ageTextField.inputAccessoryView = ageDoneButton()
         ageTextField.becomeFirstResponder()
     }
     
@@ -646,7 +653,11 @@ extension ProfileVC {
         containerView.addSubview(textField)
     }
     
-    private func doneButton() -> UIButton {
+    private func textIsPlaceholderText(text: String) -> Bool {
+        return text.contains(expandedPrefixText) || text.contains(nonExpandedPrefixText)
+    }
+    
+    private func ageDoneButton() -> UIButton {
         let button = UIButton(asConstrainable: false, frame: CGRect.zero)
         button.setTitle("Done", for: .normal)
         button.titleLabel?.font = StyleGuideManager.sharedInstance.profileNameLabelFont()
@@ -656,8 +667,12 @@ extension ProfileVC {
         button.addTarget(self, action: #selector(endEditing), for: .touchUpInside)
         button.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileVC.doneButtonHeight)
         
+        doneButton = button
+        
         return button
     }
+    
+    
 }
 
 
@@ -670,6 +685,7 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
         editingView = nil
         hiddenView?.isHidden = false
         hiddenView = nil
+        doneButton = nil
         
         // the editing field is too wide so we have to hide these when editing
         locationIcon.isHidden = false
@@ -679,8 +695,12 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
     //Textfield
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        endEditing()
-        return true
+        if (textField.text?.characters.count ?? 0) > 0 {
+            endEditing()
+            return true
+        } else {
+            return false
+        }
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -693,11 +713,23 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
         let allowableRange = characterLimitForView(view: textField)
         let newLength = currentCharacterCount + string.characters.count - range.length
         
-        return newLength <= allowableRange && newLength > 1
+        let rangeIsOk = newLength <= allowableRange
+        
+        if textField == ageTextField {
+            if newLength == 0 {
+                doneButton?.backgroundColor = UIColor.lightGray
+                doneButton?.isUserInteractionEnabled = false
+            } else {
+                doneButton?.backgroundColor = StyleGuideManager.floatingSpaceinLabelColor
+                doneButton?.isUserInteractionEnabled = true
+            }
+        }
+        
+        return rangeIsOk
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("textfield text : \(textField.text)")
+        setupText()
     }
     
     
@@ -865,16 +897,16 @@ extension ProfileVC {
         }
     }
     
+    
     fileprivate func defaultTextForState(with labelName: String) -> String {
         if !isUserProfile {
             return labelName + " " + defaultText
         } else if !isExpanded {
-            return "Tap Settings to add your \(labelName)"
+            return nonExpandedPrefixText + labelName
         } else {
             // we are expanded and we are the user profile
             return "Tap to add your \(labelName)"
         }
-        
     }
     
     
