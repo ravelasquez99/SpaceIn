@@ -719,9 +719,10 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
         
         let shouldChange = newLength <= allowableRange && newLength > 1
         
-        if shouldChange {
+        if shouldChange && textView == bioView {
             bioViewTextIsValid = true
         }
+        
         return shouldChange
     }
     
