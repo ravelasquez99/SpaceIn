@@ -631,6 +631,12 @@ extension ProfileVC {
         bioView.isEditable = true
         bioView.isUserInteractionEnabled = true
         bioView.returnKeyType = .done
+        
+        if !bioViewTextIsValid {
+            bioView.text = ""
+        }
+        
+        
         bioView.becomeFirstResponder()
     }
     
@@ -702,12 +708,8 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
     //Textfield
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if (textField.text?.characters.count ?? 0) > 0 {
-            endEditing()
-            return true
-        } else {
-            return false
-        }
+        endEditing()
+        return true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -758,8 +760,10 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
         
         let shouldChange = newLength <= allowableRange
         
-        if shouldChange && textView == bioView {
+        if shouldChange && textView == bioView && newLength > 0 {
             bioViewTextIsValid = true
+        } else if textView == bioView {
+            bioViewTextIsValid = false
         }
         
         return shouldChange
@@ -768,6 +772,7 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         guard textView == bioView else { return }
         bioView.isEditable = false
+        setupText()
     }
     
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
