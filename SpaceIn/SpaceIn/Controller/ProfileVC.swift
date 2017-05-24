@@ -949,9 +949,13 @@ extension ProfileVC {
         }
         
         if let job = jobLabel.text {
-            if job != userForProfile?.job && textIsPlaceholderText(text: job) && job.isValidString() {
+            if job != userForProfile?.job && !textIsPlaceholderText(text: job) && job.isValidString() {
                 profileChanges.job = job
             }
+        }
+        
+        if userForProfile?.bio != bioView.text && !textIsPlaceholderText(text: bioView.text) && bioView.text.isValidString() {
+            profileChanges.bio = bioView.text
         }
         
         userForProfile?.madeChanges(changes: profileChanges)
