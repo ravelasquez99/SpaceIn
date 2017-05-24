@@ -639,13 +639,20 @@ extension ProfileVC {
         endEditing() // added here in case we are switching text fields.
         
         textField.frame = label.frame
-        textField.text = label.text
         textField.textColor = label.textColor
         textField.font = label.font
         textField.adjustsFontSizeToFitWidth = true
         textField.textAlignment = label.textAlignment
         textField.delegate = self
         
+        if let textForLabel = label.text {
+            if textIsPlaceholderText(text: textForLabel) {
+                
+            } else {
+                textField.text = textForLabel
+            }
+        }
+
         label.isHidden = true
         editingView = textField
         hiddenView = label
@@ -749,7 +756,7 @@ extension ProfileVC: UITextFieldDelegate, UITextViewDelegate {
         let allowableRange = characterLimitForView(view: textView)
         let newLength = currentCharacterCount + text.characters.count - range.length
         
-        let shouldChange = newLength <= allowableRange && newLength > 1
+        let shouldChange = newLength <= allowableRange
         
         if shouldChange && textView == bioView {
             bioViewTextIsValid = true
