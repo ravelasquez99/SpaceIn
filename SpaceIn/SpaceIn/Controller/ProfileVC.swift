@@ -450,6 +450,7 @@ extension ProfileVC {
 extension ProfileVC {
     @objc fileprivate func closePressed() {
         endEditing()
+        updateSpaceinUserIfNeccessary()
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -560,6 +561,10 @@ extension ProfileVC {
         editView(view: viewForGesture)
     }
     
+    fileprivate func textIsPlaceholderText(text: String) -> Bool {
+        return text.contains(expandedPrefixText) || text.contains(nonExpandedPrefixText)
+    }
+    
     
     private func editView(view: UIView) {
         if view == imageView || view == imageContainerView {
@@ -664,10 +669,6 @@ extension ProfileVC {
         hiddenView = label
         
         containerView.addSubview(textField)
-    }
-    
-    private func textIsPlaceholderText(text: String) -> Bool {
-        return text.contains(expandedPrefixText) || text.contains(nonExpandedPrefixText)
     }
     
     private func ageDoneButton() -> UIButton {
@@ -841,7 +842,6 @@ extension ProfileVC {
         } else {
             moveToDefaultHeights()
         }
-        
     }
     
     fileprivate func moveToDefaultHeights() {
@@ -920,9 +920,42 @@ extension ProfileVC {
             return "Tap to add your \(labelName)"
         }
     }
-    
-    
-    
+}
+
+extension ProfileVC {
+    fileprivate func updateSpaceinUserIfNeccessary(){
+        guard isUserProfile else {
+            return
+        }
+        
+        var profileChanges = ProfileChanges()
+        
+        if let nameLabelText = nameLabel.text {
+            if nameLabelText != userForProfile?.name && !textIsPlaceholderText(text: nameLabelText) && nameLabelText.isValidString() {
+                profileChanges.name = nameLabelText
+            }
+        }
+        
+        if let age = Int(ageLabel.text ?? "") {
+            if age != userForProfile?.age && age > 0 {
+                profileChanges.age = age
+            }
+        }
+        
+        if let location = locationLabel.text {
+            if location != userForProfile?.location && !textIsPlaceholderText(text: location) && location.isValidString() {
+                profileChanges.location = location
+            }
+        }
+        
+        if let job = jobLabel.text {
+            if job != userForProfile?.job && textIsPlaceholderText(text: job) && job.isValidString() {
+                profileChanges.job = job
+            }
+        }
+        
+        userForProfile?.madeChanges(changes: profileChanges)
+    }
 }
 
 

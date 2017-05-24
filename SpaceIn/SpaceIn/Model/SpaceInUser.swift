@@ -10,6 +10,43 @@ import Foundation
 import MapKit
 import Firebase
 
+struct ProfileChanges {
+    var name: String?
+    var image: UIImage?
+    var age: Int?
+    var location: String?
+    var job: String?
+    var bio: String?
+    
+    func isEmpty() -> Bool {
+        if name != nil {
+            return false
+        }
+        
+        if image != nil {
+            return false
+        }
+        
+        if age != nil {
+            return false
+        }
+        
+        if location != nil {
+            return false
+        }
+        
+        if job != nil {
+            return false
+        }
+        
+        if bio != nil {
+            return false
+        }
+        
+        return true
+    }
+}
+
 class SpaceInUser: NSObject {
     public static var current : SpaceInUser? {
         didSet {
@@ -106,6 +143,14 @@ extension SpaceInUser {
         }
         
         return SpaceInUser.current!.uid.characters.count > 0
+    }
+    
+    func madeChanges(changes: ProfileChanges) {
+        guard !changes.isEmpty() else {
+            return
+        }
+        
+        print(changes)
     }
 }
 
