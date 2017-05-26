@@ -103,7 +103,7 @@ class LoginRegisterVC : UIViewController {
     }
     
     fileprivate func userIsSignedIn() -> Bool {
-        return FirebaseHelper.loggedInUser() != nil
+        return SpaceInUser.userIsLoggedIn()
     }
     
     func goAway() {
