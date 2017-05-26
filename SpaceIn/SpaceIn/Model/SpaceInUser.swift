@@ -63,6 +63,8 @@ class SpaceInUser: NSObject {
     var age: Int?
     var job: String?
     var location: String?
+    var image: UIImage?
+    var imageURL: String?
     
     fileprivate var coordinate: CLLocationCoordinate2D? {
         didSet {
@@ -150,7 +152,7 @@ extension SpaceInUser {
             return
         }
         
-        print(changes)
+        makeChanges(changes: changes)
     }
 }
 
@@ -189,5 +191,14 @@ extension SpaceInUser {
                 defaults.synchronize()
             }
         }
+    }
+}
+
+
+//MARK: - Profile Changes
+
+extension SpaceInUser {
+    fileprivate func makeChanges(changes: ProfileChanges) {
+        
     }
 }

@@ -263,7 +263,8 @@ extension ProfileVC {
         imageView.layer.borderColor = UIColor.clear.cgColor
         imageView.layer.cornerRadius = imageView.frame.height/2
         imageView.clipsToBounds = true
-    
+
+        
         imageView.isUserInteractionEnabled = true
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tappedEditableView(gesture:)))
         imageView.addGestureRecognizer(gestureRecognizer)
@@ -568,7 +569,7 @@ extension ProfileVC {
     
     private func editView(view: UIView) {
         if view == imageView || view == imageContainerView {
-            editProfileImage()
+            editImage()
         } else if view == ageLabel{
             editAge()
         } else if view == nameLabel {
@@ -582,8 +583,28 @@ extension ProfileVC {
         }
     }
     
-    private func editProfileImage() {
+    private func editImage() {
         endEditing()
+        present(imagePickerPhotos(), animated: true, completion: nil)
+    }
+    
+    private func imagePickerCamera() -> UIImagePickerController {
+        let imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .camera
+        imagePicker.cameraDevice = .front
+        
+        imagePicker.delegate = self
+        
+        return imagePicker
+    }
+    
+    
+    private func imagePickerPhotos() -> UIImagePickerController {
+        let picker = imagePickerCamera()
+        picker.sourceType = .photoLibrary
+        
+        return picker
     }
     
     private func editName() {
@@ -958,7 +979,27 @@ extension ProfileVC {
             profileChanges.bio = bioView.text
         }
         
+        if imageView.image != userForProfile?.image {
+            profileChanges.image = imageView.image
+        }
+        
         userForProfile?.madeChanges(changes: profileChanges)
+    }
+}
+
+
+extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            imageView.image = pickedImage
+            imageView.contentMode = .scaleAspectFill
+        }
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 
