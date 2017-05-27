@@ -475,6 +475,7 @@ extension ProfileVC {
         
         setToState(on: false)
         updateSpaceinUserIfNeccessary { (success, returnType) in
+            print("update done")
             DispatchQueue.main.async { [weak self] in
                 if success {
                     self?.dismiss(animated: true, completion: nil)
@@ -1048,6 +1049,7 @@ extension ProfileVC {
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.userForProfile?.madeChanges(changes: profileChanges, completion: { (success, returnType) in
+                print("completion is back")
                 if !success {
                     completion(false, returnType)
                 } else {

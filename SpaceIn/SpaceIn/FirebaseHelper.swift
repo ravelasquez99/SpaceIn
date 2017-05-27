@@ -191,6 +191,7 @@ class FirebaseHelper {
         }
         
         guard let values = valuesForChanges(changes: changes) else {
+            completion(FirebaseReturnType.Success) // successfull if there are not any non image changes
             return
         }
         
