@@ -19,7 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     fileprivate var tutorialVC: TutorialVC?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-
+        
+        setupManagers()
+        
         // Use Firebase library to configure APIs
         FIRApp.configure()
         
@@ -194,5 +196,13 @@ extension AppDelegate: TutorialVCDelegate {
             SpaceInUser.current = SpaceInUser(name: "", email: "", uid: "")
             SpaceInUser.current?.movedToCoordinate(coordinate: location.coordinate)
         }
+    }
+}
+
+
+//MARK: - Managers Setup
+extension AppDelegate {
+    fileprivate func setupManagers() {
+        ReachabilityManager.setup()
     }
 }

@@ -52,11 +52,18 @@ enum AlertMessages: String {
     case locationPermissionResetTitle = "Sorry, but you need to allow us to access your location to use this feature."
     case locationPermissionResetSubTitle = "Go to settings to fix this!"
     case okayButtonTitle = "Okay"
+    
+    case failedToPostToServerTitle = "Oops, looks like something is going on with our servers"
+    case failedToPostToServerSubTitle = "There might be many people trying to access our servers right now, this issue may be fixed momentarily"
+    
+    case failedInternetTitle = "Oops, looks like something is wrong with your Internet"
+    case failedToPostInternetSubtitle = "There might be something wrong with your Internet connection or our servers"
+
 
 }
 
 class AlertMessage {
-    var alertTitle: String?
+    var alertTitle: String
     var alertSubtitle: String?
     var actionButton1Title: String
     var actionButton2title: String?
@@ -146,6 +153,14 @@ class AlertMessage {
     
     class func failedAuth() -> AlertMessage {
         return AlertMessage(title: AlertMessages.failedAuthTitle.rawValue, subtitle: AlertMessages.failedAuthSubTitle.rawValue, actionButtontitle: "Ok", secondButtonTitle: nil)
+    }
+    
+    class func serverIssueSavingProfile() -> AlertMessage {
+        return AlertMessage(title: AlertMessages.failedToPostToServerTitle.rawValue, subtitle: AlertMessages.failedToPostToServerSubTitle.rawValue, actionButtontitle: "Ok, Maybe Later", secondButtonTitle: "Try Again")
+    }
+    
+    class func networkIssueSavingProfile() -> AlertMessage {
+        return AlertMessage(title: AlertMessages.failedInternetTitle.rawValue, subtitle: AlertMessages.failedToPostInternetSubtitle.rawValue, actionButtontitle: "Ok, Maybe Later", secondButtonTitle: "Try Again")
     }
 }
 

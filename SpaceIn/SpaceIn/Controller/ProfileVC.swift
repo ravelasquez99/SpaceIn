@@ -33,6 +33,8 @@ class ProfileVC: UIViewController {
     
     fileprivate let toggle = UISwitch(frame: CGRect.zero)
     
+    fileprivate let spinner = UIActivityIndicatorView()
+    
     //Textfields
     fileprivate let nameTextField = UITextField(frame: CGRect.zero)
     fileprivate let ageTextField = UITextField(frame: CGRect.zero)
@@ -48,6 +50,9 @@ class ProfileVC: UIViewController {
     fileprivate var switchToLabelConstraint: NSLayoutConstraint?
     fileprivate var notificationHeightConstraint: NSLayoutConstraint?
     fileprivate var labelToBottomConstraint: NSLayoutConstraint?
+    
+    //MARK: - Internet Connection
+    var reachability: Reachability? = Reachability()
     
     
     //MARK: - Layout Values
@@ -111,6 +116,7 @@ class ProfileVC: UIViewController {
         super.viewWillAppear(animated)
         setupBackground()
         addBlurEffectViewFrame()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -130,7 +136,7 @@ class ProfileVC: UIViewController {
 }
 
 
-//MARK: - Setup View
+//MARK: - Setup
 extension ProfileVC {
     fileprivate func setup() {
         setupContainerView()
@@ -446,6 +452,15 @@ extension ProfileVC {
 //MARK: - Button targets
 extension ProfileVC {
     @objc fileprivate func closePressed() {
+        savedAndClose()
+    }
+}
+
+
+//MARK: - Save and Close
+
+extension ProfileVC {
+    fileprivate func savedAndClose() {
         endEditing()
         
         guard isUserProfile else {
@@ -453,18 +468,25 @@ extension ProfileVC {
             return
         }
         
+        guard ReachabilityManager.shared.internetIsUp else {
+            presentProfileEditError(isServerIssue: false)
+            return
+        }
         
+        setToState(on: false)
         updateSpaceinUserIfNeccessary { (success, returnType) in
             DispatchQueue.main.async { [weak self] in
                 if success {
                     self?.dismiss(animated: true, completion: nil)
                 } else if let returnType = returnType {
+                    self?.setToState(on: true)
                     self?.handleFirebaseReturnTypeForProfileEdit(returnType: returnType)
                 } else {
+                    print("WARNING: This should not be possible. there isn't a return type and success is false")
+                    //we just dismiss because this shouldn't be possible
                     self?.dismiss(animated: true, completion: nil)
                 }
             }
-           
         }
     }
 }
@@ -1041,8 +1063,79 @@ extension ProfileVC {
 
 extension ProfileVC {
     fileprivate func handleFirebaseReturnTypeForProfileEdit(returnType: FirebaseReturnType) {
-        print(returnType)
+        guard returnType != .Success else {
+            print("This should not be called if the return type is success")
+            return
+        }
+        
+        switch returnType {
+        case .Unknown, .NetworkError:
+            presentProfileEditError(isServerIssue: false)
+            break // something went wront. try again
+        case .TooManyRequests:
+            presentProfileEditError(isServerIssue: true)
+            break // server is busy. try again
+        default:
+            presentProfileEditError(isServerIssue: false)
+            break
+        }
+        
+//        //Default
+//
+//        case InvalidToken
+//        
+//        //Network
+//        case TooManyRequests
+    }
+    
+    fileprivate func presentProfileEditError(isServerIssue: Bool) {
+        let alertMessage = isServerIssue ? AlertMessage.serverIssueSavingProfile() : AlertMessage.networkIssueSavingProfile()
+        
+        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle ?? nil, preferredStyle: .alert)
+        
+        
+        let tryAgainLaterAction = UIAlertAction(title: alertMessage.actionButton1Title, style: .default) { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        alertController.addAction(tryAgainLaterAction)
+        
+        let tryAgainAction = UIAlertAction(title: alertMessage.actionButton2title ?? "Try Again", style: .default) { (action) in
+            self.savedAndClose()
+        }
+        
+        alertController.addAction(tryAgainAction)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
 }
+
+
+//MARK: - Loading State
+extension ProfileVC {
+    fileprivate func setToState(on: Bool) {
+        setSpinner(on: !on)
+        view.isUserInteractionEnabled = on
+    }
+    
+    private func setSpinner(on: Bool) {
+        guard (spinner.superview == nil) == on else {
+            // spinner is already at the state we want
+            return
+        }
+        
+        if on {
+            spinner.frame = CGRect(x: (view.frame.width / 2) - 10, y: (view.frame.height / 2) - 10, width: 20, height: 20)
+            spinner.color = UIColor.gray
+            view.addSubview(spinner)
+            spinner.startAnimating()
+        } else {
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
+        }
+
+    }
+}
+
 
 

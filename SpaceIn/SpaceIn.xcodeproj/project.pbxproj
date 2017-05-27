@@ -29,6 +29,8 @@
 		D8CA4C1C1DFA5879004665F0 /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */; };
 		D8CB6A411E38E41D00F7D070 /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CB6A401E38E41D00F7D070 /* TutorialVC.swift */; };
 		D8CEEA641EB835A000E0E90E /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CEEA631EB835A000E0E90E /* ProfileVC.swift */; };
+		D8D0A86B1EDA0C0100B66CA7 /* Reachibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0A86A1EDA0C0100B66CA7 /* Reachibility.swift */; };
+		D8D0A86D1EDA125400B66CA7 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0A86C1EDA125400B66CA7 /* ReachabilityManager.swift */; };
 		D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D7465E1DF1228700A1EE70 /* MapView.swift */; };
 		D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D746601DF122C100A1EE70 /* MapVC.swift */; };
 		D8D746631DF122D700A1EE70 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D746621DF122D700A1EE70 /* Main.storyboard */; };
@@ -70,6 +72,8 @@
 		D8CA4C1B1DFA5879004665F0 /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		D8CB6A401E38E41D00F7D070 /* TutorialVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialVC.swift; path = Controller/TutorialVC.swift; sourceTree = "<group>"; };
 		D8CEEA631EB835A000E0E90E /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileVC.swift; path = Controller/ProfileVC.swift; sourceTree = "<group>"; };
+		D8D0A86A1EDA0C0100B66CA7 /* Reachibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachibility.swift; sourceTree = "<group>"; };
+		D8D0A86C1EDA125400B66CA7 /* ReachabilityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		D8D7465E1DF1228700A1EE70 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapView.swift; path = View/MapView.swift; sourceTree = "<group>"; };
 		D8D746601DF122C100A1EE70 /* MapVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapVC.swift; path = Controller/MapVC.swift; sourceTree = "<group>"; };
 		D8D746621DF122D700A1EE70 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = View/Main.storyboard; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 			isa = PBXGroup;
 			children = (
 				D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */,
+				D8D0A86A1EDA0C0100B66CA7 /* Reachibility.swift */,
+				D8D0A86C1EDA125400B66CA7 /* ReachabilityManager.swift */,
 			);
 			name = Convenience;
 			sourceTree = "<group>";
@@ -354,12 +360,14 @@
 				D88E70751E5EA10100714EE5 /* JoystickViewController.swift in Sources */,
 				D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */,
 				D8CA4C1A1DFA57A3004665F0 /* StyleGuideManager.swift in Sources */,
+				D8D0A86D1EDA125400B66CA7 /* ReachabilityManager.swift in Sources */,
 				D8FE550E1E36485F00156F27 /* LocationManager.swift in Sources */,
 				D8B48E2A1E46EBBA00647D7B /* SpaceInUserAnnotation.swift in Sources */,
 				D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */,
 				D8AF8D841E5BAF00006C7B8B /* Joystick.swift in Sources */,
 				D8D746651DF1236A00A1EE70 /* FirebaseHelper.swift in Sources */,
 				D817FDB61E40DCBC00A79ED3 /* JoystickView.swift in Sources */,
+				D8D0A86B1EDA0C0100B66CA7 /* Reachibility.swift in Sources */,
 				D8D746671DF128BA00A1EE70 /* LoginRegisterVC.swift in Sources */,
 				D8280FC61E11A3B300D47D83 /* SpaceInUser.swift in Sources */,
 				D8B48E2C1E46EE3D00647D7B /* UserAnnotationView.swift in Sources */,

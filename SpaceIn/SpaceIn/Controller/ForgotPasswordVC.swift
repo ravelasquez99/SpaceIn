@@ -242,7 +242,7 @@ extension ForgotPasswordVC {
     func presentAlertMessage(alertMessage: AlertMessage) {
         self.stopSpinner()
         
-        let alertController = UIAlertController(title: alertMessage.alertTitle!, message: alertMessage.alertSubtitle!, preferredStyle: .alert)
+        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle!, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: alertMessage.actionButton1Title, style: .default, handler: nil))
             
         if let alertAction2 = alertMessage.actionButton2title {
