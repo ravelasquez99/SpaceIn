@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */; };
 		D8083D5F1E3D8C5600F5309C /* FloatingSpaceinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8083D5E1E3D8C5600F5309C /* FloatingSpaceinView.swift */; };
+		D815E4511EDA29F4005C073F /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D815E4501EDA29F4005C073F /* MediaManager.swift */; };
+		D815E4531EDA2A39005C073F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D815E4521EDA2A39005C073F /* AVFoundation.framework */; };
 		D817FDB61E40DCBC00A79ED3 /* JoystickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D817FDB51E40DCBC00A79ED3 /* JoystickView.swift */; };
 		D81CD97D1DFA7A8F0042E2AD /* ToplessTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */; };
 		D8280FC61E11A3B300D47D83 /* SpaceInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */; };
@@ -49,6 +51,8 @@
 		A69320F58315C503A7837752 /* Pods-SpaceIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceIn.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpaceIn/Pods-SpaceIn.release.xcconfig"; sourceTree = "<group>"; };
 		D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceInConvenience.swift; sourceTree = "<group>"; };
 		D8083D5E1E3D8C5600F5309C /* FloatingSpaceinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingSpaceinView.swift; sourceTree = "<group>"; };
+		D815E4501EDA29F4005C073F /* MediaManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
+		D815E4521EDA2A39005C073F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D817FDB51E40DCBC00A79ED3 /* JoystickView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JoystickView.swift; path = View/JoystickView.swift; sourceTree = "<group>"; };
 		D81CD97C1DFA7A8F0042E2AD /* ToplessTextfield.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToplessTextfield.swift; sourceTree = "<group>"; };
 		D8280FC51E11A3B300D47D83 /* SpaceInUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpaceInUser.swift; path = Model/SpaceInUser.swift; sourceTree = "<group>"; };
@@ -90,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D815E4531EDA2A39005C073F /* AVFoundation.framework in Frameworks */,
 				F04FE1F66A58311B4E88C286 /* Pods_SpaceIn.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,6 +105,7 @@
 		752633AF3549B1F6B50E9FDD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D815E4521EDA2A39005C073F /* AVFoundation.framework */,
 				036A50A7C319BF6AAF4DEA2C /* Pods_SpaceIn.framework */,
 			);
 			name = Frameworks;
@@ -120,6 +126,7 @@
 				D8083D5C1E3D79EA00F5309C /* SpaceInConvenience.swift */,
 				D8D0A86A1EDA0C0100B66CA7 /* Reachibility.swift */,
 				D8D0A86C1EDA125400B66CA7 /* ReachabilityManager.swift */,
+				D815E4501EDA29F4005C073F /* MediaManager.swift */,
 			);
 			name = Convenience;
 			sourceTree = "<group>";
@@ -356,6 +363,7 @@
 				D8DBDF551E56BB4C001908DE /* AskLocationVC.swift in Sources */,
 				D8D7465F1DF1228700A1EE70 /* MapView.swift in Sources */,
 				D8D746611DF122C100A1EE70 /* MapVC.swift in Sources */,
+				D815E4511EDA29F4005C073F /* MediaManager.swift in Sources */,
 				D84706B11E66840B0098D3FB /* JoystickProccesser.swift in Sources */,
 				D88E70751E5EA10100714EE5 /* JoystickViewController.swift in Sources */,
 				D8083D5D1E3D79EA00F5309C /* SpaceInConvenience.swift in Sources */,

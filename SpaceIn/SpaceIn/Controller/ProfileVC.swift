@@ -105,6 +105,7 @@ class ProfileVC: UIViewController {
     fileprivate var hiddenView: UIView? = nil
     fileprivate var bioViewTextIsValid = false // need this var to determine if the bioviewtext should be edited programatically
     fileprivate var didMakeEdits = false
+    fileprivate var isUsingCamera = false
     
     
     
@@ -620,32 +621,6 @@ extension ProfileVC {
         }
     }
     
-    private func editImage() {
-        endEditing()
-        //let alertStyle = UIAlertControllerStyle.actionSheet
-        present(imagePickerCamera(), animated: true, completion: nil)
-    }
-    
-    private func imagePickerCamera() -> UIImagePickerController {
-       
-        let imagePicker = UIImagePickerController()
-        imagePicker.allowsEditing = false
-        imagePicker.sourceType = .camera
-        imagePicker.cameraDevice = .front
-        
-        imagePicker.delegate = self
-        
-        return imagePicker
-    }
-    
-    
-    private func imagePickerPhotos() -> UIImagePickerController {
-        let picker = imagePickerCamera()
-        picker.sourceType = .photoLibrary
-        
-        return picker
-    }
-    
     private func editName() {
         willEdit(label: nameLabel, with: nameTextField)
         
@@ -745,8 +720,122 @@ extension ProfileVC {
         
         return button
     }
+}
+
+
+extension ProfileVC {
+    fileprivate func editImage() {
+        guard isUserProfile else {
+            return
+        }
+        
+        endEditing()
+        
+        let imageChoices = imageAlertActionOptions()
+        
+        guard imageChoices.count == 2  else {
+            if imageChoices.count == 0 {
+                presentNoWayToAccessPhotos()
+            } else if MediaManager.shared.cameraPermissionStatus() == .accepted || MediaManager.shared.cameraPermissionStatus() == .notAsked {
+                present(cameraVC: true)
+            } else {
+                present(cameraVC: false)
+            }
+            
+            return
+        }
+        
+        let alertController = UIAlertController(title: "How would you like to choose your profile picture?", message: nil, preferredStyle: .actionSheet)
+    
+        
+        for action in imageChoices {
+            alertController.addAction(action)
+        }
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func imageAlertActionOptions() -> [UIAlertAction] {
+        var options = [UIAlertAction]()
+        
+        let cameraStatus = MediaManager.shared.cameraPermissionStatus()
+        
+        switch cameraStatus {
+        case .accepted, .notAsked:
+            let cameraAction = UIAlertAction(title: "Camera", style: .default) { (action) in
+                self.present(cameraVC: true)
+            }
+            
+            options.append(cameraAction)
+        default:
+            break
+        }
+       
+        let cameraRollStatus = MediaManager.shared.cameraRollPermissionStatus()
+        
+        switch cameraRollStatus {
+        case .notDetermined, .authorized:
+            let cameraRollAction = UIAlertAction(title: "Camera Roll", style: .default) { (action) in
+                self.present(cameraVC: false)
+            }
+            
+            options.append(cameraRollAction)
+        default:
+            break
+        }
+        
+        return options
+        
+    }
+    
+    //MOVE THIDA SDIFH DIAFAIERGIERHGOUT
+    private func canTakePhotos() -> Bool {
+        return UIImagePickerController.isSourceTypeAvailable(.camera)
+    }
+    
+    private func present(cameraVC: Bool) {
+        isUsingCamera = cameraVC
+        let vc = cameraVC ? imagePickerCamera() : imagePickerPhotos()
+        present(vc, animated: true, completion: nil)
+    }
+    
+    private func imagePickerCamera() -> UIImagePickerController {
+        
+        let finalPicker = imagePicker()
+        finalPicker.sourceType = .camera
+        finalPicker.cameraDevice = .front
+        
+        return finalPicker
+    }
     
     
+    private func imagePicker() -> UIImagePickerController {
+        let imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .camera
+        
+        
+        imagePicker.delegate = self
+        
+        return imagePicker
+    }
+    
+    private func imagePickerPhotos() -> UIImagePickerController {
+        let picker = imagePicker()
+        picker.sourceType = .photoLibrary
+        
+        return picker
+    }
+    
+    
+    private func presentNoWayToAccessPhotos() {
+        let alertController = UIAlertController(title: "No Way To Edit Profile Picture", message: "This device has denied permissions to both the camera roll and the camera", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            
+        }))
+        
+        present(alertController, animated: true, completion: nil)
+    }
 }
 
 
@@ -988,7 +1077,14 @@ extension ProfileVC {
 extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            imageView.image = pickedImage
+            
+            if let cgImage = pickedImage.cgImage, isUsingCamera == true {
+                let flippedImage = UIImage(cgImage: cgImage, scale: pickedImage.scale, orientation: UIImageOrientation.leftMirrored)
+                imageView.image = flippedImage
+            } else {
+                imageView.image = pickedImage
+            }
+
             imageView.contentMode = .scaleAspectFill
         }
         

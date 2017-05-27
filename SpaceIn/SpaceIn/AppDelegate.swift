@@ -204,5 +204,6 @@ extension AppDelegate: TutorialVCDelegate {
 extension AppDelegate {
     fileprivate func setupManagers() {
         ReachabilityManager.setup()
+        MediaManager.setup()
     }
 }
