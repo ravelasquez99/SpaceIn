@@ -105,7 +105,6 @@ class ProfileVC: UIViewController {
     fileprivate var hiddenView: UIView? = nil
     fileprivate var bioViewTextIsValid = false // need this var to determine if the bioviewtext should be edited programatically
     fileprivate var didMakeEdits = false
-    fileprivate var isUsingCamera = false
     
     
     
@@ -794,7 +793,6 @@ extension ProfileVC {
     }
     
     private func present(cameraVC: Bool) {
-        isUsingCamera = cameraVC
         let vc = cameraVC ? imagePickerCamera() : imagePickerPhotos()
         present(vc, animated: true, completion: nil)
     }
@@ -1077,14 +1075,7 @@ extension ProfileVC {
 extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            
-            if let cgImage = pickedImage.cgImage, isUsingCamera == true {
-                let flippedImage = UIImage(cgImage: cgImage, scale: pickedImage.scale, orientation: UIImageOrientation.leftMirrored)
-                imageView.image = flippedImage
-            } else {
-                imageView.image = pickedImage
-            }
-
+            imageView.image = pickedImage
             imageView.contentMode = .scaleAspectFill
         }
         
