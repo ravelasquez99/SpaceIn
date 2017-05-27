@@ -9,6 +9,7 @@
 
 import UIKit
 
+
 class ProfileVC: UIViewController {
     
     //MARK: - UI
@@ -622,10 +623,11 @@ extension ProfileVC {
     private func editImage() {
         endEditing()
         //let alertStyle = UIAlertControllerStyle.actionSheet
-        present(imagePickerPhotos(), animated: true, completion: nil)
+        present(imagePickerCamera(), animated: true, completion: nil)
     }
     
     private func imagePickerCamera() -> UIImagePickerController {
+       
         let imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .camera

@@ -1,6 +1,0 @@
-framework module LEMirroredImagePicker {
-  umbrella header "LEMirroredImagePicker-umbrella.h"
-
-  export *
-  module * { export * }
-}
