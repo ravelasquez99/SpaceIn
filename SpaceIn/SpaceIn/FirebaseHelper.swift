@@ -36,7 +36,16 @@ enum FirebaseReturnType {
 class FirebaseHelper {
     
     static let fireBaseBaseURL = "https://spacein-299ee.firebaseio.com/"
-    static let usersBranchURL = FirebaseHelper.fireBaseBaseURL + "users"
+    static let usersBranchURL = FirebaseHelper.fireBaseBaseURL + usersBranchName
+    
+    // User branch
+    static let usersBranchName = "users"
+    static let userNameKey = "name"
+    static let userEmailKey = "email"
+    static let userAgeKey = "age"
+    static let userLocationKey = "location"
+    static let userJobKey = "job"
+    static let userBioKey = "bio"
     
     class func createUser(name: String, email: String, password: String, completion: @escaping ( _ name: String, _ email: String, _ uid: String,  _ fbReturnType: FirebaseReturnType) -> Void) {
         
@@ -57,8 +66,8 @@ class FirebaseHelper {
     class func addUserToDatabase(user: FIRUser, name: String, email: String, completion: @escaping ( _ name: String, _ email: String, _ uid: String,  _ fbReturnType: FirebaseReturnType) -> Void) {
         
         let ref = FIRDatabase.database().reference(fromURL: FirebaseHelper.fireBaseBaseURL)
-        let usersReference = ref.child("users").child(user.uid)
-        let values = ["name": name, "email": email]
+        let usersReference = ref.child(FirebaseHelper.usersBranchName).child(user.uid)
+        let values = [FirebaseHelper.userNameKey: name, FirebaseHelper.userEmailKey: email]
         usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
             if err != nil {
                 completion("", "", "", FirebaseHelper.feedback(forError: err!))
@@ -174,5 +183,79 @@ class FirebaseHelper {
             }
         })
     }
+    
+    
+    class func makeProfileChanges(changes: ProfileChanges, for userID: String, completion: @escaping (FirebaseReturnType) -> ()) {
+        if let newProfilePic = changes.image {
+            FirebaseHelper.setNewProfileImage(newProfilePic, for: userID)
+        }
+        
+        guard let values = valuesForChanges(changes: changes) else {
+            return
+        }
+        
+        let ref = FIRDatabase.database().reference(fromURL: FirebaseHelper.fireBaseBaseURL)
+        let usersReference = ref.child(FirebaseHelper.usersBranchName).child(userID)
+        
+        usersReference.updateChildValues(values) { (error, returnedRef) in
+            if let error = error {
+                completion(feedback(forError: error))
+            } else {
+                completion(FirebaseReturnType.Success)
+            }
+        }
+        
+    }
 }
+
+
+//MARK: - Profile Changes
+
+extension FirebaseHelper {
+    fileprivate class func valuesForChanges(changes: ProfileChanges) -> [String: Any]? {
+        guard !changes.isEmpty() else {
+            return nil
+        }
+        
+        var valueDictionary = [String: Any]()
+        
+        if let name = changes.name {
+            valueDictionary[FirebaseHelper.userNameKey] = name
+        }
+        
+        if let age = changes.age {
+            valueDictionary[userAgeKey] = age
+        }
+        
+        if let location = changes.location {
+            valueDictionary[userLocationKey] = location
+        }
+        
+        if let job = changes.job {
+            valueDictionary[userJobKey] = job
+        }
+        
+        if let bio = changes.bio {
+            valueDictionary[userBioKey] = bio
+        }
+        
+        if valueDictionary.isEmpty {
+            return nil
+        } else {
+            return valueDictionary
+        }
+    }
+}
+
+
+//MARK: - Image Changes
+
+extension FirebaseHelper {
+    fileprivate static func setNewProfileImage(_ image: UIImage, for userID: String) {
+        
+    }
+}
+
+
+
 

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>We would like access to the camera so we can take pictures for your profile</string>
+	<string>We need access to your camera so that you may be able to take original pictures to use for whatever you&apos;d like</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We would like to use your photos for setting your profile pictue</string>
+	<string>We need access to your photos in order to help you view and use your device&apos;s images</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

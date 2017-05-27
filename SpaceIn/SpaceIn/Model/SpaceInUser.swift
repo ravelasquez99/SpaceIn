@@ -55,7 +55,7 @@ class SpaceInUser: NSObject {
         }
     }
     
-    let name: String
+    var name: String
     let email: String
     let uid: String
     
@@ -147,12 +147,13 @@ extension SpaceInUser {
         return SpaceInUser.current!.uid.characters.count > 0
     }
     
-    func madeChanges(changes: ProfileChanges) {
+    func madeChanges(changes: ProfileChanges, completion: @escaping (Bool, FirebaseReturnType?) -> ()) {
         guard !changes.isEmpty() else {
+            completion(true, nil)
             return
         }
         
-        makeChanges(changes: changes)
+        makeChanges(changes: changes, completion: completion)
     }
 }
 
@@ -198,7 +199,53 @@ extension SpaceInUser {
 //MARK: - Profile Changes
 
 extension SpaceInUser {
-    fileprivate func makeChanges(changes: ProfileChanges) {
+    fileprivate func makeChanges(changes: ProfileChanges, completion: @escaping (Bool, FirebaseReturnType?) -> ()) {
+        FirebaseHelper.makeProfileChanges(changes: changes, for: uid) { [weak self] (returnType) in
+            if returnType == FirebaseReturnType.Success {
+                self?.commit(name: changes.name, age: changes.age, location: changes.location, job: changes.job, bio: changes.bio)
+                completion(true, nil)
+            } else {
+                completion(false, returnType)
+            }
+        }
+    }
+    
+    private static func didUpdateCurrentUser() {
+        if SpaceInUser.current != nil {
+            NotificationCenter.default.post(name: .DidUpdateCurrentUser, object: nil)
+        }
+    }
+    
+    private func commit(name: String?, age: Int?, location: String?, job: String?, bio: String?) {
+        var didChange = false
         
+        if let newName = name {
+            self.name = newName
+            didChange = true
+        }
+        
+        if let newAge = age {
+            self.age = newAge
+            didChange = true
+        }
+        
+        if let newLocation = location {
+            self.location = newLocation
+            didChange = true
+        }
+        
+        if let newJob = job {
+            self.job = newJob
+            didChange = true
+        }
+        
+        if let newBio = bio {
+            self.bio = newBio
+            didChange = true
+        }
+        
+        if didChange && self == SpaceInUser.current {
+            SpaceInUser.didUpdateCurrentUser()
+        }
     }
 }

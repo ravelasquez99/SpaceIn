@@ -235,12 +235,8 @@ extension ProfileVC {
     }
     
     private func setupProfileImage() {
-        guard let profileImage = UIImage(named: AssetName.rickySquare.rawValue) else {
-            print("the profile image is not there")
-            return
-        }
-        
-        imageView.image = profileImage
+        let image = userForProfile?.image ?? UIImage(named: AssetName.profilePlaceholder.rawValue) ?? #imageLiteral(resourceName: "profilePlaceHolder") 
+        imageView.image = image
         
         // we add a clear view to hold the imageview that way we can keep the height for the contraints. we then add the imageview with a frame based layout
         
@@ -451,8 +447,25 @@ extension ProfileVC {
 extension ProfileVC {
     @objc fileprivate func closePressed() {
         endEditing()
-        updateSpaceinUserIfNeccessary()
-        self.dismiss(animated: true, completion: nil)
+        
+        guard isUserProfile else {
+            self.dismiss(animated: true, completion: nil)
+            return
+        }
+        
+        
+        updateSpaceinUserIfNeccessary { (success, returnType) in
+            DispatchQueue.main.async { [weak self] in
+                if success {
+                    self?.dismiss(animated: true, completion: nil)
+                } else if let returnType = returnType {
+                    self?.handleFirebaseReturnTypeForProfileEdit(returnType: returnType)
+                } else {
+                    self?.dismiss(animated: true, completion: nil)
+                }
+            }
+           
+        }
     }
 }
 
@@ -585,6 +598,7 @@ extension ProfileVC {
     
     private func editImage() {
         endEditing()
+        //let alertStyle = UIAlertControllerStyle.actionSheet
         present(imagePickerPhotos(), animated: true, completion: nil)
     }
     
@@ -943,9 +957,31 @@ extension ProfileVC {
     }
 }
 
+
+//MARK: - Image Picker
+
+extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            imageView.image = pickedImage
+            imageView.contentMode = .scaleAspectFill
+        }
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+
+//MARK: - Edit Profile
+
 extension ProfileVC {
-    fileprivate func updateSpaceinUserIfNeccessary(){
+    fileprivate func updateSpaceinUserIfNeccessary(completion: @escaping(Bool, FirebaseReturnType?) -> ()){
         guard isUserProfile else {
+            completion(true, nil)
             return
         }
         
@@ -983,25 +1019,30 @@ extension ProfileVC {
             profileChanges.image = imageView.image
         }
         
-        userForProfile?.madeChanges(changes: profileChanges)
-    }
-}
-
-
-extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            imageView.image = pickedImage
-            imageView.contentMode = .scaleAspectFill
+        guard !profileChanges.isEmpty() else {
+            completion(true, nil)
+            return
         }
         
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.userForProfile?.madeChanges(changes: profileChanges, completion: { (success, returnType) in
+                if !success {
+                    completion(false, returnType)
+                } else {
+                    completion(true, nil)
+                }
+            })
+        }
     }
 }
 
+
+//MARK: - Error Handling
+
+extension ProfileVC {
+    fileprivate func handleFirebaseReturnTypeForProfileEdit(returnType: FirebaseReturnType) {
+        print(returnType)
+    }
+}
 
 
