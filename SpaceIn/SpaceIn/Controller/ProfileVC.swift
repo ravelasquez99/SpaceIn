@@ -787,13 +787,9 @@ extension ProfileVC {
         
     }
     
-    //MOVE THIDA SDIFH DIAFAIERGIERHGOUT
-    private func canTakePhotos() -> Bool {
-        return UIImagePickerController.isSourceTypeAvailable(.camera)
-    }
-    
     private func present(cameraVC: Bool) {
         let vc = cameraVC ? imagePickerCamera() : imagePickerPhotos()
+        vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: true, completion: nil)
     }
     
