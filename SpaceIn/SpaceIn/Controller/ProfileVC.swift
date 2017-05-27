@@ -817,6 +817,7 @@ extension ProfileVC {
     private func imagePickerPhotos() -> UIImagePickerController {
         let picker = imagePicker()
         picker.sourceType = .photoLibrary
+        picker.mediaTypes = [kCIAttributeTypeImage]
         
         return picker
     }
