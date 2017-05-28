@@ -253,7 +253,24 @@ extension FirebaseHelper {
 
 extension FirebaseHelper {
     fileprivate static func setNewProfileImage(_ image: UIImage, for userID: String) {
+        guard let data = UIImageJPEGRepresentation(image, 1.0) else {
+            return
+        }
         
+        let ref = storageRef().child("profilePictures").child(userID)
+        let uploadMetaData = FIRStorageMetadata()
+        uploadMetaData.contentType = "image/jpeg"
+        ref.put(data, metadata: uploadMetaData) { (downloadMeta, error) in
+            if let error = error {
+                
+            } else if let downloadMeta = downloadMeta {
+                print("download url is \(downloadMeta.downloadURL())")
+            }
+        }
+    }
+    
+    private static func storageRef() -> FIRStorageReference {
+        return FIRStorage.storage().reference()
     }
 }
 
