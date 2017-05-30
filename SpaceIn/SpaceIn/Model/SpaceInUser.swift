@@ -200,6 +200,7 @@ extension SpaceInUser {
 
 extension SpaceInUser {
     fileprivate func makeChanges(changes: ProfileChanges, completion: @escaping (Bool, FirebaseReturnType?) -> ()) {
+        
         FirebaseHelper.makeProfileChanges(changes: changes, for: uid) { [weak self] (returnType) in
             if returnType == FirebaseReturnType.Success {
                 self?.commit(name: changes.name, age: changes.age, location: changes.location, job: changes.job, bio: changes.bio)

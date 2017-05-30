@@ -46,6 +46,7 @@ class FirebaseHelper {
     static let userLocationKey = "location"
     static let userJobKey = "job"
     static let userBioKey = "bio"
+    static let profilePicturesBasePath = "profilePictures"
     
     class func createUser(name: String, email: String, password: String, completion: @escaping ( _ name: String, _ email: String, _ uid: String,  _ fbReturnType: FirebaseReturnType) -> Void) {
         
@@ -149,6 +150,10 @@ class FirebaseHelper {
     
     class func loggedInUser() -> FIRUser? {
         return FIRAuth.auth()?.currentUser
+    }
+    
+    class func userIsSignedIn() -> Bool {
+        return loggedInUser() != nil
     }
     
     class func signOut() {
@@ -257,14 +262,24 @@ extension FirebaseHelper {
             return
         }
         
-        let ref = storageRef().child("profilePictures").child(userID)
+        guard FirebaseHelper.userIsSignedIn() else {
+            return // cannot post if user is not signed in
+        }
+        
+        let ref = storageRef().child(FirebaseHelper.profilePicturesBasePath).child(userID)
         let uploadMetaData = FIRStorageMetadata()
         uploadMetaData.contentType = "image/jpeg"
         ref.put(data, metadata: uploadMetaData) { (downloadMeta, error) in
             if let error = error {
-                
+                print(error.localizedDescription)
             } else if let downloadMeta = downloadMeta {
-                print("download url is \(downloadMeta.downloadURL())")
+                if let downLoadURL = downloadMeta.downloadURL() {
+                        print("download url is \(downLoadURL)")
+                } else {
+                    print("no download url")
+                }
+            } else {
+                print("Something else went wrong")
             }
         }
     }
