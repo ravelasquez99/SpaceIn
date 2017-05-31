@@ -46,7 +46,9 @@ class FirebaseHelper {
     static let userLocationKey = "location"
     static let userJobKey = "job"
     static let userBioKey = "bio"
+    static let userProfilePictureKey = "profilePictureURL"
     static let profilePicturesBasePath = "profilePictures"
+    
     
     class func createUser(name: String, email: String, password: String, completion: @escaping ( _ name: String, _ email: String, _ uid: String,  _ fbReturnType: FirebaseReturnType) -> Void) {
         
@@ -190,9 +192,9 @@ class FirebaseHelper {
     }
     
     
-    class func makeProfileChanges(changes: ProfileChanges, for userID: String, completion: @escaping (FirebaseReturnType) -> ()) {
+    class func makeProfileChanges(changes: ProfileChanges, for userID: String, completion: @escaping (FirebaseReturnType) -> (), imageChangeCompletion: @escaping ((Bool, String?) -> ())) {
         if let newProfilePic = changes.image {
-            FirebaseHelper.setNewProfileImage(newProfilePic, for: userID)
+            FirebaseHelper.setNewProfileImage(newProfilePic, for: userID, completion: imageChangeCompletion)
         }
         
         guard let values = valuesForChanges(changes: changes) else {
@@ -245,6 +247,10 @@ extension FirebaseHelper {
             valueDictionary[userBioKey] = bio
         }
         
+        if let imageURL = changes.imageURL {
+            valueDictionary[userProfilePictureKey] = imageURL
+        }
+        
         if valueDictionary.isEmpty {
             return nil
         } else {
@@ -257,13 +263,15 @@ extension FirebaseHelper {
 //MARK: - Image Changes
 
 extension FirebaseHelper {
-    fileprivate static func setNewProfileImage(_ image: UIImage, for userID: String) {
-        guard let data = UIImageJPEGRepresentation(image, 1.0) else {
-            return
+    fileprivate static func setNewProfileImage(_ image: UIImage, for userID: String, completion: @escaping(Bool, String?) ->()) {
+        guard FirebaseHelper.userIsSignedIn() else {
+            completion(false, "You must be signed in to change a picture")
+            return // cannot post if user is not signed in
         }
         
-        guard FirebaseHelper.userIsSignedIn() else {
-            return // cannot post if user is not signed in
+        guard let data = UIImageJPEGRepresentation(image, 1.0) else {
+            completion(false, "We could not proccess the image")
+            return
         }
         
         let ref = storageRef().child(FirebaseHelper.profilePicturesBasePath).child(userID)
@@ -271,21 +279,40 @@ extension FirebaseHelper {
         uploadMetaData.contentType = "image/jpeg"
         ref.put(data, metadata: uploadMetaData) { (downloadMeta, error) in
             if let error = error {
-                print(error.localizedDescription)
+                completion(false, error.localizedDescription)
             } else if let downloadMeta = downloadMeta {
                 if let downLoadURL = downloadMeta.downloadURL() {
-                        print("download url is \(downLoadURL)")
+                    changeProfilePictureURl(url: downLoadURL.absoluteString, uid: userID, completion: completion)
                 } else {
-                    print("no download url")
+                    completion(false, "something went wrong. there is download meta data but there is no download url")
                 }
             } else {
-                print("Something else went wrong")
+                completion(false, "Something else went wrong. There is no error and there is no download Meta data")
             }
+        }
+    }
+    
+    private static func changeProfilePictureURl(url: String, uid: String, completion: @escaping(Bool, String)->()) {
+        let changes = ProfileChanges(name: nil, image: nil, age: nil, location: nil, job: nil, bio: nil, imageURL: url)
+        
+        FirebaseHelper.makeProfileChanges(changes: changes, for: uid, completion: { (returnType) in
+            if returnType == FirebaseReturnType.Success {
+                completion(true, url)
+            } else {
+                completion(false, "There was an issue saving the image url")
+            }
+        }) { (notUsed, AlsoNotUsedString) in
+            
         }
     }
     
     private static func storageRef() -> FIRStorageReference {
         return FIRStorage.storage().reference()
+    }
+    
+    
+    private func setImageURL(url: String, uid: String) {
+        
     }
 }
 

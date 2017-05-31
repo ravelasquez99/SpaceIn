@@ -17,6 +17,7 @@ struct ProfileChanges {
     var location: String?
     var job: String?
     var bio: String?
+    var imageURL: String?
     
     func isEmpty() -> Bool {
         if name != nil {
@@ -43,6 +44,10 @@ struct ProfileChanges {
             return false
         }
         
+        if imageURL != nil {
+            return false
+        }
+        
         return true
     }
 }
@@ -65,6 +70,9 @@ class SpaceInUser: NSObject {
     var location: String?
     var image: UIImage?
     var imageURL: String?
+    fileprivate var previousProfileImage: UIImage?
+    fileprivate var previousProfileImageURL: String?
+
     
     fileprivate var coordinate: CLLocationCoordinate2D? {
         didSet {
@@ -200,15 +208,31 @@ extension SpaceInUser {
 
 extension SpaceInUser {
     fileprivate func makeChanges(changes: ProfileChanges, completion: @escaping (Bool, FirebaseReturnType?) -> ()) {
+        if let changedImaged = changes.image {
+            previousProfileImage = image
+            previousProfileImageURL = imageURL
+            image = changedImaged
+            postProfileImageChangedNotification()
+        }
         
-        FirebaseHelper.makeProfileChanges(changes: changes, for: uid) { [weak self] (returnType) in
+        FirebaseHelper.makeProfileChanges(changes: changes, for: uid, completion: { [weak self] (returnType) in
             if returnType == FirebaseReturnType.Success {
                 self?.commit(name: changes.name, age: changes.age, location: changes.location, job: changes.job, bio: changes.bio)
                 completion(true, nil)
             } else {
                 completion(false, returnType)
             }
-        }
+        }, imageChangeCompletion: { [weak self] success, urlString in
+            if changes.image != nil {
+                if success {
+                    self?.imageURL = urlString
+                    self?.previousProfileImage = nil
+                } else {
+                    print(urlString ?? "no  message")
+                    self?.failedToChangeProfilePciture()
+                }
+            }
+        })
     }
     
     private static func didUpdateCurrentUser() {
@@ -248,5 +272,23 @@ extension SpaceInUser {
         if didChange && self == SpaceInUser.current {
             SpaceInUser.didUpdateCurrentUser()
         }
+    }
+    
+    private func postProfileImageChangedNotification() {
+        print("Posting profile picture change notification")
+    }
+    
+    private func failedToChangeProfilePciture() {
+        image = previousProfileImage ?? nil
+        previousProfileImage = nil
+        
+        imageURL = previousProfileImageURL ?? nil
+        previousProfileImageURL = nil
+        
+        postFailedToChangeProfilePictureNotification()
+    }
+    
+    private func postFailedToChangeProfilePictureNotification() {
+        print("Posting profile picture change notification")
     }
 }
