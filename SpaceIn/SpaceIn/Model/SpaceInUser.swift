@@ -275,7 +275,7 @@ extension SpaceInUser {
     }
     
     private func postProfileImageChangedNotification() {
-        print("Posting profile picture change notification")
+        NotificationCenter.default.post(name: .DidSetCurrentUserProfilePicture, object: nil)
     }
     
     private func failedToChangeProfilePciture() {
@@ -285,10 +285,6 @@ extension SpaceInUser {
         imageURL = previousProfileImageURL ?? nil
         previousProfileImageURL = nil
         
-        postFailedToChangeProfilePictureNotification()
-    }
-    
-    private func postFailedToChangeProfilePictureNotification() {
-        print("Posting profile picture change notification")
+        postProfileImageChangedNotification()
     }
 }

@@ -54,6 +54,7 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addNotificationObservers()
         UIApplication.shared.statusBarStyle = .lightContent
         mapView.mapViewDelagate = self
         addViews()
@@ -196,6 +197,21 @@ extension MapViewController {
 
     }
     
+    fileprivate func setProfileButtonImage() {
+        var image: UIImage
+        var contentMode = UIViewContentMode.scaleAspectFit
+        
+        if let spaceInUserImage = SpaceInUser.current?.image {
+            image = spaceInUserImage
+            contentMode = .scaleAspectFill
+        } else {
+            image = UIImage(named: AssetName.profilePlaceholder.rawValue)!
+        }
+
+        profileButton.setImage(image, for: .normal)
+        profileButton.imageView?.contentMode = contentMode
+    }
+    
     fileprivate func constrain() {
         if didConstrain == false {
             constrainMapView()
@@ -203,7 +219,6 @@ extension MapViewController {
             constrainButtons()
         }
     }
-    
     
     fileprivate func constrainMapView() {
         mapView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -300,10 +315,8 @@ extension MapViewController {
         profileContainerButton.backgroundColor = UIColor.clear
         setupRounded(button: profileContainerButton, withImage: nil)
         
-        let profileImage = profileButtonImage()
-        profileButton.setImage(profileImage, for: .normal)
-        profileButton.imageView?.contentMode = .scaleAspectFit
-        
+        setProfileButtonImage()
+
         profileButton.addTarget(self, action: #selector(profileButtonPressed), for: .touchUpInside)
         
         profileContainerButton.addSubview(profileButton)
@@ -316,11 +329,6 @@ extension MapViewController {
         
         profileButton.layer.borderWidth = 0.0
     }
-    
-    private func profileButtonImage() -> UIImage {
-        return UIImage(named: AssetName.profilePlaceholder.rawValue)!
-    }
-
     
     private func setupRounded(button: RoundedButton, withImage image: UIImage?) {
         button.setImage(image, for: .normal)
@@ -416,13 +424,34 @@ extension MapViewController {
 }
 
 
-//MARK: - Profile
+//MARK: - Notifications
+
 extension MapViewController {
     @objc fileprivate func notificationsButtonPressed() {
         presentNotificationsVC()
     }
     
     private func presentNotificationsVC() {
+        
+        
+    }
+}
+
+
+//MARK: - External Events
+
+extension MapViewController {
+    fileprivate func addNotificationObservers() {
+        let notificationCenter = NotificationCenter.default
+        
+        notificationCenter.addObserver(self, selector: #selector(profilePictureChanged), name: .DidSetCurrentUserProfilePicture, object: nil)
+    }
+    
+    @objc private func profilePictureChanged() {
+        setProfileButtonImage()
+        // who needs to know about the picture change?
+        //map pin
+        //center icon
         
         
     }
