@@ -242,6 +242,8 @@ extension ProfileVC {
     }
     
     private func setupProfileImage() {
+        let isPlaceholderImage = userForProfile?.image == nil
+        
         let image = userForProfile?.image ?? UIImage(named: AssetName.profilePlaceholder.rawValue) ?? #imageLiteral(resourceName: "profilePlaceHolder") 
         imageView.image = image
         
@@ -260,7 +262,7 @@ extension ProfileVC {
         
         imageView.frame = CGRect(x: 0, y: 0, width: ProfileVC.imageViewHeight, height: ProfileVC.imageViewHeight)
         
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode =  isPlaceholderImage ? .scaleAspectFit : .scaleAspectFill
         imageView.layer.borderWidth = 1
         imageView.layer.masksToBounds = false
         imageView.layer.borderColor = UIColor.clear.cgColor
