@@ -262,7 +262,7 @@ extension ProfileVC {
         
         imageView.frame = CGRect(x: 0, y: 0, width: ProfileVC.imageViewHeight, height: ProfileVC.imageViewHeight)
         
-        imageView.contentMode =  isPlaceholderImage ? .scaleAspectFit : .scaleAspectFill
+        imageView.contentMode =  isPlaceholderImage ? .scaleAspectFit : .scaleAspectFill // placeholder appears differently if .scaleaspectfill
         imageView.layer.borderWidth = 1
         imageView.layer.masksToBounds = false
         imageView.layer.borderColor = UIColor.clear.cgColor
