@@ -448,7 +448,10 @@ extension MapViewController {
     }
     
     @objc private func profilePictureChanged() {
-        setProfileButtonImage()
+        DispatchQueue.main.async { [weak self] in
+            self?.setProfileButtonImage()
+        }
+        
         // who needs to know about the picture change?
         //map pin
         //center icon
