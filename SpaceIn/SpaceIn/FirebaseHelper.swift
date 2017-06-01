@@ -269,7 +269,12 @@ extension FirebaseHelper {
             return // cannot post if user is not signed in
         }
         
-        guard let data = UIImageJPEGRepresentation(image, 1.0) else {
+        guard let imageToPost = image.normalizedImage() else {
+            completion(false, "Image could not be normalized")
+            return
+        }
+        
+        guard let data = UIImageJPEGRepresentation(imageToPost, 1.0) else {
             completion(false, "We could not proccess the image")
             return
         }
