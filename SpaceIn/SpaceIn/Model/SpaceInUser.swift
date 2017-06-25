@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import Firebase
+import SDWebImage
 
 struct ProfileChanges {
     var name: String?
@@ -290,7 +291,20 @@ extension SpaceInUser {
             return
         }
         
+        guard let url = URL(string: urlForProfilePicture) else {
+            return
+        }
         
+        
+        
+        SDWebImageManager.shared().downloadImage(with: url, options: SDWebImageOptions(rawValue: 0), progress: { (one, two) in
+            
+        }) { [weak self] (image, error, cacheType, finished, url) in
+            if let image = image {
+                self?.image = image
+                self?.postProfileImageChangedNotification()
+            }
+        }
     }
 }
 
@@ -405,7 +419,11 @@ extension SpaceInUser {
         }
     }
     
-    private func postProfileImageChangedNotification() {
+    fileprivate func postProfileImageChangedNotification() {
+        guard self == SpaceInUser.current else {
+            return
+        }
+        
         NotificationCenter.default.post(name: .DidSetCurrentUserProfilePicture, object: nil)
     }
     
