@@ -24,6 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         // Use Firebase library to configure APIs
         FIRApp.configure()
+        FIRDatabase.database().persistenceEnabled = true
+
         
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
@@ -142,7 +144,7 @@ extension AppDelegate: TutorialVCDelegate {
     private func setupUserSettingsAndLaunchMapVC() {
         let location: CLLocation
         
-        SpaceInUser.setCurrentUserFromUserDefaults()
+        SpaceInUser.initializeCurrentUser()
         
         //We check for location in this order 1. the spaceinuserlocation has been set 2. The location manager has a location (which means we can from tutorial most likely 3. default location
         

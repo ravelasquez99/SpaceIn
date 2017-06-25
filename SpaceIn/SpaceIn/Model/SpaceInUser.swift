@@ -18,6 +18,7 @@ struct ProfileChanges {
     var job: String?
     var bio: String?
     var imageURL: String?
+    var email: String?
     
     func isEmpty() -> Bool {
         if name != nil {
@@ -104,6 +105,10 @@ class SpaceInUser: NSObject {
     static let loggedInUserNameString = "UserName"
     static let loggedInUserEmailString = "UserEmail"
     static let loggedInUserUIDString = "UserUID"
+    static let loggedInUserAgeInt = "UserAGE"
+    static let loggedInUserLocationString = "UserLocationLiving"
+    static let loggedInUserJobString = "UserJob"
+    static let loggedInUserBioString = "UserJob"
     static let loggedInUserCoordinateLatString = "UserCoordinateLat"
     static let loggedInUserCoordinateLongString = "UserCoordinateLong"
 }
@@ -112,7 +117,8 @@ class SpaceInUser: NSObject {
 //MARK: - API
 
 extension SpaceInUser {
-    static func setCurrentUserFromUserDefaults() {
+    // we load information from user defaults. Then if we have a valid
+    static func initializeCurrentUser() {
         guard SpaceInUser.current == nil else {
             return  // we don't overwrite the current user with the info from defaults. we only write to defaults
         }
@@ -127,15 +133,32 @@ extension SpaceInUser {
         
         SpaceInUser.current = SpaceInUser(name: name, email: email, uid: uid)
         
-        guard let userLat = defaults.value(forKey: SpaceInUser.loggedInUserCoordinateLatString) as? Double else {
-            return
+        if let currentUser = SpaceInUser.current {
+            if let age = defaults.value(forKey: SpaceInUser.loggedInUserAgeInt) as? Int {
+                currentUser.age = age
+            }
+            
+            if let location = defaults.value(forKey: SpaceInUser.loggedInUserLocationString) as? String {
+                currentUser.location = location
+            }
+            
+            if let job = defaults.value(forKey: SpaceInUser.loggedInUserJobString) as? String {
+                currentUser.job = job
+            }
+            
+            if let bio = defaults.value(forKey: SpaceInUser.loggedInUserBioString) as? String {
+                currentUser.bio = bio
+            }
         }
         
-        guard let userLong = defaults.value(forKey: SpaceInUser.loggedInUserCoordinateLongString) as? Double else {
-            return
+        if let userLat = defaults.value(forKey: SpaceInUser.loggedInUserCoordinateLatString) as? Double {
+            if let userLong = defaults.value(forKey: SpaceInUser.loggedInUserCoordinateLongString) as? Double {
+                 SpaceInUser.current!.movedToCoordinate(coordinate: CLLocationCoordinate2D(latitude: userLat, longitude: userLong))
+            }
         }
         
-        SpaceInUser.current!.movedToCoordinate(coordinate: CLLocationCoordinate2D(latitude: userLat, longitude: userLong))
+        
+       
     }
     
     
@@ -165,7 +188,44 @@ extension SpaceInUser {
     }
 }
 
+
+//MARK: - LoadingState
+extension SpaceInUser {
+    fileprivate func loadInformationFromServer() {
+        guard self.uid.isValidString() else {
+            return
+        }
+        
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async { [weak self] in
+            guard self != nil else {
+                return
+            }
+            FirebaseHelper.fetchInfoForUserID(userID: self!.uid, completion: { (firReturnType, changes) in
+                guard let strongSelf = self else {
+                    return
+                }
+                
+                if firReturnType == FirebaseReturnType.Success {
+                    strongSelf.loadChangesFromServer(changes: changes)
+                } else  {
+                    strongSelf.updateUserInfoToServer()
+                }
+            })
+        }
+    }
+    
+    private func loadChangesFromServer(changes: ProfileChanges?) {
+        // breadcrumb - start here next time.
+    }
+    
+    private func updateUserInfoToServer() {
+        
+    }
+}
+
+
 //MARK: - Setter
+
 extension SpaceInUser {
     fileprivate class func didSetCurrentUser() {
         if SpaceInUser.current != nil {

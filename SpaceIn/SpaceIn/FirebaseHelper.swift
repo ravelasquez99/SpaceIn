@@ -31,6 +31,9 @@ enum FirebaseReturnType {
     //Network
     case NetworkError
     case TooManyRequests
+    
+    //User information
+    case informationNotValid
 }
 
 class FirebaseHelper {
@@ -202,8 +205,7 @@ class FirebaseHelper {
             return
         }
         
-        let ref = FIRDatabase.database().reference(fromURL: FirebaseHelper.fireBaseBaseURL)
-        let usersReference = ref.child(FirebaseHelper.usersBranchName).child(userID)
+        let usersReference = FirebaseHelper.profileReference().child(userID)
         
         usersReference.updateChildValues(values) { (error, returnedRef) in
             if let error = error {
@@ -212,7 +214,47 @@ class FirebaseHelper {
                 completion(FirebaseReturnType.Success)
             }
         }
+    }
+    
+    class func fetchInfoForUserID(userID: String, completion: @escaping (FirebaseReturnType, ProfileChanges?)->()) {
+        let ref = FirebaseHelper.profileReference().child(userID)
         
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let value = snapshot.value else {
+                completion(FirebaseReturnType.UserNotFound, nil)
+                return
+            }
+            
+            guard let dictionary = value as? NSDictionary else {
+                completion(FirebaseReturnType.informationNotValid, nil)
+                return
+            }
+            
+            completion(FirebaseReturnType.Success, FirebaseHelper.profileChanges(from: dictionary))
+        })
+    }
+}
+
+
+//MARK: - Profile Branch
+extension FirebaseHelper {
+    fileprivate class func profileReference() -> FIRDatabaseReference {
+        return FIRDatabase.database().reference(fromURL: FirebaseHelper.fireBaseBaseURL).child(FirebaseHelper.usersBranchName)
+    }
+    
+    fileprivate class func profileChanges(from dict: NSDictionary) -> ProfileChanges? {
+        let name = dict[FirebaseHelper.userNameKey] as? String
+        let email = dict[FirebaseHelper.userEmailKey] as? String
+        let age = dict[FirebaseHelper.userAgeKey] as? Int
+        let location = dict[FirebaseHelper.userLocationKey] as? String
+        let job = dict[FirebaseHelper.userJobKey] as? String
+        let bio = dict[FirebaseHelper.userBioKey] as? String
+        let imageURL = dict[FirebaseHelper.userProfilePictureKey] as? String
+        
+        
+        let profileChanges = ProfileChanges(name: name, image: nil, age: age, location: location, job: job, bio: bio, imageURL: imageURL, email: email)
+        
+        return profileChanges
     }
 }
 
@@ -298,7 +340,7 @@ extension FirebaseHelper {
     }
     
     private static func changeProfilePictureURl(url: String, uid: String, completion: @escaping(Bool, String)->()) {
-        let changes = ProfileChanges(name: nil, image: nil, age: nil, location: nil, job: nil, bio: nil, imageURL: url)
+        let changes = ProfileChanges(name: nil, image: nil, age: nil, location: nil, job: nil, bio: nil, imageURL: url, email: nil)
         
         FirebaseHelper.makeProfileChanges(changes: changes, for: uid, completion: { (returnType) in
             if returnType == FirebaseReturnType.Success {
