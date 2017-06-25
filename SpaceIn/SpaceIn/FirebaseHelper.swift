@@ -187,7 +187,7 @@ class FirebaseHelper {
                         if let coordinate = coordinate {
                             SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
                         }
-                        
+                        SpaceInUser.current?.loadInformationFromServer()
                     } else {
                         NotificationCenter.default.post(name: .DidFailLogin, object: nil)
                     }

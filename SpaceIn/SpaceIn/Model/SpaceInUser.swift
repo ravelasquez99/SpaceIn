@@ -62,7 +62,7 @@ class SpaceInUser: NSObject {
     }
     
     var name: String
-    let email: String
+    var email: String
     var uid: String
     
     var bio: String?
@@ -70,7 +70,18 @@ class SpaceInUser: NSObject {
     var job: String?
     var location: String?
     var image: UIImage?
-    var imageURL: String?
+    var imageURL: String? {
+        didSet {
+            if oldValue != imageURL {
+                if let newURL = imageURL {
+                    if newURL.isValidString() {
+                        updateProfileImage()
+                    }
+                }
+            }
+        }
+    }
+    
     fileprivate var previousProfileImage: UIImage?
     fileprivate var previousProfileImageURL: String?
 
@@ -191,7 +202,7 @@ extension SpaceInUser {
 
 //MARK: - LoadingState
 extension SpaceInUser {
-    fileprivate func loadInformationFromServer() {
+    func loadInformationFromServer() {
         guard self.uid.isValidString() else {
             return
         }
@@ -206,21 +217,79 @@ extension SpaceInUser {
                     return
                 }
                 
-                if firReturnType == FirebaseReturnType.Success {
-                    strongSelf.loadChangesFromServer(changes: changes)
-                } else  {
-                    strongSelf.updateUserInfoToServer()
+                if firReturnType == FirebaseReturnType.Success && changes != nil {
+                    strongSelf.loadChangesFromServer(changes: changes!)
+                } else {
+                    strongSelf.failedToLoadInfoFromServer()
                 }
             })
         }
     }
     
     private func loadChangesFromServer(changes: ProfileChanges?) {
+        var didLoadNewChanges = false
         
-        // breadcrumb - start here next time.
+        if let name = changes?.name {
+            self.name = name
+            didLoadNewChanges = true
+        }
+        
+        if let age = changes?.age {
+            self.age = age
+            didLoadNewChanges = true
+        }
+        
+        if let location = changes?.location {
+            self.location = location
+            didLoadNewChanges = true
+        }
+        
+        if let job = changes?.job {
+            self.job = job
+            didLoadNewChanges = true
+        }
+        
+        if let bio = changes?.bio {
+            self.bio = bio
+            didLoadNewChanges = true
+        }
+        
+        // if we have an image we don't want to set the image url
+        if let image = changes?.image {
+            self.image = image
+        } else if let imageURL = changes?.imageURL {
+            self.imageURL = imageURL
+        }
+        
+        if let email = changes?.email {
+            self.email = email
+            didLoadNewChanges = true
+        }
+        
+        if didLoadNewChanges {
+            didLoadChanges()
+        }
     }
     
-    private func updateUserInfoToServer() {
+    private func failedToLoadInfoFromServer() {
+        
+    }
+    
+    private func didLoadChanges() {
+        if self == SpaceInUser.current {
+            SpaceInUser.didSetCurrentUser()
+        }
+    }
+}
+
+
+//MARK: - Image
+extension SpaceInUser {
+    fileprivate func updateProfileImage() {
+        guard let urlForProfilePicture = imageURL else {
+            return
+        }
+        
         
     }
 }
