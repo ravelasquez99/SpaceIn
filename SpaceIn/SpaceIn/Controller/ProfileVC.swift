@@ -404,6 +404,8 @@ extension ProfileVC {
             
         buttonHeightConstraint?.isActive = true
         startConvoLogOutButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
+        
+        startConvoLogOutButton.addTarget(self, action: #selector(self.startConversationOrLogOut), for: .touchUpInside)
 
     }
     
@@ -1222,6 +1224,53 @@ extension ProfileVC {
             spinner.removeFromSuperview()
         }
 
+    }
+}
+
+
+//MARK: - Log Out/Start Convo
+extension ProfileVC {
+    @objc fileprivate func startConversationOrLogOut() {
+        if isUserProfile {
+            logOut()
+        } else {
+            startConversation()
+        }
+    }
+    
+    private func logOut() {
+        FirebaseHelper.signOut()
+        if !FirebaseHelper.userIsSignedIn() {
+            SpaceInUser.logOut()
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            presentSignOutFailure()
+        }
+        
+    }
+    
+    private func presentSignOutFailure() {
+        
+        let alertMessage = AlertMessage.issueLoggingOut()
+        let alertController = UIAlertController(title: alertMessage.alertTitle, message: alertMessage.alertSubtitle ?? nil, preferredStyle: .alert)
+        
+        
+        let yesAction = UIAlertAction(title: alertMessage.actionButton1Title, style: .default) { (action) in
+            self.logOut()
+        }
+        
+        alertController.addAction(yesAction)
+        
+        let noAction = UIAlertAction(title: alertMessage.actionButton2title ?? "No", style: .default) { (action) in
+        }
+        
+        alertController.addAction(noAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func startConversation() {
+        
     }
 }
 

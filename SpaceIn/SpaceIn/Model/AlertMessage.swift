@@ -58,6 +58,9 @@ enum AlertMessages: String {
     
     case failedInternetTitle = "Oops, looks like something is wrong with your Internet"
     case failedToPostInternetSubtitle = "There might be something wrong with your Internet connection or our servers"
+    
+    case failedToSignOutTitle = "Oops, there was an issue signing out"
+    case failedToSignOutSubTitle = "Would you like to try again"
 
 
 }
@@ -157,6 +160,10 @@ class AlertMessage {
     
     class func serverIssueSavingProfile() -> AlertMessage {
         return AlertMessage(title: AlertMessages.failedToPostToServerTitle.rawValue, subtitle: AlertMessages.failedToPostToServerSubTitle.rawValue, actionButtontitle: "Ok, Maybe Later", secondButtonTitle: "Try Again")
+    }
+    
+    class func issueLoggingOut() -> AlertMessage {
+        return AlertMessage(title: AlertMessages.failedToSignOutTitle.rawValue, subtitle: AlertMessages.failedToSignOutSubTitle.rawValue, actionButtontitle: "Yes", secondButtonTitle: "No")
     }
     
     class func networkIssueSavingProfile() -> AlertMessage {

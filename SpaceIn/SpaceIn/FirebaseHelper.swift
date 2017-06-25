@@ -164,7 +164,6 @@ class FirebaseHelper {
     class func signOut() {
         do {
             try FIRAuth.auth()?.signOut()
-            SpaceInUser.current = nil
         } catch {
             print("we could not sign out")
         }

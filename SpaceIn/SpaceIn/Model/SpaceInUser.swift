@@ -182,6 +182,24 @@ extension SpaceInUser {
         return self.coordinate
     }
     
+    static func logOut() {
+        let defaults = UserDefaults.standard
+        
+        defaults.removeObject(forKey: SpaceInUser.loggedInUserNameString)
+        defaults.removeObject(forKey: SpaceInUser.loggedInUserEmailString)
+        defaults.removeObject(forKey: SpaceInUser.loggedInUserUIDString)
+        
+        let existingCoordinate = SpaceInUser.current?.coordinate
+        SpaceInUser.current = SpaceInUser(name: "", email: "", uid: "")
+        
+        if let coordinate = existingCoordinate {
+            SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
+        }
+        
+        postProfileImageChangedNotification()
+    }
+    
+    
     static func userIsLoggedIn() -> Bool {
         guard SpaceInUser.current != nil else {
             return false
@@ -302,7 +320,10 @@ extension SpaceInUser {
         }) { [weak self] (image, error, cacheType, finished, url) in
             if let image = image {
                 self?.image = image
-                self?.postProfileImageChangedNotification()
+                if self == SpaceInUser.current {
+                    SpaceInUser.postProfileImageChangedNotification()
+                }
+                
             }
         }
     }
@@ -357,7 +378,9 @@ extension SpaceInUser {
             previousProfileImage = image
             previousProfileImageURL = imageURL
             image = changedImaged
-            postProfileImageChangedNotification()
+            if self == SpaceInUser.current {
+                SpaceInUser.postProfileImageChangedNotification()
+            }
         }
         
         FirebaseHelper.makeProfileChanges(changes: changes, for: uid, completion: { [weak self] (returnType) in
@@ -419,11 +442,7 @@ extension SpaceInUser {
         }
     }
     
-    fileprivate func postProfileImageChangedNotification() {
-        guard self == SpaceInUser.current else {
-            return
-        }
-        
+    fileprivate static func postProfileImageChangedNotification() {
         NotificationCenter.default.post(name: .DidSetCurrentUserProfilePicture, object: nil)
     }
     
@@ -434,6 +453,6 @@ extension SpaceInUser {
         imageURL = previousProfileImageURL ?? nil
         previousProfileImageURL = nil
         
-        postProfileImageChangedNotification()
+        SpaceInUser.postProfileImageChangedNotification()
     }
 }
