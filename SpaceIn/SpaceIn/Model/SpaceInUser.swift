@@ -63,7 +63,7 @@ class SpaceInUser: NSObject {
     
     var name: String
     let email: String
-    let uid: String
+    var uid: String
     
     var bio: String?
     var age: Int?
@@ -157,7 +157,7 @@ extension SpaceInUser {
             }
         }
         
-        
+        SpaceInUser.current?.loadInformationFromServer()
        
     }
     
@@ -200,6 +200,7 @@ extension SpaceInUser {
             guard self != nil else {
                 return
             }
+            
             FirebaseHelper.fetchInfoForUserID(userID: self!.uid, completion: { (firReturnType, changes) in
                 guard let strongSelf = self else {
                     return
@@ -215,6 +216,7 @@ extension SpaceInUser {
     }
     
     private func loadChangesFromServer(changes: ProfileChanges?) {
+        
         // breadcrumb - start here next time.
     }
     

@@ -182,7 +182,12 @@ class FirebaseHelper {
             } else if returnedUser != nil {
                 FirebaseHelper.addUserToDatabase(user: returnedUser!, name: user.profile.name, email: user.profile.email, completion: { userName, userEmail, userID, returnType in
                     if returnType == .Success {
+                        let coordinate = SpaceInUser.current?.getCoordinate()
                         SpaceInUser.current = SpaceInUser(name: userName, email: userEmail, uid: userID)
+                        if let coordinate = coordinate {
+                            SpaceInUser.current?.movedToCoordinate(coordinate: coordinate)
+                        }
+                        
                     } else {
                         NotificationCenter.default.post(name: .DidFailLogin, object: nil)
                     }
