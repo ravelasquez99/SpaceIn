@@ -449,6 +449,7 @@ extension MapViewController {
     @objc private func profilePictureChanged() {
         DispatchQueue.main.async { [weak self] in
             self?.setProfileButtonImage()
+            self?.mapView.reloadUserAnnotationIfNeeded()
         }
         
         // who needs to know about the picture change?

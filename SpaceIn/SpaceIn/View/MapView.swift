@@ -35,6 +35,10 @@ extension MapView {
     func isIn3DMode() -> Bool {
         return camera.pitch != 0
     }
+    
+    func reloadUserAnnotationIfNeeded() {
+        _reloadUserAnnotationIfNeeded()
+    }
 }
 
 // MARK: - Map View Delegate
@@ -166,7 +170,18 @@ extension MapView {
     public func removeUserPin() {
         if self.userAnnotation != nil {
             self.removePin(pin: self.userAnnotation!)
+            self.userAnnotation = nil
         }
+    }
+    
+    public func _reloadUserAnnotationIfNeeded() {
+        guard let visibleUserAnnotation = self.userAnnotation else {
+            return
+        }
+        
+        let coordinate = visibleUserAnnotation.coordinate
+        self.removeUserPin()
+        self.addUserPin(withCoordinate: coordinate)
     }
     
     fileprivate func setupUserPinBasedOnZoomType(zoomType: MapViewZoomType) {
@@ -239,7 +254,11 @@ extension MapView: MKMapViewDelegate {
         
         //2. get the identifier for the annotation
         //3. if the view exists, return it
-        if let viewToReturn = mapView.dequeueReusableAnnotationView(withIdentifier: userAnnotation.uid) {
+        if let viewToReturn = mapView.dequeueReusableAnnotationView(withIdentifier: userAnnotation.uid) as? UserAnnotationView {
+            if let userPicture = userAnnotation.user.image {
+                viewToReturn.pictureView.image = userPicture
+            }
+            
             viewToReturn.annotation = annotation
             return viewToReturn
         } else {  //4. Else, create the view

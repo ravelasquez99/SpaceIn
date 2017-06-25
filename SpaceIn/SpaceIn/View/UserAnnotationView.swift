@@ -13,9 +13,11 @@ class UserAnnotationView: MKAnnotationView {
     static let imageIdentifier = "mapProfile"
     let pictureView = UIImageView(asConstrainable: false)
     let pinView = UIImageView(asConstrainable: false)
+    weak var user: SpaceInUser?
     
     convenience init (annotation: MKAnnotation, user: SpaceInUser) {
         self.init(annotation: annotation, reuseIdentifier: user.uid)
+        self.user = user
         setup()
     }
     
@@ -46,8 +48,18 @@ class UserAnnotationView: MKAnnotationView {
         let diameter = pinView.frame.size.height * 0.9 - circleBorderWidth
         
         pictureView.frame = CGRect(x: sidePadding+circleBorderWidth, y: circleBorderWidth / 2, width: diameter, height: diameter)
-        let image = UIImage(named: AssetName.profilePlaceholder.rawValue)
-        pictureView.image = image
+        
+        let placeholderImage = UIImage(named: AssetName.profilePlaceholder.rawValue)
+        pictureView.image = placeholderImage
+
+        if let profileImage = user?.image {
+            pictureView.image = profileImage
+        } else if let imageURL = user?.imageURL {
+            if let url = URL(string: imageURL) {
+                pictureView.sd_setImage(with: url, placeholderImage: placeholderImage!)
+            }
+        }
+                    
         pictureView.contentMode = .scaleAspectFit
         
         pictureView.layer.cornerRadius = pictureView.frame.size.width / 2
