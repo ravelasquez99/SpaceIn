@@ -60,7 +60,7 @@ class UserAnnotationView: MKAnnotationView {
             }
         }
                     
-        pictureView.contentMode = .scaleAspectFit
+        pictureView.contentMode = .scaleAspectFill
         
         pictureView.layer.cornerRadius = pictureView.frame.size.width / 2
         pictureView.clipsToBounds = true
